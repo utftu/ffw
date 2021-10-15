@@ -1,0 +1,24 @@
+{
+  "name": "form",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^17.0.2",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@jest/globals": "^27.2.5",
+    "@swc/cli": "^0.1.51",
+    "@swc/core": "^1.2.97",
+    "jest": "^27.2.5",
+    "prettier": "2.4.1"
+  }
+}

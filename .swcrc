@@ -1,0 +1,12 @@
+{
+  "jsc": {
+    "minify": {
+      "compress": {
+        "unused": true
+      },
+      "mangle": true
+    }
+  },
+  // Enable minification in codgen.
+  "minify": true
+}
