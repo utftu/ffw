@@ -7,6 +7,5 @@
       "mangle": true
     }
   },
-  // Enable minification in codgen.
   "minify": true
 }
