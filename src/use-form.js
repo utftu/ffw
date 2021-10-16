@@ -49,13 +49,11 @@ function useForm(...deps) {
     };
   }, deps);
 
-  return form;
-
-  // if (process.env.NODE_ENV === 'development') {
-  //   return proxyForm;
-  // } else {
-  //   return form;
-  // }
+  if (process.env.NODE_ENV === 'development') {
+    return proxyForm;
+  } else {
+    return form;
+  }
 }
 
 export default useForm;

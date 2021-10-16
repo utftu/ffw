@@ -1,3 +1,5 @@
+// export {unstable_batchedUpdates} from 'react-dom';
+
 class Field {
   value = '';
   touched = false;
@@ -88,6 +90,9 @@ class Field {
 
   triggerListeners() {
     this.listeners.forEach((listener) => listener(this));
+    // unstable_batchedUpdates(() => {
+    //   this.listeners.forEach((listener) => listener(this));
+    // })
   }
 }
 
