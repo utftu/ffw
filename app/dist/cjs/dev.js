@@ -6,6 +6,7 @@ var react = require('react');
 
 const context = react.createContext(null);
 
+// export {unstable_batchedUpdates} from 'react-dom';
 class Field {
   value = '';
   touched = false;
@@ -97,7 +98,9 @@ class Field {
   };
 
   triggerListeners() {
-    this.listeners.forEach(listener => listener(this));
+    this.listeners.forEach(listener => listener(this)); // unstable_batchedUpdates(() => {
+    //   this.listeners.forEach((listener) => listener(this));
+    // })
   }
 
 }
@@ -150,7 +153,7 @@ function useForm(...deps) {
       createNonExistField(form, name);
     });
   }, deps);
-  react.useMemo(() => {
+  const proxyForm = react.useMemo(() => {
     if (process.env.NODE_ENV === 'development') {
       return createFormProxy(form, deps);
     } else {
@@ -181,11 +184,12 @@ function useForm(...deps) {
       }
     };
   }, deps);
-  return form; // if (process.env.NODE_ENV === 'development') {
-  //   return proxyForm;
-  // } else {
-  //   return form;
-  // }
+
+  if (process.env.NODE_ENV === 'development') {
+    return proxyForm;
+  } else {
+    return form;
+  }
 }
 
 class Form {

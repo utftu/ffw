@@ -4,7 +4,14 @@ function AgeInput() {
   const form = useFfs('age');
   console.log('-----', 'AgeInput');
 
-  return <input {...form.f.age.getInputField()} />;
+  return (
+    <div>
+      <span>
+        AgeInput: age = {''}
+        <input {...form.f.age.getInputField()} />
+      </span>
+    </div>
+  );
 }
 
 export default AgeInput;

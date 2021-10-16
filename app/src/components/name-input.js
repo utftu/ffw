@@ -4,7 +4,14 @@ function NameInput() {
   const form = useFfs('name');
   console.log('-----', 'NameInput');
 
-  return <input {...form.f.name.getInputField()} />;
+  return (
+    <div>
+      <span>
+        NameInput: name = {''}
+        <input {...form.f.name.getInputField()} />
+      </span>
+    </div>
+  );
 }
 
 export default NameInput;

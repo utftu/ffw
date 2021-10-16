@@ -4,7 +4,11 @@ function AgeListener() {
   const form = useFfs('age');
   console.log('-----', 'AgeListener');
 
-  return <div>child</div>;
+  return (
+    <div>
+      <span>AgeListener: age = {form.f.age.value}</span>
+    </div>
+  );
 }
 
 export default AgeListener;
