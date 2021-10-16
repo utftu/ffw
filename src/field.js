@@ -30,7 +30,7 @@ class Field {
   }
 
   async validate() {
-    const fieldSchema = this.getForm().validationsSchema.fields[this.name];
+    const fieldSchema = this.getForm().validateSchema.fields[this.name];
     if (!fieldSchema) {
       return;
     }

@@ -44,7 +44,7 @@ class Field {
   }
 
   async validate() {
-    const fieldSchema = this.getForm().validationsSchema.fields[this.name];
+    const fieldSchema = this.getForm().validateSchema.fields[this.name];
 
     if (!fieldSchema) {
       return;
@@ -105,21 +105,22 @@ class Field {
 function createNonExistField(form, name) {
   if (!form.fields[name]) {
     form._addField(name, new Field({
-      name
+      name,
+      getForm: () => form
     }));
   }
 }
 
 function createFormProxy(form, deps) {
   function checkAndThrow(property) {
-    if (!deps.contains(property)) {
+    if (!deps.includes(property)) {
       throw new Error(`You don't have access to field with name - ${property}`);
     }
   }
 
   return new Proxy(form, {
     get(target, property) {
-      if (property === 'fields') {
+      if (property === 'fields' || property === 'f') {
         return new Proxy(form.fields, {
           get(target, property) {
             checkAndThrow(property);
@@ -149,13 +150,13 @@ function useForm(...deps) {
       createNonExistField(form, name);
     });
   }, deps);
-  const proxyForm = react.useMemo(() => {
+  react.useMemo(() => {
     if (process.env.NODE_ENV === 'development') {
       return createFormProxy(form, deps);
     } else {
       return null;
     }
-  }, [deps]); // todo subscribe on memo
+  }, []); // todo subscribe on memo
 
   react.useEffect(() => {
     const listener = () => {
@@ -166,7 +167,7 @@ function useForm(...deps) {
       form._addGlobalListener(listener);
     } else {
       deps.forEach(fieldName => {
-        form.fields[fieldName].listeners = [...form.fields[fieldName].listeners, setUpdate];
+        form.fields[fieldName].listeners = [...form.fields[fieldName].listeners, listener];
       });
     }
 
@@ -179,13 +180,12 @@ function useForm(...deps) {
         });
       }
     };
-  }, [deps]);
-
-  if (process.env.NODE_ENV === 'development') {
-    return proxyForm;
-  } else {
-    return form;
-  }
+  }, deps);
+  return form; // if (process.env.NODE_ENV === 'development') {
+  //   return proxyForm;
+  // } else {
+  //   return form;
+  // }
 }
 
 class Form {
@@ -195,7 +195,7 @@ class Form {
   };
   fields = {};
   f = null;
-  validationsSchema = null;
+  validateSchema = null;
   globalListeners = [];
   globalFieldListener = field => {
     this.globalListeners.forEach(globalListener => globalListener(field));
@@ -203,11 +203,11 @@ class Form {
 
   constructor({
     initValues,
-    validateSchema: validationSchema,
+    validateSchema,
     options
   }) {
     this.f = this.fields;
-    this.validationsSchema = validationSchema;
+    this.validateSchema = validateSchema;
     this.options = { ...this.options,
       ...options
     };
@@ -215,7 +215,6 @@ class Form {
       this.fields[name] = new Field({
         name,
         value,
-        form: this,
         getForm: () => this
       });
     });
@@ -247,21 +246,18 @@ class Form {
     if (this.globalListeners.length) {
       this.fields[name].listeners.push(this.globalListeners);
     }
-  }
-
-  async validate() {
-    let error = false;
-
-    for (const [name, field] of Object.entries(this.fields)) {
-      try {
-        await this.validationsSchema.validateAt(name, field.value);
-      } catch (error) {
-        error = true;
-      }
-    }
-
-    return !error;
-  } //
+  } // async validate() {
+  //   let error = false;
+  //   for (const [name, field] of Object.entries(this.fields)) {
+  //     try {
+  //       await this.validationsSchema.validateAt(name, field.value);
+  //     } catch (error) {
+  //       error = true;
+  //     }
+  //   }
+  //   return !error;
+  // }
+  //
   // setFieldValue(name, value) {
   //
   // }

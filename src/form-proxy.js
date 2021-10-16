@@ -1,13 +1,13 @@
-function createFormProxy(form, deps) {
+export function createFormProxy(form, deps) {
   function checkAndThrow(property) {
-    if (!deps.contains(property)) {
+    if (!deps.includes(property)) {
       throw new Error(`You don't have access to field with name - ${property}`);
     }
   }
 
   return new Proxy(form, {
     get(target, property) {
-      if (property === 'fields') {
+      if (property === 'fields' || property === 'f') {
         return new Proxy(form.fields, {
           get(target, property) {
             checkAndThrow(property);

@@ -1,6 +1,7 @@
 import context from './conext.js';
 import {useContext, useEffect, useMemo, useState} from 'react';
 import {createNonExistField} from './helpers.js';
+import {createFormProxy} from './form-proxy.js';
 
 function useForm(...deps) {
   const form = useContext(context);
@@ -31,7 +32,7 @@ function useForm(...deps) {
       deps.forEach((fieldName) => {
         form.fields[fieldName].listeners = [
           ...form.fields[fieldName].listeners,
-          setUpdate,
+          listener,
         ];
       });
     }
@@ -46,13 +47,15 @@ function useForm(...deps) {
         });
       }
     };
-  }, [deps]);
+  }, deps);
 
-  if (process.env.NODE_ENV === 'development') {
-    return proxyForm;
-  } else {
-    return form;
-  }
+  return form;
+
+  // if (process.env.NODE_ENV === 'development') {
+  //   return proxyForm;
+  // } else {
+  //   return form;
+  // }
 }
 
 export default useForm;

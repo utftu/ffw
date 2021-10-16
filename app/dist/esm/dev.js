@@ -1,10 +1,6 @@
-'use strict';
+import { createContext, useContext, useState, useMemo, useEffect } from 'react';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var react = require('react');
-
-const context = react.createContext(null);
+const context = createContext(null);
 
 class Field {
   value = '';
@@ -44,7 +40,7 @@ class Field {
   }
 
   async validate() {
-    const fieldSchema = this.getForm().validationsSchema.fields[this.name];
+    const fieldSchema = this.getForm().validateSchema.fields[this.name];
 
     if (!fieldSchema) {
       return;
@@ -105,21 +101,22 @@ class Field {
 function createNonExistField(form, name) {
   if (!form.fields[name]) {
     form._addField(name, new Field({
-      name
+      name,
+      getForm: () => form
     }));
   }
 }
 
 function createFormProxy(form, deps) {
   function checkAndThrow(property) {
-    if (!deps.contains(property)) {
+    if (!deps.includes(property)) {
       throw new Error(`You don't have access to field with name - ${property}`);
     }
   }
 
   return new Proxy(form, {
     get(target, property) {
-      if (property === 'fields') {
+      if (property === 'fields' || property === 'f') {
         return new Proxy(form.fields, {
           get(target, property) {
             checkAndThrow(property);
@@ -142,22 +139,22 @@ function createFormProxy(form, deps) {
 }
 
 function useForm(...deps) {
-  const form = react.useContext(context);
-  const [, setUpdate] = react.useState(null);
-  react.useMemo(() => {
+  const form = useContext(context);
+  const [, setUpdate] = useState(null);
+  useMemo(() => {
     deps.forEach(name => {
       createNonExistField(form, name);
     });
   }, deps);
-  const proxyForm = react.useMemo(() => {
+  useMemo(() => {
     if (process.env.NODE_ENV === 'development') {
       return createFormProxy(form, deps);
     } else {
       return null;
     }
-  }, [deps]); // todo subscribe on memo
+  }, []); // todo subscribe on memo
 
-  react.useEffect(() => {
+  useEffect(() => {
     const listener = () => {
       setUpdate({});
     };
@@ -166,7 +163,7 @@ function useForm(...deps) {
       form._addGlobalListener(listener);
     } else {
       deps.forEach(fieldName => {
-        form.fields[fieldName].listeners = [...form.fields[fieldName].listeners, setUpdate];
+        form.fields[fieldName].listeners = [...form.fields[fieldName].listeners, listener];
       });
     }
 
@@ -179,13 +176,12 @@ function useForm(...deps) {
         });
       }
     };
-  }, [deps]);
-
-  if (process.env.NODE_ENV === 'development') {
-    return proxyForm;
-  } else {
-    return form;
-  }
+  }, deps);
+  return form; // if (process.env.NODE_ENV === 'development') {
+  //   return proxyForm;
+  // } else {
+  //   return form;
+  // }
 }
 
 class Form {
@@ -195,7 +191,7 @@ class Form {
   };
   fields = {};
   f = null;
-  validationsSchema = null;
+  validateSchema = null;
   globalListeners = [];
   globalFieldListener = field => {
     this.globalListeners.forEach(globalListener => globalListener(field));
@@ -203,11 +199,11 @@ class Form {
 
   constructor({
     initValues,
-    validateSchema: validationSchema,
+    validateSchema,
     options
   }) {
     this.f = this.fields;
-    this.validationsSchema = validationSchema;
+    this.validateSchema = validateSchema;
     this.options = { ...this.options,
       ...options
     };
@@ -215,7 +211,6 @@ class Form {
       this.fields[name] = new Field({
         name,
         value,
-        form: this,
         getForm: () => this
       });
     });
@@ -247,21 +242,18 @@ class Form {
     if (this.globalListeners.length) {
       this.fields[name].listeners.push(this.globalListeners);
     }
-  }
-
-  async validate() {
-    let error = false;
-
-    for (const [name, field] of Object.entries(this.fields)) {
-      try {
-        await this.validationsSchema.validateAt(name, field.value);
-      } catch (error) {
-        error = true;
-      }
-    }
-
-    return !error;
-  } //
+  } // async validate() {
+  //   let error = false;
+  //   for (const [name, field] of Object.entries(this.fields)) {
+  //     try {
+  //       await this.validationsSchema.validateAt(name, field.value);
+  //     } catch (error) {
+  //       error = true;
+  //     }
+  //   }
+  //   return !error;
+  // }
+  //
   // setFieldValue(name, value) {
   //
   // }
@@ -277,7 +269,7 @@ class Form {
 }
 
 function useGlobalForm(...args) {
-  const initForm = react.useMemo(() => {
+  const initForm = useMemo(() => {
     return new Form(...args);
   }, []);
   return initForm;
@@ -285,6 +277,4 @@ function useGlobalForm(...args) {
 
 const Provider = context.Provider;
 
-exports.FfsProvider = Provider;
-exports.useFfs = useForm;
-exports.useGlobalFfs = useGlobalForm;
+export { Provider as FfsProvider, useForm as useFfs, useGlobalForm as useGlobalFfs };

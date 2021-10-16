@@ -7,21 +7,20 @@ class Form {
   };
   fields = {};
   f = null;
-  validationsSchema = null;
+  validateSchema = null;
   globalListeners = [];
   globalFieldListener = (field) => {
     this.globalListeners.forEach((globalListener) => globalListener(field));
   };
 
-  constructor({initValues, validateSchema: validationSchema, options}) {
+  constructor({initValues, validateSchema, options}) {
     this.f = this.fields;
-    this.validationsSchema = validationSchema;
+    this.validateSchema = validateSchema;
     this.options = {...this.options, ...options};
     Object.entries(initValues).forEach(([name, value]) => {
       this.fields[name] = new Field({
         name,
         value,
-        form: this,
         getForm: () => this,
       });
     });
@@ -57,17 +56,17 @@ class Form {
     }
   }
 
-  async validate() {
-    let error = false;
-    for (const [name, field] of Object.entries(this.fields)) {
-      try {
-        await this.validationsSchema.validateAt(name, field.value);
-      } catch (error) {
-        error = true;
-      }
-    }
-    return !error;
-  }
+  // async validate() {
+  //   let error = false;
+  //   for (const [name, field] of Object.entries(this.fields)) {
+  //     try {
+  //       await this.validationsSchema.validateAt(name, field.value);
+  //     } catch (error) {
+  //       error = true;
+  //     }
+  //   }
+  //   return !error;
+  // }
   //
   // setFieldValue(name, value) {
   //

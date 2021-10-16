@@ -8,11 +8,13 @@ import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const target = './app/dist';
+
 const config = [
   {
     input: join(__dirname, './static/path.cjs'),
     output: {
-      file: join(__dirname, 'dist/cjs/index.js'),
+      file: join(__dirname, `${target}/cjs/index.js`),
       format: 'cjs',
     },
     plugins: [
@@ -20,7 +22,7 @@ const config = [
         targets: [
           {
             src: join(__dirname, './static/package-cjs.json'),
-            dest: join(__dirname, './dist/cjs'),
+            dest: join(__dirname, `./${target}/cjs`),
             rename: 'package.json',
           },
         ],
@@ -35,7 +37,7 @@ const config = [
   ].map(({format, mode}) => ({
     input: join(__dirname, 'src/index.js'),
     output: {
-      file: join(__dirname, `dist/${format}/${mode}.js`),
+      file: join(__dirname, `${target}/${format}/${mode}.js`),
       format: format,
     },
     plugins: [
