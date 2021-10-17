@@ -18,12 +18,6 @@ const typescriptConfig = JSON.parse(
 const target = './dist';
 
 const config = [
-  {
-    input: './src/index.ts',
-    plugins: [typescript({tsconfig: './tsconfig.json'})],
-    external: ['react'],
-  },
-
   // {
   //   input: join(__dirname, './static/path.cjs'),
   //   output: {

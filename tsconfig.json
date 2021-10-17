@@ -3,7 +3,7 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "outDir": "dist",
-    "declaration": true,
-    "emitDeclarationOnly": true
+    "target": "esnext",
+    "allowJs": true
   }
 }
