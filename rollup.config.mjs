@@ -39,7 +39,10 @@ const config = [
     })),
     plugins: [
       typescript({
-        tsconfig: mode === 'prod' ? './tsconfig.prod.json' : './tsconfig.json',
+        tsconfig:
+          mode === 'prod'
+            ? join(__dirname, './tsconfig.prod.json')
+            : join(__dirname, './tsconfig.json'),
       }),
       mode === 'prod' ? terser() : null,
     ],
