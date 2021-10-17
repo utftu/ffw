@@ -23,10 +23,11 @@
     "access": "public"
   },
   "peerDependencies": {
-    "react": ">=17.0.2"
+    "react": ">=17.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
     "@jest/globals": "^27.2.5",
     "@rollup/plugin-typescript": "^8.3.0",
