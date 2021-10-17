@@ -1,7 +1,7 @@
-import {useFfs} from '../../dist/cjs';
+import {useFfw} from '../../../dist/cjs/dev.js';
 
 function AgeListener() {
-  const form = useFfs('age');
+  const form = useFfw('age');
   console.log('-----', 'AgeListener');
 
   return (

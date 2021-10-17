@@ -1,7 +1,7 @@
-import {useFfs} from '../../dist/cjs';
+import {useFfw} from '../../../dist/cjs/dev.js';
 
 function GlobalListener() {
-  useFfs();
+  const form = useFfw();
   console.log('-----', 'GlobalListener');
 
   return (

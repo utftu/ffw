@@ -1,13 +1,12 @@
-import {useGlobalFfs, FfsProvider} from '../../dist/cjs';
+import {useGlobalFfw, FfwProvider} from '../../../dist/cjs/dev.js';
 import * as yup from 'yup';
 import AgeListener from '../components/age-listener';
-import {useEffect} from 'react';
 import AgeInput from '../components/age-input';
 import NameInput from '../components/name-input';
 import GlobalListener from '../components/global-listener';
 
 export default function Home() {
-  const form = useGlobalFfs({
+  const form = useGlobalFfw({
     initValues: {
       age: 42,
     },
@@ -19,19 +18,14 @@ export default function Home() {
     },
   });
   globalThis.form = form;
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     form.f.age.set(43);
-  //   }, 1000);
-  // }, []);
   return (
-    <FfsProvider value={form}>
+    <FfwProvider value={form}>
       <div>
         <AgeListener />
         <AgeInput />
         <NameInput />
         <GlobalListener />
       </div>
-    </FfsProvider>
+    </FfwProvider>
   );
 }
