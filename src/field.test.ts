@@ -7,7 +7,7 @@ import {waitAsync} from './helpers';
 const ageFieldParams = {
   value: 42,
   name: 'age',
-  getForm: jest.fn(),
+  getForm: jest.fn() as any,
 };
 
 export const fieldMockExpectFunctions = {
@@ -81,12 +81,13 @@ describe('field', () => {
 
     expect(field.value).toBe(43);
     expect(listener.mock.calls.length).toBe(1);
+    // @ts-ignore
     expect(listener.mock.calls[0][0].value).toBe(43);
   });
 
   it('setError()', () => {
     const field = new Field(ageFieldParams);
-    const listener = jest.fn();
+    const listener: any = jest.fn();
     field.listeners.push(listener);
     field.setError('Wrong value');
 
@@ -97,7 +98,7 @@ describe('field', () => {
 
   it('setTouched()', () => {
     const field = new Field(ageFieldParams);
-    const listener = jest.fn();
+    const listener: any = jest.fn();
     field.listeners.push(listener);
     field.setTouched(true);
 
@@ -180,7 +181,7 @@ describe('field', () => {
     it('set value', () => {
       const form = new Form({
         initValues: {
-          age: 42,
+          age: '42',
         },
         validateSchema: yup.object({}),
       });
@@ -189,10 +190,10 @@ describe('field', () => {
 
       form.fields.age.onChange({
         target: {
-          value: 43,
+          value: '43',
         },
       });
-      expect(form.fields.age.value).toBe(43);
+      expect(form.fields.age.value).toBe('43');
       expect(listener.mock.calls.length).toBe(1);
     });
   });

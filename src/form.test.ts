@@ -1,7 +1,5 @@
-import Form from './form.js';
+import Form from './form';
 import * as yup from 'yup';
-import Field from './field';
-import {fieldMockExpectFunctions} from './field.test';
 
 describe('form', () => {
   it('initValues', () => {

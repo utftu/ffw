@@ -3,14 +3,16 @@ import Field, {Listener} from './field';
 export type FormProps = {
   initValues: Record<string, any>;
   validateSchema: any;
-  options: {
-    validateOnChange: boolean;
-    validateOnBlur: boolean;
-  };
+  options?: Options;
+};
+
+type Options = {
+  validateOnChange?: boolean;
+  validateOnBlur?: boolean;
 };
 
 class Form {
-  options = {
+  options: Options = {
     validateOnChange: true,
     validateOnBlur: true,
   };
