@@ -7,7 +7,7 @@ import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const target = './dist/app/dist';
+const target = './dist';
 
 const config = [
   {

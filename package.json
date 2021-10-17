@@ -9,9 +9,10 @@
     "typecheck": "tsc --noEmit",
     "types": "tsc -p tsconfig-declaration.json",
     "test": "jest",
-    "prepublish": " npm run test && npm run typecheck && npm run types && npm run format  && npm run build"
+    "update": "npm run test && npm run typecheck && npm run types && npm run format && npm run build && npm version patch && npm publish"
   },
   "type": "module",
+  "types": "./dist/types/index.d.ts",
   "author": "",
   "license": "ISC",
   "devDependencies": {
