@@ -1,5 +1,6 @@
 import fs from 'fs';
 import {babel} from '@rollup/plugin-babel';
+import resolve from 'rollup-plugin-node-resolve';
 // import babelConfig from './babel.config.cjs';
 import copy from 'rollup-plugin-copy';
 import {terser} from 'rollup-plugin-terser';
@@ -14,6 +15,7 @@ console.log('-----', '123');
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const target = './dist';
+const extensions = ['.ts', '.js'];
 
 const config = [
   {
@@ -23,10 +25,12 @@ const config = [
       format: 'esm',
     },
     plugins: [
-      // typescript({tsconfig: './tsconfig.json'}),
+      // typescript()
       babel({
         babelHelpers: 'bundled',
-        configFile: path.join(__dirname, 'babel.config.prod.cjs'),
+        configFile: path.join(__dirname, './babel.config.cjs'),
+        presets: ['@babel/preset-typescript'],
+        extensions: ['.ts'],
       }),
     ],
   },
