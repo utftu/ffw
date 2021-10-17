@@ -4,7 +4,7 @@ import useGlobalForm from './use-global-form';
 
 const Provider = context.Provider;
 export {
-  useForm as useFfs,
-  Provider as FfsProvider,
-  useGlobalForm as useGlobalFfs,
+  useForm as useFfw,
+  Provider as FfwProvider,
+  useGlobalForm as useGlobalFfw,
 };
