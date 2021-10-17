@@ -13,30 +13,36 @@ const typescriptConfig = JSON.parse(
   fs.readFileSync(new URL('./tsconfig.json', import.meta.url)).toString()
 );
 
-console.log('-----', 'typescriptConfig', typescriptConfig);
+// console.log('-----', 'typescriptConfig', typescriptConfig);
 
 const target = './dist';
 
 const config = [
   {
-    input: join(__dirname, './static/path.cjs'),
-    output: {
-      file: join(__dirname, `${target}/cjs/index.js`),
-      format: 'cjs',
-    },
-    plugins: [
-      typescript(),
-      copy({
-        targets: [
-          {
-            src: join(__dirname, './static/package-cjs.json'),
-            dest: join(__dirname, `./${target}/cjs`),
-            rename: 'package.json',
-          },
-        ],
-      }),
-    ],
+    input: './src/index.ts',
+    plugins: [typescript({tsconfig: './tsconfig.json'})],
+    external: ['react'],
   },
+
+  // {
+  //   input: join(__dirname, './static/path.cjs'),
+  //   output: {
+  //     file: join(__dirname, `${target}/cjs/index.js`),
+  //     format: 'cjs',
+  //   },
+  //   plugins: [
+  //     typescript({tsconfig: './tsconfig.json'}),
+  //     copy({
+  //       targets: [
+  //         {
+  //           src: join(__dirname, './static/package-cjs.json'),
+  //           dest: join(__dirname, `./${target}/cjs`),
+  //           rename: 'package.json',
+  //         },
+  //       ],
+  //     }),
+  //   ],
+  // },
   // ...[
   //   {format: 'esm', mode: 'dev'},
   //   {format: 'esm', mode: 'prod'},
