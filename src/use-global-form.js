@@ -1,12 +1,8 @@
-import {useMemo} from 'react';
-import Form from './form.js';
-
-function useGlobalForm(...args) {
-  const initForm = useMemo(() => {
-    return new Form(...args);
-  }, []);
-
-  return initForm;
+import { useMemo } from 'react';
+import Form from './form';
+function useGlobalForm(options) {
+    return useMemo(() => {
+        return new Form(options);
+    }, []);
 }
-
 export default useGlobalForm;
