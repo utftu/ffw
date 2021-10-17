@@ -1,9 +1,10 @@
 import context from './conext';
+import Form from './form';
 import {useContext, useEffect, useMemo, useState} from 'react';
 import {createNonExistField} from './helpers';
 import {createFormProxy} from './form-proxy';
 
-function useForm(...deps: string[]) {
+function useForm(...deps: string[]): Form {
   const form = useContext(context);
   const [, setUpdate] = useState(null);
 

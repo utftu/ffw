@@ -1,11 +1,6 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "./dist",
-    "allowJs": true,
-    "target": "esnext"
-  },
-  "include": [
-    "./src/*"
-  ]
+    "outDir": "dist",
+    "declaration": true
+  }
 }

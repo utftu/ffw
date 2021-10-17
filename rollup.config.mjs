@@ -25,6 +25,7 @@ const config = [
       format: 'cjs',
     },
     plugins: [
+      typescript(),
       copy({
         targets: [
           {
@@ -36,27 +37,27 @@ const config = [
       }),
     ],
   },
-  ...[
-    {format: 'esm', mode: 'dev'},
-    {format: 'esm', mode: 'prod'},
-    {format: 'cjs', mode: 'dev'},
-    {format: 'cjs', mode: 'prod'},
-  ].map(({format, mode}) => ({
-    input: join(__dirname, 'src/index.ts'),
-    output: {
-      file: join(__dirname, `${target}/${format}/${mode}.js`),
-      format: format,
-    },
-    plugins: [
-      typescript(),
-      babel({
-        babelHelpers: 'bundled',
-        ...babelConfig,
-      }),
-      mode === 'prod' ? terser() : null,
-    ],
-    external: ['react'],
-  })),
+  // ...[
+  //   {format: 'esm', mode: 'dev'},
+  //   {format: 'esm', mode: 'prod'},
+  //   {format: 'cjs', mode: 'dev'},
+  //   {format: 'cjs', mode: 'prod'},
+  // ].map(({format, mode}) => ({
+  //   input: join(__dirname, 'src/index.ts'),
+  //   output: {
+  //     file: join(__dirname, `${target}/${format}/${mode}.js`),
+  //     format: format,
+  //   },
+  //   plugins: [
+  //     typescript(),
+  //     babel({
+  //       babelHelpers: 'bundled',
+  //       ...babelConfig,
+  //     }),
+  //     mode === 'prod' ? terser() : null,
+  //   ],
+  //   external: ['react'],
+  // })),
 ];
 
 export default config;

@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useMemo, useEffect } from 'react';
 
 const context = createContext(null);
 
-// export {unstable_batchedUpdates} from 'react-dom';
 class Field {
   value = '';
   touched = false;
@@ -105,7 +104,8 @@ function createNonExistField(form, name) {
   if (!form.fields[name]) {
     form._addField(name, new Field({
       name,
-      getForm: () => form
+      getForm: () => form,
+      value: ''
     }));
   }
 }
@@ -244,7 +244,7 @@ class Form {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
-      this.fields[name].listeners.push(this.globalListeners);
+      this.fields[name].listeners.push(this.globalFieldListener);
     }
   } // async validate() {
   //   let error = false;
@@ -272,11 +272,10 @@ class Form {
 
 }
 
-function useGlobalForm(...args) {
-  const initForm = useMemo(() => {
-    return new Form(...args);
+function useGlobalForm(options) {
+  return useMemo(() => {
+    return new Form(options);
   }, []);
-  return initForm;
 }
 
 const Provider = context.Provider;
