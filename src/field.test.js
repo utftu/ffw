@@ -25,7 +25,7 @@ describe('field', () => {
         new Field({
           value: 42,
           name: 'age',
-          getForm: () => {},
+          getForm: jest.fn(),
         })
       ).toEqual({
         value: 42,
@@ -43,7 +43,7 @@ describe('field', () => {
           name: 'age',
           error: 'too young',
           touched: true,
-          getForm: () => {},
+          getForm: jest.fn(),
         })
       ).toEqual({
         value: 42,
