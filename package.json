@@ -2,7 +2,6 @@
   "name": "ffw",
   "version": "1.0.6",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "rollup -c",
     "format": "prettier --write .",
@@ -12,10 +11,11 @@
     "update": "npm run test && npm run typecheck && npm run types && npm run format && npm run build && npm version patch && npm publish"
   },
   "type": "module",
-  "man": "./dist/cjs/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "dist/esm/prod.js",
   "types": "./dist/types/index.d.ts",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "files": [
     "dist/**/*"
   ],
