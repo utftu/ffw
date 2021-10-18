@@ -2,7 +2,7 @@ import Form from './form';
 
 export function createFormProxy(form: Form, deps: string[]) {
   function checkAndThrow(property) {
-    if (!deps.includes(property)) {
+    if (!deps.includes(property) && deps.length !== 0) {
       throw new Error(`You don't have access to field with name - ${property}`);
     }
   }

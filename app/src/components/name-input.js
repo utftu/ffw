@@ -1,4 +1,4 @@
-import {useFfw} from '../../../dist/cjs/dev.js';
+import {useFfw} from '../../dist/cjs/dev.js';
 
 function NameInput() {
   const form = useFfw('name');

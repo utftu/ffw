@@ -1,4 +1,4 @@
-import {useGlobalFfw, FfwProvider} from '../../../dist/cjs/dev.js';
+import {useGlobalFfw, FfwProvider} from '../../dist/cjs/dev.js';
 import * as yup from 'yup';
 import AgeListener from '../components/age-listener';
 import AgeInput from '../components/age-input';
