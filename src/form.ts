@@ -4,12 +4,24 @@ export type FormProps = {
   initValues: Record<string, any>;
   validateSchema: any;
   options?: Options;
+  onSubmit?: (form: Form) => void;
 };
 
 type Options = {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
+  validateOnMount?: boolean;
 };
+
+function setInitValues(form: Form, initValues: Record<string, any>) {
+  Object.entries(initValues).forEach(([name, value]) => {
+    form.fields[name] = new Field({
+      name,
+      value,
+      getForm: () => form,
+    });
+  });
+}
 
 class Form {
   options: Options = {
@@ -19,22 +31,24 @@ class Form {
   fields: Record<string, Field> = {};
   f: Record<string, Field> = null;
   validateSchema = null;
+  onSubmit: (form: Form) => void = null;
   globalListeners: Listener[] = [];
   globalFieldListener = (field: Field) => {
     this.globalListeners.forEach((globalListener) => globalListener(field));
   };
+  initValues: Record<string, any> = null;
 
-  constructor({initValues, validateSchema, options}: FormProps) {
+  constructor({initValues, validateSchema, onSubmit, options}: FormProps) {
     this.f = this.fields;
     this.validateSchema = validateSchema;
     this.options = {...this.options, ...options};
-    Object.entries(initValues).forEach(([name, value]) => {
-      this.fields[name] = new Field({
-        name,
-        value,
-        getForm: () => this,
-      });
-    });
+    this.onSubmit = onSubmit;
+    this.initValues = initValues;
+    setInitValues(this, initValues);
+
+    if (options.validateOnMount) {
+      this.validate();
+    }
   }
 
   _addGlobalListener(listener: Listener) {
@@ -67,25 +81,45 @@ class Form {
     }
   }
 
-  // async validate() {
-  //   let error = false;
-  //   for (const [name, field] of Object.entries(this.fields)) {
-  //     try {
-  //       await this.validationsSchema.validateAt(name, field.value);
-  //     } catch (error) {
-  //       error = true;
-  //     }
-  //   }
-  //   return !error;
-  // }
-  //
-  // setFieldValue(name, value) {
-  //
-  // }
+  async validate() {
+    for (const field of Object.values(this.fields)) {
+      const fieldValid = await field.validate();
+      if (!fieldValid) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  submit = async () => {
+    const formValid = await this.validate();
+    if (formValid) {
+      this.onSubmit(this);
+    }
+  };
+
+  reset() {
+    this.fields = this.f = {};
+    setInitValues(this, this.initValues);
+  }
+
+  getErrors() {
+    return Object.values(this.fields).reduce((store, field) => {
+      store[field.name] = field.error;
+      return store;
+    }, {});
+  }
+
+  getTouches() {
+    return Object.values(this.fields).reduce((store, field) => {
+      store[field.name] = field.touched;
+      return store;
+    }, {});
+  }
 
   getValues() {
-    return Object.entries(this.fields).reduce((store, [name, field]) => {
-      store[name] = field.value;
+    return Object.values(this.fields).reduce((store, field) => {
+      store[field.name] = field.value;
       return store;
     }, {});
   }

@@ -1,5 +1,4 @@
-import Field from './field';
-import Form from './form';
+import {unstable_batchedUpdates} from './react-batched-updates';
 
 export async function waitAsync(milliseconds = 0) {
   return new Promise((resolve) => {
@@ -7,16 +6,6 @@ export async function waitAsync(milliseconds = 0) {
   });
 }
 
-export async function batch(cb: () => void) {
-  try {
-    const renderPackage = await Promise.race([
-      import('react-dom'),
-      // @ts-ignore
-      import('react-native'),
-    ]);
-    renderPackage.unstable_batchedUpdates(cb);
-  } catch (error) {
-    console.log('-----', 'error');
-    throw new Error('You don\'t use nor "react-dom" nor "react-native"');
-  }
+export function batch(cb: () => void) {
+  unstable_batchedUpdates(cb);
 }

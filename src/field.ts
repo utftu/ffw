@@ -1,5 +1,5 @@
-// export {unstable_batchedUpdates} from 'react-dom';
 import Form from './form';
+import {batch} from './utils';
 
 export type Listener = (field: Field) => void;
 
@@ -46,15 +46,17 @@ class Field {
     this.triggerListeners();
   }
 
-  async validate() {
+  async validate(): Promise<boolean> {
     const fieldSchema = this.getForm().validateSchema.fields[this.name];
     if (!fieldSchema) {
-      return;
+      return true;
     }
     try {
       await fieldSchema.validate(this.value);
+      return true;
     } catch (error) {
       this.setError(error.errors[0]);
+      return false;
     }
   }
 
@@ -104,10 +106,9 @@ class Field {
   };
 
   triggerListeners() {
-    this.listeners.forEach((listener) => listener(this));
-    // unstable_batchedUpdates(() => {
-    //   this.listeners.forEach((listener) => listener(this));
-    // })
+    batch(() => {
+      this.listeners.forEach((listener) => listener(this));
+    });
   }
 }
 

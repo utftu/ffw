@@ -5,6 +5,8 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "target": "esnext",
-    "allowJs": true
+    "module": "esnext",
+    "allowJs": true,
+    "lib": ["es2021"]
   }
 }

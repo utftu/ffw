@@ -2,7 +2,7 @@ import Field from './field';
 import {jest} from '@jest/globals';
 import Form from './form';
 import * as yup from 'yup';
-import {waitAsync} from './helpers';
+import {waitAsync} from './utils';
 
 const ageFieldParams = {
   value: 42,

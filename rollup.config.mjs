@@ -7,7 +7,7 @@ import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const target = './dist';
+const target = './app/dist';
 
 const config = [
   {
@@ -46,7 +46,7 @@ const config = [
       }),
       mode === 'prod' ? terser() : null,
     ],
-    external: ['react'],
+    external: ['react', 'react-dom', 'react-native'],
   })),
 ];
 

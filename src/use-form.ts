@@ -1,8 +1,8 @@
 import context from './conext';
 import Form from './form';
 import {useContext, useEffect, useMemo, useState} from 'react';
-import {createNonExistField} from './helpers';
 import {createFormProxy} from './form-proxy';
+import Field from './field.js';
 
 function useForm(...deps: string[]): Form {
   const form = useContext(context);
@@ -10,7 +10,9 @@ function useForm(...deps: string[]): Form {
 
   useMemo(() => {
     deps.forEach((name) => {
-      createNonExistField(form, name);
+      if (!form.fields[name]) {
+        form._addField(name, new Field({name, getForm: () => form, value: ''}));
+      }
     });
   }, deps);
 
@@ -39,7 +41,7 @@ function useForm(...deps: string[]): Form {
     }
     return () => {
       if (deps.length === 0) {
-        form._addGlobalListener(listener);
+        form._removeGlobalListener(listener);
       } else {
         deps.forEach((fieldName) => {
           form.fields[fieldName].listeners = form.fields[
