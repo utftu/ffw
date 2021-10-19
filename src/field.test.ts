@@ -132,6 +132,21 @@ describe('field', () => {
       await form.fields.age.validate();
       expect(form.fields.age.error.length).toBe(0);
     });
+    it('invalid -> valid', async () => {
+      const form = new Form({
+        initValues: {
+          age: 'wrong',
+        },
+        validateSchema: yup.object({
+          age: yup.number().required(),
+        }),
+      });
+      await form.fields.age.validate();
+      expect(form.fields.age.error.length).not.toBe(0);
+      form.fields.age.set(43);
+      await form.fields.age.validate();
+      expect(form.fields.age.error).toBe('');
+    });
   });
 
   describe('onBlur()', () => {
@@ -196,42 +211,43 @@ describe('field', () => {
       expect(form.fields.age.value).toBe('43');
       expect(listener.mock.calls.length).toBe(1);
     });
-  });
-  it('validateOnChange = true', async () => {
-    const form = new Form({
-      initValues: {
-        age: 42,
-      },
-      validateSchema: yup.object({
-        age: yup.number().required(),
-      }),
+
+    it('validateOnChange = true', async () => {
+      const form = new Form({
+        initValues: {
+          age: 42,
+        },
+        validateSchema: yup.object({
+          age: yup.number().required(),
+        }),
+      });
+      form.fields.age.onChange({
+        target: {
+          value: 'invalid',
+        },
+      });
+      await waitAsync();
+      expect(form.fields.age.error.length).not.toBe(0);
     });
-    form.fields.age.onChange({
-      target: {
-        value: 'invalid',
-      },
+    it('validateOnChange = false', async () => {
+      const form = new Form({
+        options: {
+          validateOnChange: false,
+        },
+        initValues: {
+          age: 42,
+        },
+        validateSchema: yup.object({
+          age: yup.number().required(),
+        }),
+      });
+      form.fields.age.onChange({
+        target: {
+          value: 'invalid',
+        },
+      });
+      await waitAsync();
+      expect(form.fields.age.error).toBe('');
     });
-    await waitAsync();
-    expect(form.fields.age.error.length).not.toBe(0);
-  });
-  it('validateOnChange = false', async () => {
-    const form = new Form({
-      options: {
-        validateOnChange: false,
-      },
-      initValues: {
-        age: 42,
-      },
-      validateSchema: yup.object({
-        age: yup.number().required(),
-      }),
-    });
-    form.fields.age.onChange({
-      target: {
-        value: 'invalid',
-      },
-    });
-    await waitAsync();
-    expect(form.fields.age.error).toBe('');
   });
 });

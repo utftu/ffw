@@ -1,4 +1,5 @@
 import Field, {Listener} from './field';
+import {batch} from './utils';
 
 export type FormProps = {
   initValues: Record<string, any>;
@@ -12,16 +13,6 @@ type Options = {
   validateOnBlur?: boolean;
   validateOnMount?: boolean;
 };
-
-function setInitValues(form: Form, initValues: Record<string, any>) {
-  Object.entries(initValues).forEach(([name, value]) => {
-    form.fields[name] = new Field({
-      name,
-      value,
-      getForm: () => form,
-    });
-  });
-}
 
 class Form {
   options: Options = {
@@ -37,19 +28,6 @@ class Form {
     this.globalListeners.forEach((globalListener) => globalListener(field));
   };
   initValues: Record<string, any> = null;
-
-  constructor({initValues, validateSchema, onSubmit, options}: FormProps) {
-    this.f = this.fields;
-    this.validateSchema = validateSchema;
-    this.options = {...this.options, ...options};
-    this.onSubmit = onSubmit;
-    this.initValues = initValues;
-    setInitValues(this, initValues);
-
-    if (options.validateOnMount) {
-      this.validate();
-    }
-  }
 
   _addGlobalListener(listener: Listener) {
     if (this.globalListeners.length === 0) {
@@ -81,6 +59,35 @@ class Form {
     }
   }
 
+  constructor({initValues, validateSchema, onSubmit, options = {}}: FormProps) {
+    this.f = this.fields;
+    this.validateSchema = validateSchema;
+    this.options = {...this.options, ...options};
+    this.onSubmit = onSubmit;
+    this.initValues = initValues;
+
+    Object.entries(initValues).forEach(([name, value]) => {
+      this.fields[name] = new Field({
+        name,
+        value,
+        getForm: () => this,
+      });
+    });
+
+    Object.keys(validateSchema.fields).forEach((name) => {
+      if (!this.fields[name]) {
+        this.fields[name] = new Field({
+          name,
+          getForm: () => this,
+        });
+      }
+    });
+
+    if (options.validateOnMount) {
+      this.validate();
+    }
+  }
+
   async validate() {
     for (const field of Object.values(this.fields)) {
       const fieldValid = await field.validate();
@@ -99,8 +106,27 @@ class Form {
   };
 
   reset() {
+    const oldFields = this.fields;
     this.fields = this.f = {};
-    setInitValues(this, this.initValues);
+
+    // recreate empty fields
+    Object.values(oldFields).forEach((oldField) => {
+      this.fields[oldField.name] = new Field({
+        name: oldField.name,
+        getForm: () => this,
+      });
+      this.fields[oldField.name].listeners = oldField.listeners;
+    });
+
+    Object.entries(this.initValues).forEach(([name, value]) => {
+      this.fields[name].value = value;
+    });
+
+    batch(() => {
+      Object.values(this.fields).forEach((field) => {
+        field.triggerListeners();
+      });
+    });
   }
 
   getErrors() {

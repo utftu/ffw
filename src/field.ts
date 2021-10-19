@@ -19,7 +19,7 @@ class Field {
     getForm,
   }: {
     name: string;
-    value: any;
+    value?: any;
     touched?: boolean;
     error?: string;
     getForm: () => Form;
@@ -53,6 +53,7 @@ class Field {
     }
     try {
       await fieldSchema.validate(this.value);
+      this.setError('');
       return true;
     } catch (error) {
       this.setError(error.errors[0]);
