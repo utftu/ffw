@@ -129,21 +129,21 @@ class Form {
     });
   }
 
-  getErrors() {
+  getErrors(): Record<string, string> {
     return Object.values(this.fields).reduce((store, field) => {
       store[field.name] = field.error;
       return store;
     }, {});
   }
 
-  getTouches() {
+  getTouches(): Record<string, boolean> {
     return Object.values(this.fields).reduce((store, field) => {
       store[field.name] = field.touched;
       return store;
     }, {});
   }
 
-  getValues() {
+  getValues(): Record<string, any> {
     return Object.values(this.fields).reduce((store, field) => {
       store[field.name] = field.value;
       return store;
