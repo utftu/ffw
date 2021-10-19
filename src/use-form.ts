@@ -11,7 +11,7 @@ function useForm(...deps: string[]): Form {
   useMemo(() => {
     deps.forEach((name) => {
       if (!form.fields[name]) {
-        form._addField(name, new Field({name, getForm: () => form, value: ''}));
+        form.addField(name, new Field({name, getForm: () => form, value: ''}));
       }
     });
   }, deps);
@@ -30,7 +30,7 @@ function useForm(...deps: string[]): Form {
       setUpdate({});
     };
     if (deps.length === 0) {
-      form._addGlobalListener(listener);
+      form.addGlobalListener(listener);
     } else {
       deps.forEach((fieldName) => {
         form.fields[fieldName].listeners = [
@@ -41,7 +41,7 @@ function useForm(...deps: string[]): Form {
     }
     return () => {
       if (deps.length === 0) {
-        form._removeGlobalListener(listener);
+        form.removeGlobalListener(listener);
       } else {
         deps.forEach((fieldName) => {
           form.fields[fieldName].listeners = form.fields[

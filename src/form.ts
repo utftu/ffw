@@ -29,21 +29,27 @@ class Form {
   };
   initValues: Record<string, any> = null;
 
-  _addGlobalListener(listener: Listener) {
+  private iterateFields(cb: (field: Field) => void) {
+    for (const fieldKey in this.fields) {
+      cb(this.fields[fieldKey]);
+    }
+  }
+
+  addGlobalListener(listener: Listener) {
     if (this.globalListeners.length === 0) {
-      Object.values(this.fields).forEach((field) => {
+      this.iterateFields((field) => {
         field.listeners.push(this.globalFieldListener);
       });
     }
     this.globalListeners.push(listener);
   }
 
-  _removeGlobalListener(listener: Listener) {
+  removeGlobalListener(listener: Listener) {
     this.globalListeners = this.globalListeners.filter(
       (globalListener) => listener !== globalListener
     );
     if (this.globalListeners.length === 0) {
-      Object.values(this.fields).forEach((field) => {
+      this.iterateFields((field) => {
         field.listeners = field.listeners.filter(
           (fieldListener) => this.globalFieldListener !== fieldListener
         );
@@ -51,12 +57,33 @@ class Form {
     }
   }
 
-  _addField(name: string, field: Field) {
+  addField(name: string, field: Field) {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
       this.fields[name].listeners.push(this.globalFieldListener);
     }
+  }
+
+  getField(name) {
+    if (!(name in this.fields)) {
+      this.addField(
+        name,
+        new Field({
+          name,
+          getForm: () => this,
+        })
+      );
+    }
+    return this.fields[name];
+  }
+
+  private triggerFields() {
+    batch(() => {
+      this.iterateFields((field) => {
+        field.triggerListeners();
+      });
+    });
   }
 
   constructor({initValues, validateSchema, onSubmit, options = {}}: FormProps) {
@@ -66,22 +93,20 @@ class Form {
     this.onSubmit = onSubmit;
     this.initValues = initValues;
 
-    Object.entries(initValues).forEach(([name, value]) => {
-      this.fields[name] = new Field({
-        name,
-        value,
-        getForm: () => this,
-      });
-    });
-
-    Object.keys(validateSchema.fields).forEach((name) => {
-      if (!this.fields[name]) {
-        this.fields[name] = new Field({
-          name,
+    for (const initValueKey in initValues) {
+      this.addField(
+        initValueKey,
+        new Field({
+          value: initValues[initValueKey],
+          name: initValueKey,
           getForm: () => this,
-        });
-      }
-    });
+        })
+      );
+    }
+
+    for (const validateFieldKey in validateSchema.fields) {
+      this.getField(validateFieldKey);
+    }
 
     if (options.validateOnMount) {
       this.validate();
@@ -90,12 +115,12 @@ class Form {
 
   async validate() {
     let error = false;
-    for (const field of Object.values(this.fields)) {
+    this.iterateFields(async (field) => {
       const fieldValid = await field.validate();
       if (!fieldValid) {
         error = true;
       }
-    }
+    });
     return !error;
   }
 
@@ -107,48 +132,74 @@ class Form {
   };
 
   reset() {
-    const oldFields = this.fields;
-    this.fields = this.f = {};
-
-    // recreate empty fields
-    Object.values(oldFields).forEach((oldField) => {
-      this.fields[oldField.name] = new Field({
-        name: oldField.name,
-        getForm: () => this,
-      });
-      this.fields[oldField.name].listeners = oldField.listeners;
+    this.iterateFields(async (field) => {
+      field.value =
+        field.name in this.initValues ? this.initValues[field.name] : '';
+      field.error = '';
+      field.touched = false;
     });
 
-    Object.entries(this.initValues).forEach(([name, value]) => {
-      this.fields[name].value = value;
-    });
+    this.triggerFields();
+  }
 
-    batch(() => {
-      Object.values(this.fields).forEach((field) => {
+  setErrors(errors: Record<string, string>) {
+    this.batch(() => {
+      for (const errorKey in errors) {
+        const field = this.getField(errorKey);
+        field.error = errors[errorKey];
         field.triggerListeners();
-      });
+      }
+    });
+  }
+
+  setTouches(touches: Record<string, boolean>) {
+    this.batch(() => {
+      for (const touchedKey in touches) {
+        const field = this.getField(touchedKey);
+        field.touched = touches[touchedKey];
+        field.triggerListeners();
+      }
+    });
+  }
+
+  setValues(values: Record<string, any>) {
+    this.batch(() => {
+      for (const valueKey in values) {
+        const field = this.getField(valueKey);
+        field.value = values[valueKey];
+        field.triggerListeners();
+      }
     });
   }
 
   getErrors(): Record<string, string> {
-    return Object.values(this.fields).reduce((store, field) => {
-      store[field.name] = field.error;
-      return store;
-    }, {});
+    const store = {};
+    this.iterateFields(async (field) => {
+      if (field.error) {
+        store[field.name] = field.error;
+      }
+    });
+    return store;
   }
 
   getTouches(): Record<string, boolean> {
-    return Object.values(this.fields).reduce((store, field) => {
+    const store = {};
+    this.iterateFields(async (field) => {
       store[field.name] = field.touched;
-      return store;
-    }, {});
+    });
+    return store;
   }
 
   getValues(): Record<string, any> {
-    return Object.values(this.fields).reduce((store, field) => {
+    const store = {};
+    this.iterateFields(async (field) => {
       store[field.name] = field.value;
-      return store;
-    }, {});
+    });
+    return store;
+  }
+
+  batch(cb) {
+    batch(cb);
   }
 }
 

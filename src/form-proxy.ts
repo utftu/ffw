@@ -17,13 +17,7 @@ export function createFormProxy(form: Form, deps: string[]) {
           },
         });
       }
-      return {
-        __proto__: target,
-        // setFieldValue(name, ...args) {
-        //   checkAndThrow(name)
-        //   target.setFieldValue(name, ...args)
-        // }
-      };
+      return target[property];
     },
   });
 }
