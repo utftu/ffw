@@ -117,8 +117,9 @@ describe('field', () => {
           age: yup.number().required(),
         }),
       });
-      await form.fields.age.validate();
+      const validateResult = await form.fields.age.validate();
       expect(form.fields.age.error.length).not.toBe(0);
+      expect(validateResult).toBe(false);
     });
     it('valid', async () => {
       const form = new Form({
@@ -129,8 +130,9 @@ describe('field', () => {
           age: yup.number().required(),
         }),
       });
-      await form.fields.age.validate();
+      const validateResult = await form.fields.age.validate();
       expect(form.fields.age.error.length).toBe(0);
+      expect(validateResult).toBe(true);
     });
     it('invalid -> valid', async () => {
       const form = new Form({

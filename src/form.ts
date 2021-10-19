@@ -115,12 +115,13 @@ class Form {
 
   async validate() {
     let error = false;
-    this.iterateFields(async (field) => {
+    for (const fieldKey in this.fields) {
+      const field = this.getField(fieldKey);
       const fieldValid = await field.validate();
       if (!fieldValid) {
         error = true;
       }
-    });
+    }
     return !error;
   }
 
@@ -132,7 +133,7 @@ class Form {
   };
 
   reset() {
-    this.iterateFields(async (field) => {
+    this.iterateFields((field) => {
       field.value =
         field.name in this.initValues ? this.initValues[field.name] : '';
       field.error = '';
@@ -174,7 +175,7 @@ class Form {
 
   getErrors(): Record<string, string> {
     const store = {};
-    this.iterateFields(async (field) => {
+    this.iterateFields((field) => {
       if (field.error) {
         store[field.name] = field.error;
       }
@@ -184,7 +185,7 @@ class Form {
 
   getTouches(): Record<string, boolean> {
     const store = {};
-    this.iterateFields(async (field) => {
+    this.iterateFields((field) => {
       store[field.name] = field.touched;
     });
     return store;
@@ -192,7 +193,7 @@ class Form {
 
   getValues(): Record<string, any> {
     const store = {};
-    this.iterateFields(async (field) => {
+    this.iterateFields((field) => {
       store[field.name] = field.value;
     });
     return store;
