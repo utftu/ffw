@@ -1,5 +1,6 @@
 import Form from './form';
 import * as yup from 'yup';
+import {waitAsync} from './utils';
 
 describe('form', () => {
   it('initValues', () => {
@@ -14,22 +15,23 @@ describe('form', () => {
     expect(form.fields.name.value).toBe('robbin');
   });
 
-  it('validateOnMount', () => {
+  it('validateOnMount', async () => {
     const form = new Form({
       options: {
         validateOnMount: true,
       },
       initValues: {
-        age: 42,
-        name: '',
+        age: 'wrong',
+        age1: 'wrong1',
       },
       validateSchema: yup.object({
         age: yup.number().required(),
-        name: yup.string().required(),
+        age1: yup.number().required(),
       }),
     });
+    await waitAsync();
     const errors = form.getErrors();
     expect(errors.age).not.toBe('');
-    expect(errors.name).not.toBe('');
+    expect(errors.age1).not.toBe('');
   });
 });

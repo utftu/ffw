@@ -89,13 +89,14 @@ class Form {
   }
 
   async validate() {
+    let error = false;
     for (const field of Object.values(this.fields)) {
       const fieldValid = await field.validate();
       if (!fieldValid) {
-        return false;
+        error = true;
       }
     }
-    return true;
+    return !error;
   }
 
   submit = async () => {
