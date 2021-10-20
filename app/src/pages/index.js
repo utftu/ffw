@@ -7,16 +7,16 @@ import GlobalListener from '../components/global-listener';
 
 export default function Home() {
   const form = useGlobalFfw({
-    initValues: {
-      age: 42,
-      name: 'Ivan',
-    },
-    validateSchema: yup.object({
-      age: yup.number().required(),
-    }),
-    options: {
-      validateOnBlur: false,
-    },
+    // initValues: {
+    //   age: 42,
+    //   name: 'Ivan',
+    // },
+    // validateSchema: yup.object({
+    //   age: yup.number().required(),
+    // }),
+    // options: {
+    //   validateOnBlur: false,
+    // },
   });
   globalThis.form = form;
   return (

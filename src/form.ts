@@ -86,34 +86,31 @@ class Form {
     });
   }
 
-  constructor({
-    initValues = {},
-    validateSchema = {fields: {}},
-    onSubmit,
-    options = {},
-  }: FormProps) {
+  constructor(props: FormProps) {
     this.f = this.fields;
-    this.validateSchema = validateSchema;
-    this.options = {...this.options, ...options};
-    this.onSubmit = onSubmit;
-    this.initValues = initValues;
+    this.validateSchema = props.validateSchema ?? {
+      fields: {},
+    };
+    this.options = {...this.options, ...props.options};
+    this.onSubmit = props.onSubmit ?? function () {};
+    this.initValues = props.initValues ?? {};
 
-    for (const initValueKey in initValues) {
+    for (const initValueKey in this.initValues) {
       this.addField(
         initValueKey,
         new Field({
-          value: initValues[initValueKey],
+          value: this.initValues[initValueKey],
           name: initValueKey,
           getForm: () => this,
         })
       );
     }
 
-    for (const validateFieldKey in validateSchema.fields) {
+    for (const validateFieldKey in this.validateSchema.fields) {
       this.getField(validateFieldKey);
     }
 
-    if (options.validateOnMount) {
+    if (this.options.validateOnMount) {
       this.validate();
     }
   }
