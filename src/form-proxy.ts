@@ -1,23 +1,37 @@
-import Form from './form';
+import type Form from './form';
 
 export function createFormProxy(form: Form, deps: string[]) {
   function checkAndThrow(property) {
-    if (!deps.includes(property) && deps.length !== 0) {
+    if (deps.length !== 0 && !deps.includes(property)) {
       throw new Error(`You don't have access to field with name - ${property}`);
     }
   }
 
   return new Proxy(form, {
-    get(target, property) {
+    get(target, property, receiver) {
       if (property === 'fields' || property === 'f') {
-        return new Proxy(form.fields, {
+        return new Proxy(Reflect.get(target, property, receiver), {
           get(target, property) {
             checkAndThrow(property);
-            return target[property as string];
+            return Reflect.get(target, property, receiver);
           },
         });
       }
-      return target[property];
+      if (
+        property === 'setValues' ||
+        property === 'setErrors' ||
+        property === 'setTouches'
+      ) {
+        return new Proxy(form[property], {
+          apply(target, thisArg, args) {
+            for (const name in args[0]) {
+              checkAndThrow(name);
+            }
+            return Reflect.apply(target, thisArg, args);
+          },
+        });
+      }
+      return Reflect.get(target, property, receiver);
     },
   });
 }

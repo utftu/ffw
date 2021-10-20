@@ -3,7 +3,7 @@ import {batch} from './utils';
 
 export type FormProps = {
   initValues: Record<string, any>;
-  validateSchema: any;
+  validateSchema?: any;
   options?: Options;
   onSubmit?: (form: Form) => void;
 };
@@ -86,7 +86,12 @@ class Form {
     });
   }
 
-  constructor({initValues, validateSchema, onSubmit, options = {}}: FormProps) {
+  constructor({
+    initValues,
+    validateSchema = {fields: {}},
+    onSubmit,
+    options = {},
+  }: FormProps) {
     this.f = this.fields;
     this.validateSchema = validateSchema;
     this.options = {...this.options, ...options};

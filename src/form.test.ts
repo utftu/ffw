@@ -134,4 +134,85 @@ describe('form', () => {
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(1);
   });
+
+  it('getValues()', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+      },
+    });
+
+    expect(form.getValues()).toEqual({
+      age: 42,
+      name: 'robbin',
+    });
+  });
+
+  it('getTouches()', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+      },
+    });
+    form.fields.age.setTouched(true);
+    form.fields.name.setTouched(false);
+
+    expect(form.getTouches()).toEqual({
+      age: true,
+      name: false,
+    });
+  });
+
+  it('getErrors()', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+        address: 'moscow',
+      },
+    });
+    form.fields.age.setError('error');
+    form.fields.name.setError('error1');
+
+    expect(form.getErrors()).toEqual({
+      age: 'error',
+      name: 'error1',
+    });
+  });
+
+  it('reset()', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+        address: 'Moscow',
+      },
+    });
+    form.setValues({
+      age: 43,
+      name: 'bobbin',
+      address: 'London',
+    });
+    form.setTouches({
+      age: true,
+    });
+    form.setErrors({
+      name: 'WRONG NAME!',
+    });
+    form.reset();
+
+    expect(form.getValues()).toEqual({
+      age: 42,
+      name: 'robbin',
+      address: 'Moscow',
+    });
+    expect(form.getErrors()).toEqual({});
+    expect(form.getTouches()).toEqual({
+      age: false,
+      name: false,
+      address: false,
+    });
+  });
 });
