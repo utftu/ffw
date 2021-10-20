@@ -87,7 +87,7 @@ class Form {
   }
 
   constructor({
-    initValues,
+    initValues = {},
     validateSchema = {fields: {}},
     onSubmit,
     options = {},

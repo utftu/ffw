@@ -118,13 +118,17 @@ describe('form', () => {
       initValues: {
         age: 42,
         name: 'robbin',
+        address: 'Moscow',
       },
       validateSchema: yup.object({}),
     });
     const ageListener = jest.fn();
     const nameListener = jest.fn();
+    const addressListener = jest.fn();
     form.fields.age.listeners.push(ageListener);
     form.fields.name.listeners.push(nameListener);
+    form.fields.address.listeners.push(addressListener);
+
     form.setValues({
       age: 43,
       name: 'bobbin',
@@ -133,6 +137,7 @@ describe('form', () => {
     expect(form.fields.name.value).toBe('bobbin');
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(1);
+    expect(addressListener.mock.calls.length).toBe(0);
   });
 
   it('getValues()', () => {
