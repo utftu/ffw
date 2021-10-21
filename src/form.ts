@@ -21,7 +21,7 @@ class Form {
   };
   fields: Record<string, Field> = {};
   /*
-   * {@link controls.Button.render | alias to .fields}
+   * alias to .fields
    * */
   f: Record<string, Field> = null;
   validateSchema = null;
