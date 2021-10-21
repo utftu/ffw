@@ -20,6 +20,9 @@ class Form {
     validateOnBlur: true,
   };
   fields: Record<string, Field> = {};
+  /*
+   * {@link controls.Button.render | alias to .fields}
+   * */
   f: Record<string, Field> = null;
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
