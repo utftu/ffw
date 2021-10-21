@@ -8,6 +8,10 @@ export type FormProps = {
   onSubmit?: (form: Form) => void;
 };
 
+/**
+ * Represents a book in the catalog.
+ * @public
+ */
 type Options = {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
@@ -20,9 +24,9 @@ class Form {
     validateOnBlur: true,
   };
   fields: Record<string, Field> = {};
-  /*
-   * alias to .fields
-   * */
+  /**
+   alias to {@link controls.From.fields | the render() method}
+   */
   f: Record<string, Field> = null;
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
