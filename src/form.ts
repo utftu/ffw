@@ -8,10 +8,6 @@ export type FormProps = {
   onSubmit?: (form: Form) => void;
 };
 
-/**
- * Represents a book in the catalog.
- * @public
- */
 type Options = {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
@@ -24,9 +20,6 @@ class Form {
     validateOnBlur: true,
   };
   fields: Record<string, Field> = {};
-  /**
-   alias to {@link controls.From.fields | the render() method}
-   */
   f: Record<string, Field> = null;
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
@@ -160,6 +153,18 @@ class Form {
         field.triggerListeners();
       }
     });
+  }
+
+  setValue(name: string, value: any) {
+    return this.getField(name).set(value);
+  }
+
+  setTouched(name: string, touched: boolean) {
+    return this.getField(name).setTouched(touched);
+  }
+
+  setError(name: string, error: string) {
+    return this.getField(name).setError(error);
   }
 
   setTouches(touches: Record<string, boolean>) {

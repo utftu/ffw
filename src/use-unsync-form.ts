@@ -1,28 +1,41 @@
-import { useContext } from "react";
-import context from "./conext.js";
+import {useContext} from 'react';
+import context from './conext';
+import type Form from './form';
 
-function useUnsyncForm(deps: string[] | any) {
-  const lastArg = deps[deps.length - 1]
-  const config = typeof lastArg !== 'string' && !Array.isArray(lastArg) ?  lastArg: null
+export type Config =
+  | {
+      context: any;
+    }
+  | {form: Form};
 
-  let fieldNames
+function useUnsyncForm(deps: string[] | any[]): {
+  form: Form;
+  fieldNames: string[];
+} {
+  const lastArg = deps[deps.length - 1];
+  const config =
+    typeof lastArg !== 'string' && !Array.isArray(lastArg)
+      ? (lastArg as Config)
+      : null;
+
+  let fieldNames;
   if (Array.isArray(deps[0])) {
-    fieldNames = deps[0]
+    fieldNames = deps[0];
   } else {
     if (config) {
-      fieldNames = deps.slice(0, deps.length - 1)
+      fieldNames = deps.slice(0, deps.length - 1);
     } else {
-      fieldNames = deps
+      fieldNames = deps;
     }
   }
 
-  const contextForm = useContext(config?.context ?? context);
-  const form = config?.form || contextForm
+  const contextForm = useContext<Form>((config as any)?.context ?? context);
+  const form = (config as any)?.form ?? contextForm;
 
   return {
     form,
-    fieldNames
-  }
+    fieldNames,
+  };
 }
 
-export default useUnsyncForm
+export default useUnsyncForm;

@@ -1,55 +1,25 @@
-import context from './conext';
 import Form from './form';
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {createFormProxy} from './form-proxy';
 import Field from './field';
+import useUnsyncForm from "./use-unsync-form.js";
 
-function useForm(...deps: string[] | any): Form {
-  let realDeps
-  let customContext
-  let customForm
-  const lastArg = deps[deps.length - 1]
-  if (Array.isArray(deps[0])) {
-    realDeps = deps[0]
-  } else if (typeof deps[deps.length - 1] !== 'string') {
-    realDeps = realDeps.slice(0, deps.length - 1)
-    const config = lastArg
-    if (config.context) {
-      customContext = config.context
-    } else if (config.form) {
-      customForm = config.form
-    } else {
-      throw new Error('Invalid config')
-    }
-  } else {
-    realDeps = deps
-  }
-
-  const contextForm = useContext(customContext || context);
-  const form = customForm || customContext
-  // let form
-  //
-  // if (lastArg instanceof Form) {
-  //   form = lastArg
-  // } else if (typeof lastArg === 'string') {
-  //   form = contextForm
-  // } else {
-  //   // custom context
-  // }
+function useForm(...deps: any[]): Form {
+  const {form, fieldNames} = useUnsyncForm(deps)
 
   const [, setUpdate] = useState(null);
 
   useMemo(() => {
-    deps.forEach((name) => {
+    fieldNames.forEach((name) => {
       if (!form.fields[name]) {
         form.addField(name, new Field({name, getForm: () => form, value: ''}));
       }
     });
-  }, deps);
+  }, fieldNames);
 
   const proxyForm = useMemo(() => {
     if (process.env.NODE_ENV === 'development') {
-      return createFormProxy(form, deps);
+      return createFormProxy(form, fieldNames);
     } else {
       return null;
     }
@@ -60,10 +30,10 @@ function useForm(...deps: string[] | any): Form {
     const listener = () => {
       setUpdate({});
     };
-    if (deps.length === 0) {
+    if (fieldNames.length === 0) {
       form.addGlobalListener(listener);
     } else {
-      deps.forEach((fieldName) => {
+      fieldNames.forEach((fieldName) => {
         form.fields[fieldName].listeners = [
           ...form.fields[fieldName].listeners,
           listener,
