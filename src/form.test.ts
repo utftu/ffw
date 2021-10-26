@@ -140,21 +140,20 @@ describe('form', () => {
     expect(addressListener.mock.calls.length).toBe(0);
   });
 
-  it('getValues()', () => {
-    const form = new Form({
-      initValues: {
-        age: 42,
-        name: 'robbin',
-      },
-    });
-
-    expect(form.getValues()).toEqual({
+  it('getValues() || .values', () => {
+    const values = {
       age: 42,
       name: 'robbin',
+    };
+    const form = new Form({
+      initValues: values,
     });
+
+    expect(form.getValues()).toEqual(values);
+    expect(form.values).toEqual(values);
   });
 
-  it('getTouches()', () => {
+  it('getTouches() || touches', () => {
     const form = new Form({
       initValues: {
         age: 42,
@@ -168,9 +167,13 @@ describe('form', () => {
       age: true,
       name: false,
     });
+    expect(form.touches).toEqual({
+      age: true,
+      name: false,
+    });
   });
 
-  it('getErrors()', () => {
+  it('getErrors() || errors', () => {
     const form = new Form({
       initValues: {
         age: 42,
@@ -182,6 +185,10 @@ describe('form', () => {
     form.fields.name.setError('error1');
 
     expect(form.getErrors()).toEqual({
+      age: 'error',
+      name: 'error1',
+    });
+    expect(form.errors).toEqual({
       age: 'error',
       name: 'error1',
     });
