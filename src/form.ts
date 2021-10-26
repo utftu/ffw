@@ -205,6 +205,18 @@ class Form {
     return store;
   }
 
+  get values() {
+    return this.getValues();
+  }
+
+  get errors() {
+    return this.getErrors();
+  }
+
+  get touches() {
+    return this.getTouches();
+  }
+
   getValues(): Record<string, any> {
     const store = {};
     this.iterateFields((field) => {
