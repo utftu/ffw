@@ -77,7 +77,7 @@ class Field {
     }
   };
 
-  getInputField = () => {
+  getInputProps = () => {
     return {
       value: this.value,
       name: this.name,
@@ -86,7 +86,7 @@ class Field {
     };
   };
 
-  getSelectField = () => {
+  getSelectProps = () => {
     return {
       value: this.value,
       name: this.name,

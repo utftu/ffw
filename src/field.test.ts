@@ -252,4 +252,6 @@ describe('field', () => {
       expect(form.fields.age.error).toBe('');
     });
   });
+
+  it('getInputProps()');
 });
