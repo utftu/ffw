@@ -8,7 +8,7 @@ function NameInput() {
     <div>
       <span>
         NameInput: name = {''}
-        <input {...form.f.name.getInputField()} />
+        <input {...form.f.name.getInputProps()} />
       </span>
     </div>
   );

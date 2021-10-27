@@ -8,7 +8,7 @@ function AgeInput() {
     <div>
       <span>
         AgeInput: age = {''}
-        <input {...form.f.age.getInputField()} />
+        <input {...form.f.age.getInputProps()} />
       </span>
     </div>
   );
