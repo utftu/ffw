@@ -79,4 +79,14 @@ describe('form-proxy', () => {
       ).toThrow();
     });
   });
+  it('unknown property', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+      },
+    });
+
+    // @ts-ignore
+    expect(form.abc).toBe(undefined);
+  });
 });

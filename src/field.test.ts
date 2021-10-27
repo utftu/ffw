@@ -11,11 +11,11 @@ const ageFieldParams = {
 };
 
 export const fieldMockExpectFunctions = {
-  getForm: expect.any(Function),
-  onBlur: expect.any(Function),
-  onChange: expect.any(Function),
-  getInputField: expect.any(Function),
-  getSelectField: expect.any(Function),
+  getForm: expect.anything(),
+  onBlur: expect.anything(),
+  onChange: expect.anything(),
+  getInputField: expect.anything(),
+  getSelectField: expect.anything(),
 };
 
 describe('field', () => {
@@ -23,17 +23,15 @@ describe('field', () => {
     it('required params', () => {
       expect(
         new Field({
-          value: 42,
           name: 'age',
           getForm: jest.fn(),
         })
-      ).toEqual({
-        value: 42,
+      ).toMatchObject({
+        value: '',
         name: 'age',
         error: '',
         touched: false,
         listeners: [],
-        ...fieldMockExpectFunctions,
       });
     });
     it('all params', () => {
@@ -45,13 +43,12 @@ describe('field', () => {
           touched: true,
           getForm: jest.fn(),
         })
-      ).toEqual({
+      ).toMatchObject({
         value: 42,
         name: 'age',
         error: 'too young',
         touched: true,
         listeners: [],
-        ...fieldMockExpectFunctions,
       });
     });
   });
@@ -63,13 +60,12 @@ describe('field', () => {
     field.triggerListeners();
 
     expect(listener.mock.calls.length).toBe(1);
-    expect(listener.mock.calls[0][0]).toEqual({
+    expect(listener.mock.calls[0][0]).toMatchObject({
       value: 42,
       name: 'age',
       error: '',
       touched: false,
       listeners: [listener],
-      ...fieldMockExpectFunctions,
     });
   });
 
@@ -177,7 +173,7 @@ describe('field', () => {
       });
       form.fields.age.onBlur();
       await waitAsync();
-      expect(form.fields.age.error).not.toBe(0);
+      expect(form.fields.age.error).not.toBe('');
     });
     it('validateOnBlur = false', async () => {
       const form = new Form({
@@ -187,10 +183,13 @@ describe('field', () => {
         validateSchema: yup.object({
           age: yup.number().required(),
         }),
+        options: {
+          validateOnBlur: false,
+        },
       });
       form.fields.age.onBlur();
       await waitAsync();
-      expect(form.fields.age.error).not.toBe(0);
+      expect(form.fields.age.error).toBe('');
     });
   });
 
@@ -253,5 +252,49 @@ describe('field', () => {
     });
   });
 
-  it('getInputProps()');
+  it('getInputProps()', () => {
+    const form = new Form({
+      initValues: {
+        name: 'robbin',
+      },
+    });
+
+    expect(form.fields.name.getInputProps()).toEqual({
+      value: 'robbin',
+      name: form.fields.name.name,
+      onChange: expect.any(Function),
+      onBlur: expect.any(Function),
+    });
+    form.fields.name.getInputProps().onBlur();
+    expect(form.fields.name.touched).toBe(true);
+    form.fields.name.setTouched(false);
+    form.fields.name.getInputProps().onChange({
+      target: {
+        value: 'bobbin',
+      },
+    });
+    expect(form.fields.name.value).toBe('bobbin');
+    expect(form.fields.name.touched).toBe(false);
+  });
+
+  it('getSelectProps()', () => {
+    const form = new Form({
+      initValues: {
+        name: 'robbin',
+      },
+    });
+
+    expect(form.fields.name.getSelectProps()).toEqual({
+      value: 'robbin',
+      name: form.fields.name.name,
+      onChange: expect.any(Function),
+      onBlur: expect.any(Function),
+    });
+    form.fields.name.getSelectProps().onBlur();
+    expect(form.fields.name.touched).toBe(true);
+    form.fields.name.setTouched(false);
+    form.fields.name.getSelectProps().onChange('bobbin');
+    expect(form.fields.name.value).toBe('bobbin');
+    expect(form.fields.name.touched).toBe(false);
+  });
 });

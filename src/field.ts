@@ -90,18 +90,11 @@ class Field {
     return {
       value: this.value,
       name: this.name,
-      onChange: (value) => {
-        this.value = value;
-        this.touched = true;
-        this.triggerListeners();
-
-        if (
-          this.getForm().options.validateOnChange ||
-          this.getForm().options.validateOnBlur
-        ) {
-          this.validate();
+      onChange: (value) => this.onChange({
+        target: {
+          value
         }
-      },
+      }),
       onBlur: this.onBlur,
     };
   };
