@@ -87,10 +87,22 @@ class Form {
   }
 
   constructor(props: FormProps) {
+    let validateSchema;
+
+    if (props.validateSchema) {
+      if (props.validateSchema instanceof Function) {
+        validateSchema = props.validateSchema();
+      } else {
+        validateSchema = props.validateSchema;
+      }
+    } else {
+      validateSchema = {
+        fields: {},
+      };
+    }
+
     this.f = this.fields;
-    this.validateSchema = props.validateSchema ?? {
-      fields: {},
-    };
+    this.validateSchema = validateSchema;
     this.options = {...this.options, ...props.options};
     this.onSubmit = props.onSubmit ?? function () {};
     this.initValues = props.initValues ?? {};
