@@ -32,7 +32,7 @@ describe('useUnsubForm', () => {
     expect(result.form instanceof Form).toBe(true);
     expect(result.form.fields.name.value).toBe('robbin');
   });
-  it('array not config', () => {
+  it('array no config', () => {
     let result;
     function Parent() {
       const form = useInitForm();
@@ -86,6 +86,24 @@ describe('useUnsubForm', () => {
           form,
         },
       ]);
+      return <div>Child</div>;
+    }
+    render(<Parent />);
+    expect(result.form instanceof Form).toBe(true);
+    expect(result.fieldNames).toEqual(['test1', 'test2']);
+  });
+  it('params no config', () => {
+    let result;
+    function Parent() {
+      const form = useInitForm();
+      return (
+        <context.Provider value={form}>
+          <Child />
+        </context.Provider>
+      );
+    }
+    function Child() {
+      result = useUnsubForm(['test1', 'test2', {context}]);
       return <div>Child</div>;
     }
     render(<Parent />);
