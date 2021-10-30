@@ -2,10 +2,10 @@ import Form from './form';
 import {useEffect, useMemo, useState} from 'react';
 import {createFormProxy} from './form-proxy';
 import Field from './field';
-import useUnsyncForm from "./use-unsync-form.js";
+import useUnsubForm from './use-unsub-form.js';
 
 function useForm(...deps: any[]): Form {
-  const {form, fieldNames} = useUnsyncForm(deps)
+  const {form, fieldNames} = useUnsubForm(deps);
 
   const [, setUpdate] = useState(null);
 
@@ -25,7 +25,7 @@ function useForm(...deps: any[]): Form {
     }
   }, []);
 
-  // todo subscribe on memo
+  // todo subscribe on memo / layout
   useEffect(() => {
     const listener = () => {
       setUpdate({});
@@ -34,10 +34,7 @@ function useForm(...deps: any[]): Form {
       form.addGlobalListener(listener);
     } else {
       fieldNames.forEach((fieldName) => {
-        form.fields[fieldName].listeners = [
-          ...form.fields[fieldName].listeners,
-          listener,
-        ];
+        form.fields[fieldName].listeners.push(listener);
       });
     }
     return () => {

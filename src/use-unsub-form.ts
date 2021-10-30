@@ -8,7 +8,7 @@ export type Config =
     }
   | {form: Form};
 
-function useUnsyncForm(deps: string[] | any[]): {
+function useUnsubForm(deps: string[] | any[]): {
   form: Form;
   fieldNames: string[];
 } {
@@ -38,4 +38,4 @@ function useUnsyncForm(deps: string[] | any[]): {
   };
 }
 
-export default useUnsyncForm;
+export default useUnsubForm;
