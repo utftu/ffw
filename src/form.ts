@@ -18,6 +18,7 @@ class Form {
   options: Options = {
     validateOnChange: true,
     validateOnBlur: true,
+    validateOnMount: false,
   };
   fields: Record<string, Field> = {};
   f: Record<string, Field> = null;
