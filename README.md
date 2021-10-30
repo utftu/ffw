@@ -96,12 +96,12 @@ function useInitFfw(options: FormProps): Form // init form
 
 `useFfa`
 ```ts
-function useFfa(fieldName1: string, fieldName2: string, ...): Form // subdribe to fields and get form
+function useFfa(fieldName1: string, fieldName2: string, ...): Form // subscribe to fields and get form
 ```
 
 `useFfaField`
 ```ts
-function useFfaField(dep1: string, dep2: string, dep3: string): Form // subdribe to field and get form
+function useFfaField(dep1: string, dep2: string, dep3: string): Form // subscribe to field and get form
 ```
 
 `Form`
