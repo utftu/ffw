@@ -24,7 +24,8 @@ function App() {
   
   return (
     <FfwProvider value={form}>
-      <AgeLitener/>
+      <User/>
+      <Age/>
     </FfwProvider>
   )
 }
