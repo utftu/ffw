@@ -218,6 +218,18 @@ return (
 В данном случае в режиме разработки мы получим ошибку<br>
 `You don't have access to field - name`
 
+#### Пару слов о синхронности
+Что будет находиться в значении поля name, если написать такой код для formik-а?
+```ts
+formik.setFieldValue('name', 'robbin')
+console.log(formik.values.name) // previous name
+```
+Правильный ответ - значение, которое находилось в name до вызова setFieldValue. Это нельзя назвать явной ошибкой, как минимум такой подход используется в react-е, однако на мой взгляд это не самое очевидно поведение и другое поведение было бы логичней
+```ts
+formik.setFieldValue('name', 'robbin')
+console.log(formik.values.name) // robbin
+```
+
 ### В итоге
 
 Соберем все вместе!
