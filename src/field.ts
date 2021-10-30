@@ -90,11 +90,12 @@ class Field {
     return {
       value: this.value,
       name: this.name,
-      onChange: (value) => this.onChange({
-        target: {
-          value
-        }
-      }),
+      onChange: (value) =>
+        this.onChange({
+          target: {
+            value,
+          },
+        }),
       onBlur: this.onBlur,
     };
   };
