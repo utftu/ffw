@@ -101,7 +101,7 @@ function useFfa(fieldName1: string, fieldName2: string, ...): Form // subscribe 
 
 `useFfaField`
 ```ts
-function useFfaField(dep1: string, dep2: string, dep3: string): Form // subscribe to field and get form
+function useFfaField(fieldName: string): Form // subscribe to field and get form
 ```
 
 `Form`
