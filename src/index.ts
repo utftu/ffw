@@ -1,6 +1,6 @@
 import useForm from './use-form';
 import context from './conext';
-import useInitForm from './use-init-form.js';
+import useInitForm from './use-init-form';
 import useField from './use-field';
 
 const Provider = context.Provider;

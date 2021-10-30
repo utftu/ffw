@@ -1,6 +1,6 @@
 import useForm from './use-form';
 import type Field from './field';
-import type {Config} from './use-unsub-form.js';
+import type {Config} from './use-unsub-form';
 
 function useField(name: string, config?: Config): Field {
   const form = useForm(name, config);

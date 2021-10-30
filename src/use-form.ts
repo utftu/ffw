@@ -2,7 +2,7 @@ import Form from './form';
 import {useEffect, useMemo, useState} from 'react';
 import {createFormProxy} from './form-proxy';
 import Field from './field';
-import useUnsubForm from './use-unsub-form.js';
+import useUnsubForm from './use-unsub-form';
 
 function useForm(...deps: any[]): Form {
   const {form, fieldNames} = useUnsubForm(deps);
