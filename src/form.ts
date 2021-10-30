@@ -2,7 +2,7 @@ import Field, {Listener} from './field';
 import {batch} from './utils';
 
 export type FormProps = {
-  initValues: Record<string, any>;
+  initValues?: Record<string, any>;
   validateSchema?: any;
   options?: Options;
   onSubmit?: (form: Form) => void;
@@ -86,7 +86,7 @@ class Form {
     });
   }
 
-  constructor(props: FormProps) {
+  constructor(props: FormProps = {}) {
     this.f = this.fields;
     this.validateSchema = props.validateSchema ?? {
       fields: {},

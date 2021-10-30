@@ -71,27 +71,6 @@ describe('form', () => {
     expect(errors.age).not.toBe('');
     expect(errors.age1).not.toBe('');
   });
-  it('setTouches()', () => {
-    const form = new Form({
-      initValues: {
-        age: 42,
-        name: 'robbin',
-      },
-      validateSchema: yup.object({}),
-    });
-    const ageListener = jest.fn();
-    const nameListener = jest.fn();
-    form.fields.age.listeners.push(ageListener);
-    form.fields.name.listeners.push(nameListener);
-    form.setTouches({
-      age: true,
-      name: false,
-    });
-    expect(form.fields.age.touched).toBe(true);
-    expect(form.fields.name.touched).toBe(false);
-    expect(ageListener.mock.calls.length).toBe(1);
-    expect(nameListener.mock.calls.length).toBe(1);
-  });
   it('setErrors()', () => {
     const form = new Form({
       initValues: {
@@ -113,66 +92,18 @@ describe('form', () => {
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(1);
   });
-  it('setValues()', () => {
+  it('setError()', () => {
     const form = new Form({
       initValues: {
-        age: 42,
-        name: 'robbin',
-        address: 'Moscow',
-      },
-      validateSchema: yup.object({}),
-    });
-    const ageListener = jest.fn();
-    const nameListener = jest.fn();
-    const addressListener = jest.fn();
-    form.fields.age.listeners.push(ageListener);
-    form.fields.name.listeners.push(nameListener);
-    form.fields.address.listeners.push(addressListener);
-
-    form.setValues({
-      age: 43,
-      name: 'bobbin',
-    });
-    expect(form.fields.age.value).toBe(43);
-    expect(form.fields.name.value).toBe('bobbin');
-    expect(ageListener.mock.calls.length).toBe(1);
-    expect(nameListener.mock.calls.length).toBe(1);
-    expect(addressListener.mock.calls.length).toBe(0);
-  });
-
-  it('getValues() || .values', () => {
-    const values = {
-      age: 42,
-      name: 'robbin',
-    };
-    const form = new Form({
-      initValues: values,
-    });
-
-    expect(form.getValues()).toEqual(values);
-    expect(form.values).toEqual(values);
-  });
-
-  it('getTouches() || touches', () => {
-    const form = new Form({
-      initValues: {
-        age: 42,
         name: 'robbin',
       },
     });
-    form.fields.age.setTouched(true);
-    form.fields.name.setTouched(false);
-
-    expect(form.getTouches()).toEqual({
-      age: true,
-      name: false,
-    });
-    expect(form.touches).toEqual({
-      age: true,
-      name: false,
-    });
+    const listener = jest.fn();
+    form.fields.name.listeners.push(listener);
+    form.setError('name', 'you are bobbin');
+    expect(form.fields.name.error).toBe('you are bobbin');
+    expect(listener.mock.calls.length).toBe(1);
   });
-
   it('getErrors() || errors', () => {
     const form = new Form({
       initValues: {
@@ -225,6 +156,108 @@ describe('form', () => {
       age: false,
       name: false,
       address: false,
+    });
+  });
+  it('setValues()', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+        address: 'Moscow',
+      },
+      validateSchema: yup.object({}),
+    });
+    const ageListener = jest.fn();
+    const nameListener = jest.fn();
+    const addressListener = jest.fn();
+    form.fields.age.listeners.push(ageListener);
+    form.fields.name.listeners.push(nameListener);
+    form.fields.address.listeners.push(addressListener);
+
+    form.setValues({
+      age: 43,
+      name: 'bobbin',
+    });
+    expect(form.fields.age.value).toBe(43);
+    expect(form.fields.name.value).toBe('bobbin');
+    expect(ageListener.mock.calls.length).toBe(1);
+    expect(nameListener.mock.calls.length).toBe(1);
+    expect(addressListener.mock.calls.length).toBe(0);
+  });
+  it('setValue()', () => {
+    const form = new Form({
+      initValues: {
+        name: 'robbin',
+      },
+    });
+    const listener = jest.fn();
+    form.fields.name.listeners.push(listener);
+    form.setValue('name', 'bobbin');
+    expect(form.fields.name.value).toBe('bobbin');
+    expect(listener.mock.calls.length).toBe(1);
+  });
+  it('getValues() || .values', () => {
+    const values = {
+      age: 42,
+      name: 'robbin',
+    };
+    const form = new Form({
+      initValues: values,
+    });
+
+    expect(form.getValues()).toEqual(values);
+    expect(form.values).toEqual(values);
+  });
+  it('setTouches()', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+      },
+      validateSchema: yup.object({}),
+    });
+    const ageListener = jest.fn();
+    const nameListener = jest.fn();
+    form.fields.age.listeners.push(ageListener);
+    form.fields.name.listeners.push(nameListener);
+    form.setTouches({
+      age: true,
+      name: false,
+    });
+    expect(form.fields.age.touched).toBe(true);
+    expect(form.fields.name.touched).toBe(false);
+    expect(ageListener.mock.calls.length).toBe(1);
+    expect(nameListener.mock.calls.length).toBe(1);
+  });
+  it('setTouched()', () => {
+    const form = new Form({
+      initValues: {
+        name: 'robbin',
+      },
+    });
+    const listener = jest.fn();
+    form.fields.name.listeners.push(listener);
+    form.setTouched('name', true);
+    expect(form.fields.name.touched).toBe(true);
+    expect(listener.mock.calls.length).toBe(1);
+  });
+  it('getTouches() || touches', () => {
+    const form = new Form({
+      initValues: {
+        age: 42,
+        name: 'robbin',
+      },
+    });
+    form.fields.age.setTouched(true);
+    form.fields.name.setTouched(false);
+
+    expect(form.getTouches()).toEqual({
+      age: true,
+      name: false,
+    });
+    expect(form.touches).toEqual({
+      age: true,
+      name: false,
     });
   });
 });
