@@ -248,7 +248,7 @@ function Name() {
   )
 }
 
-// name.js
+// age.js
 function Age() {
   const ageField = useField('age')
   return (
