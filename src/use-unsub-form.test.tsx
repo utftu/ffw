@@ -103,7 +103,44 @@ describe('useUnsubForm', () => {
       );
     }
     function Child() {
+      result = useUnsubForm(['test1', 'test2']);
+      return <div>Child</div>;
+    }
+    render(<Parent />);
+    expect(result.form instanceof Form).toBe(true);
+    expect(result.fieldNames).toEqual(['test1', 'test2']);
+  });
+  it('params with context', () => {
+    let result;
+    function Parent() {
+      const form = useInitForm();
+      return (
+        <context.Provider value={form}>
+          <Child />
+        </context.Provider>
+      );
+    }
+    function Child() {
       result = useUnsubForm(['test1', 'test2', {context}]);
+      return <div>Child</div>;
+    }
+    render(<Parent />);
+    expect(result.form instanceof Form).toBe(true);
+    expect(result.fieldNames).toEqual(['test1', 'test2']);
+  });
+  it('params with form', () => {
+    let result;
+    let form;
+    function Parent() {
+      form = useInitForm();
+      return (
+        <context.Provider value={null}>
+          <Child />
+        </context.Provider>
+      );
+    }
+    function Child() {
+      result = useUnsubForm(['test1', 'test2', {form}]);
       return <div>Child</div>;
     }
     render(<Parent />);
