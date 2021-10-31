@@ -344,6 +344,6 @@ function Age() {
 
 Как кажется получилось довольно лаконично и производительно. Хотелось бы услышать ваши отзывы и предложения.
 
-[GitHub](https://codesandbox.io/s/ffw-23v1r?file=/src/app.js)
+[GitHub](https://github.com/utftufutukgyftryidytftuv/ffw)
 
 [Sandbox](https://codesandbox.io/s/ffw-23v1r?file=/src/app.js)
