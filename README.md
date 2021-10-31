@@ -5,8 +5,8 @@ Ffw is form package. Ffw implements partial subscription to certain fields.
 [Sandbox](https://codesandbox.io/s/ffw-23v1r?file=/src/app.js)
 
 ## Install:
-```sh
-npm i ffw
+```bash
+npm install axios
 ```
 
 ## Main goals of ffw:
