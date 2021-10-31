@@ -9,7 +9,7 @@ Ffw is form package. Ffw implements partial subscription to certain fields.
 npm i ffw
 ```
 
-## Main goals of ffw:
+## Goals of ffw:
 
 - subscription to certain fields
 - api that looks like formik
