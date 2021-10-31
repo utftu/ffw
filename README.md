@@ -6,7 +6,7 @@ Ffw is form package. Ffw implements partial subscription to certain fields.
 
 ## Install:
 ```bash
-npm install axios
+npm i ffw
 ```
 
 ## Main goals of ffw:
