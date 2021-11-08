@@ -205,7 +205,7 @@ const form = useForm({
 ### Авторские улучшения
 
 Но когда начал что-то менять сложно остановиться, и вот несколько улучшений,
-которые хотел бы добавить я:
+которые хотел бы добавить я
 
 В formik-е нет деления на логические сущности и все методы исходят именно из
 этого. Так, например, выставление несколько свойств для одного поля в
@@ -273,7 +273,11 @@ return <input {...form.fields.name.getInputProps()} />;
 ```tsx
 const form = useForm('name');
 
-return <button onClick={() => form.fields.age.set('')}>clear name</button>;
+return (
+  <button onClick={() => form.fields.age.set('')}>
+    clear name
+  </button>
+);
 ```
 
 В данном случае в режиме разработки мы получим ошибку<br>
