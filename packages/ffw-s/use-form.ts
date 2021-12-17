@@ -1,7 +1,7 @@
 import {getContext} from 'svelte';
 import type {Form} from 'ffw-base';
 
-function useFfw(deps: string[]) {
+function useForm(deps: string[]) {
   const form = getContext<Form>('ffw-s');
 
   return deps.reduce((store, dep) => {
@@ -19,4 +19,4 @@ function useFfw(deps: string[]) {
   }, {});
 }
 
-export default useFfw;
+export default useForm;
