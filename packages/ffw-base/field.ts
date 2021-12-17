@@ -60,6 +60,16 @@ class Field {
     }
   }
 
+  subscribe(listener) {
+    this.listeners.push(listener);
+  }
+
+  unsubscribe(listener) {
+    this.listeners = this.listeners.filter(
+      (compareListener) => listener !== compareListener
+    );
+  }
+
   onChange = (event: {target: {value: string}}) => {
     this.set(event.target.value);
 

@@ -63,6 +63,15 @@ importers:
   packages/ffw-base/dist/cjs:
     specifiers: {}
 
+  packages/ffw-s:
+    specifiers:
+      ffw-base: workspace:*
+      svelte: '>=3.0.0'
+    dependencies:
+      ffw-base: link:../ffw-base
+    devDependencies:
+      svelte: 3.44.3
+
   packages/ffw/dist/cjs:
     specifiers: {}
 
@@ -3896,6 +3905,11 @@ packages:
     dependencies:
       has-flag: 4.0.0
       supports-color: 7.2.0
+    dev: true
+
+  /svelte/3.44.3:
+    resolution: {integrity: sha512-aGgrNCip5PQFNfq9e9tmm7EYxWLVHoFsEsmKrtOeRD8dmoGDdyTQ+21xd7qgFd8MNdKGSYvg7F9dr+Tc0yDymg==}
+    engines: {node: '>= 8'}
     dev: true
 
   /symbol-tree/3.2.4:
