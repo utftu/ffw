@@ -1,7 +1,8 @@
 {
-  "include": ["./src/*"],
+  "include": ["./packages/**/*"],
   "exclude": ["node_modules", "./src/*.test.*"],
   "compilerOptions": {
+    "isolatedModules": true,
     "moduleResolution": "node",
     "outDir": "dist",
     "target": "esnext",
@@ -9,6 +10,9 @@
     "allowJs": true,
     "lib": ["es2021"],
     "jsx": "preserve",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "utils": ["./packages/utils"],
+    }
   }
 }

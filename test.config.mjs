@@ -10,24 +10,24 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const target = './dist';
 
 const config = [
-  {
-    input: join(__dirname, './static/path.cjs'),
-    output: {
-      file: join(__dirname, `${target}/cjs/index.js`),
-      format: 'cjs',
-    },
-    plugins: [
-      copy({
-        targets: [
-          {
-            src: join(__dirname, './static/package-cjs.json'),
-            dest: join(__dirname, `./${target}/cjs`),
-            rename: 'package.json',
-          },
-        ],
-      }),
-    ],
-  },
+  // {
+  //   input: join(__dirname, './static/path.cjs'),
+  //   output: {
+  //     file: join(__dirname, `${target}/cjs/index.js`),
+  //     format: 'cjs',
+  //   },
+  //   plugins: [
+  //     copy({
+  //       targets: [
+  //         {
+  //           src: join(__dirname, './static/package-cjs.json'),
+  //           dest: join(__dirname, `./${target}/cjs`),
+  //           rename: 'package.json',
+  //         },
+  //       ],
+  //     }),
+  //   ],
+  // },
   ...[
     {formats: ['esm', 'cjs'], mode: 'dev'},
     {formats: ['esm', 'cjs'], mode: 'prod'},
