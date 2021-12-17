@@ -1,5 +1,5 @@
 {
-  "include": ["./packages/**/*"],
+  "include": ["./packages/**/*", "./packages/*"],
   "exclude": ["node_modules", "./src/*.test.*"],
   "compilerOptions": {
     "isolatedModules": true,

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build2": "rollup -c ./relax.config.mjs",
     "build": "rollup -c ./rollup.config.mjs",
     "test": "echo \"Error: no test specified\""
   },
