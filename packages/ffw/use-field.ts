@@ -1,5 +1,5 @@
 import useForm from './use-form';
-import {Field} from 'ffw';
+import {Field} from 'ffw-base';
 import type {Config} from './use-unsub-form';
 
 function useField(name: string, config?: Config): Field {

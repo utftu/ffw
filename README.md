@@ -19,7 +19,7 @@ npm i ffw
 ### Setting
 
 ```tsx
-import {useGlobalFfw, FfwProvider} from 'ffw';
+import {useGlobalFfw, FfwProvider} from 'packages/ffw-base';
 import AgeListener from './age-listener';
 
 function App() {
@@ -44,7 +44,7 @@ export default App;
 ### Using
 
 ```tsx
-import {useFfw} from 'ffw';
+import {useFfw} from 'packages/ffw-base';
 
 function User() {
   const form = useFfw(
@@ -67,7 +67,7 @@ export default User;
 or
 
 ```tsx
-import {useFfwField} from 'ffw';
+import {useFfwField} from 'packages/ffw-base';
 
 function Age() {
   const ageField = useFfwField('age');

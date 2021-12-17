@@ -1,9 +1,10 @@
 import {useMemo} from 'react';
-import {FormProps, Form} from 'ffw';
+import batch from './batch/react-batched-updates';
+import {FormProps, Form} from 'ffw-base';
 
 function useInitForm(options: FormProps = {}): Form {
   return useMemo(() => {
-    return new Form(options);
+    return new Form({batch, ...options});
   }, []);
 }
 

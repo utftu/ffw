@@ -1,4 +1,4 @@
-import {Form, Field, createFormProxy} from 'ffw';
+import {Form, Field, createFormProxy} from 'ffw-base';
 import {useEffect, useMemo, useState} from 'react';
 import useUnsubForm from './use-unsub-form';
 

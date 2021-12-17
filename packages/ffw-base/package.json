@@ -1,13 +1,14 @@
 {
-  "name": "ffw-react",
+  "name": "ffw-base",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c ./rollup.config.mjs",
+    "test": "echo \"Error: no test specified\""
   },
   "dependencies": {
-    "ffw": "workspace:*"
+    "utils": "file:../utils"
   },
   "author": "",
   "license": "ISC"

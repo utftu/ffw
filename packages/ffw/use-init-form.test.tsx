@@ -4,7 +4,7 @@
 
 import {render} from '@testing-library/react';
 import React from 'react';
-import {Form} from 'ffw';
+import {Form} from 'ffw-base';
 import useInitForm from './use-init-form';
 
 test('return form', async () => {

@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import context from './conext';
-import {Form} from 'ffw';
+import {Form} from 'ffw-base';
 
 export type Config =
   | {

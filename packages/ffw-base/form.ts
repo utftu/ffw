@@ -5,7 +5,7 @@ export type FormProps = {
   validateSchema?: any;
   options?: Options;
   onSubmit?: (form: Form) => void;
-  batch?: () => any;
+  batch?: any;
 };
 
 type Options = {

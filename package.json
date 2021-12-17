@@ -3,9 +3,9 @@
   "version": "1.0.12",
   "description": "",
   "scripts": {
-    "test1": "rollup -c packages/ffw/rollup.config.mjs",
+    "test1": "rollup -c packages/ffw-base/rollup.config.mjs",
     "test2": "rollup -c ./test.config.mjs",
-    "build": "rollup -c",
+    "build": "pnpm m exec build",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "types": "tsc -p tsconfig-declaration.json",

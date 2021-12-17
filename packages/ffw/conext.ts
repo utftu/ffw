@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import {Form} from 'ffw';
+import {Form} from 'ffw-base';
 
 const context = createContext<Form>(null);
 

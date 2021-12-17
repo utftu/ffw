@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c rollup.config.mjs",
+    "test": "echo \"Error: no test specified\""
   },
   "dependencies": {
-    "utils": "file:../utils"
+    "ffw-base": "workspace:*"
   },
   "author": "",
   "license": "ISC"

@@ -7,8 +7,5 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default createRollupConfig({
   inputDir: __dirname,
   outputDir: join(__dirname, 'dist'),
-  config: {
-    external: ['react', 'react-dom', 'react-native']
-  }
 });
 
