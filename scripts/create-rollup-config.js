@@ -7,11 +7,7 @@ import {fileURLToPath} from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default function ({config, inputDir, outputDir}) {
-  console.log(
-    '-----',
-    "join(__dirname, '../tsconfig.prod.json')",
-    join(__dirname, '../tsconfig.prod.json')
-  );
+  console.log('-----', join(inputDir, 'index.ts'));
   return [
     {
       input: join(__dirname, './path.cjs'),
