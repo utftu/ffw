@@ -1,5 +1,5 @@
 {
-  "include": ["./packages/**/*", "./packages/*"],
+  "include": ["static/*", "packages/**/*", "scripts/*"],
   "exclude": ["node_modules", "./src/*.test.*"],
   "compilerOptions": {
     "isolatedModules": true,
@@ -12,7 +12,7 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "utils": ["./packages/utils"],
+      "utils": ["./packages/utils"]
     }
   }
 }

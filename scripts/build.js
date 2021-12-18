@@ -8,8 +8,8 @@ const exec = (cmd, options) => {
 };
 
 console.log('ffw-base build start');
-exec(`npm run --prefix ${path.join(__dirname, '../packages/ffw-base')} build`);
-// exec('rollup -c packages/ffw-base/rollup.config.mjs');
+// exec(`npm run --prefix ${path.join(__dirname, '../packages/ffw-base')} build`);
+exec('rollup -c packages/ffw-base/rollup.config.mjs');
 // console.log('ffw build start');
 // exec('rollup -c packages/ffw/rollup.config.mjs');
 // console.log('ffw-s build start');
