@@ -7,7 +7,7 @@ class Field {
   touched: boolean = false;
   error = '';
   name = '';
-  getForm: () => Form = null;
+  form: Form = null;
   listeners: Listener[] = [];
 
   constructor({
@@ -15,19 +15,19 @@ class Field {
     value = '',
     touched = false,
     error = '',
-    getForm,
+    form = null,
   }: {
     name: string;
     value?: any;
     touched?: boolean;
     error?: string;
-    getForm: () => Form;
+    form: Form;
   }) {
-    this.getForm = getForm;
     this.name = name;
     this.value = value;
     this.touched = touched;
     this.error = error;
+    this.form = form;
   }
 
   setError(error: string) {
@@ -46,7 +46,7 @@ class Field {
   }
 
   async validate(): Promise<boolean> {
-    const fieldSchema = this.getForm().validateSchema.fields[this.name];
+    const fieldSchema = this.form.validateSchema.fields[this.name];
     if (!fieldSchema) {
       return true;
     }
@@ -73,7 +73,7 @@ class Field {
   onChange = (event: {target: {value: string}}) => {
     this.set(event.target.value);
 
-    if (this.getForm().options.validateOnChange) {
+    if (this.form.options.validateOnChange) {
       this.validate();
     }
   };
@@ -81,7 +81,7 @@ class Field {
   onBlur = () => {
     this.setTouched(true);
 
-    if (this.getForm().options.validateOnBlur) {
+    if (this.form.options.validateOnBlur) {
       this.validate();
     }
   };
@@ -110,7 +110,7 @@ class Field {
   };
 
   triggerListeners() {
-    this.getForm().batch(() => {
+    this.form.batch(() => {
       this.listeners.forEach((listener) => listener(this));
     });
   }

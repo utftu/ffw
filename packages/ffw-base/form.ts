@@ -69,15 +69,16 @@ class Form {
     }
   }
 
+  createField(name: string) {
+    return new Field({
+      name,
+      form: this,
+    });
+  }
+
   getField(name) {
     if (!(name in this.fields)) {
-      this.addField(
-        name,
-        new Field({
-          name,
-          getForm: () => this,
-        })
-      );
+      this.addField(name, this.createField(name));
     }
     return this.fields[name];
   }
@@ -115,14 +116,9 @@ class Form {
     }
 
     for (const initValueKey in this.initValues) {
-      this.addField(
-        initValueKey,
-        new Field({
-          value: this.initValues[initValueKey],
-          name: initValueKey,
-          getForm: () => this,
-        })
-      );
+      const field = this.createField(initValueKey);
+      field.value = this.initValues[initValueKey];
+      this.addField(initValueKey, field);
     }
 
     for (const validateFieldKey in this.validateSchema.fields) {
