@@ -1,13 +1,18 @@
 <script lang="ts">
+  import Input from '../components/input.svelte'
   import {useFfw} from '../../../packages/ffw-s/dist/esm/dev.js'
   
   const form = useFfw(['name', 'age'])
-  console.log('-----', 'form', form)
+  globalThis.form1 = form
   
-  $: useName = form.name;
-  console.log('-----', 'name', useName)
+  // const name = form.name;
+  const {name} = form;
+  console.log('-----', 'name', name)
+  console.log($name)
 </script>
 
 <div>
-  <!--{$form.name}-->
+  <Input field={form.name}/>
+<!--  <input bind:value={$name}>-->
+  <!--{$useName}-->
 </div>

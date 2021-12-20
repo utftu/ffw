@@ -1,11 +1,8 @@
-// import Field from './field';
-// import Form, {FormProps} from './form';
-// import {createFormProxy} from './form-proxy';
-//
-// // export type FieldType = Field;
-// // export type FormType = Form;
-// export type {FormProps};
-// export {Form, Field, createFormProxy};
+import Field from './field';
+import Form, {FormProps} from './form';
+import {createFormProxy} from './form-proxy';
 
-const a: string = 'hello';
-export default a;
+// export type FieldType = Field;
+// export type FormType = Form;
+export type {FormProps};
+export {Form, Field, createFormProxy};

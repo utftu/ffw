@@ -1,5 +1,5 @@
 {
-  "include": ["static/*", "packages/**/*", "scripts/*"],
+  "include": ["packages/**/*", "scripts/*"],
   "exclude": ["node_modules", "./src/*.test.*"],
   "compilerOptions": {
     "isolatedModules": true,
