@@ -239,10 +239,6 @@ class Form {
     });
     return store;
   }
-
-  // batch(cb) {
-  //   batch(cb);
-  // }
 }
 
 export default Form;
