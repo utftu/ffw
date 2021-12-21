@@ -206,6 +206,14 @@ class Form {
     });
   }
 
+  getValues(): Record<string, any> {
+    const store = {};
+    this.iterateFields((field) => {
+      store[field.name] = field.value;
+    });
+    return store;
+  }
+
   getErrors(): Record<string, string> {
     const store = {};
     this.iterateFields((field) => {
@@ -234,14 +242,6 @@ class Form {
 
   get touches() {
     return this.getTouches();
-  }
-
-  getValues(): Record<string, any> {
-    const store = {};
-    this.iterateFields((field) => {
-      store[field.name] = field.value;
-    });
-    return store;
   }
 }
 
