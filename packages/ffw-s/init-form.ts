@@ -4,14 +4,17 @@ interface Svelte {
   subscribe: any;
   value: {
     prev: any;
+    set: any;
     subscribe: any;
   };
   error: {
     prev: string;
+    set: any;
     subscribe: any;
   };
   touched: {
     prev: boolean;
+    set: any;
     subscribe: any;
   };
 }
@@ -31,6 +34,9 @@ class SvelteField extends Field {
       },
       value: {
         prev: field.value,
+        set(value) {
+          field.set(value);
+        },
         subscribe(cb) {
           cb(field.value);
           return field.subscribe(() => {
@@ -44,6 +50,9 @@ class SvelteField extends Field {
       },
       error: {
         prev: field.error,
+        set(error) {
+          field.setError(error);
+        },
         subscribe(cb) {
           cb(field.error);
           return field.subscribe(() => {
@@ -57,6 +66,9 @@ class SvelteField extends Field {
       },
       touched: {
         prev: field.touched,
+        set(touched) {
+          field.set(touched);
+        },
         subscribe(cb) {
           cb(field.touched);
           return field.subscribe(() => {

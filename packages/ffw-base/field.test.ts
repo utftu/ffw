@@ -4,10 +4,12 @@ import Form from './form';
 import * as yup from 'yup';
 import {waitAsync} from 'utils';
 
+const formMock = new Form({});
+
 const ageFieldParams = {
   value: 42,
   name: 'age',
-  form: null as any,
+  form: formMock,
 };
 
 export const fieldMockExpectFunctions = {
@@ -24,7 +26,7 @@ describe('field', () => {
       expect(
         new Field({
           name: 'age',
-          form: null as any,
+          form: formMock,
         })
       ).toMatchObject({
         value: '',
@@ -41,7 +43,7 @@ describe('field', () => {
           name: 'age',
           error: 'too young',
           touched: true,
-          form: null as any,
+          form: formMock,
         })
       ).toMatchObject({
         value: 42,
