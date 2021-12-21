@@ -24,17 +24,16 @@ class SvelteField extends Field {
     super(...props);
 
     const field = this;
-    const originalMethods = Object.getPrototypeOf(field);
     this.svelte = {
       subscribe(cb) {
         cb(field);
-        return super.subscribe(field);
+        return field.subscribe(cb);
       },
       value: {
         prev: field.value,
         subscribe(cb) {
           cb(field.value);
-          return originalMethods.subscribe.call(field, (field) => {
+          return field.subscribe(() => {
             if (field.value === field.svelte.value.prev) {
               return;
             }
@@ -47,7 +46,7 @@ class SvelteField extends Field {
         prev: field.error,
         subscribe(cb) {
           cb(field.error);
-          return originalMethods.subscribe.call((field) => {
+          return field.subscribe(() => {
             if (field.error === field.svelte.error.prev) {
               return;
             }
@@ -60,7 +59,7 @@ class SvelteField extends Field {
         prev: field.touched,
         subscribe(cb) {
           cb(field.touched);
-          return originalMethods.subscribe.call((field) => {
+          return field.subscribe(() => {
             if (field.touched === field.svelte.touched.prev) {
               return;
             }

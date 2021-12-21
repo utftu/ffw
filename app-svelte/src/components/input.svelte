@@ -3,6 +3,10 @@
 <script>
   export let field
   const {value} = field.s
+  
+  console.log('-----', '', value)
+  
+  value.subscribe(() => console.log('-----', 'sub'))
 
   // console.log(value.subscribe(() => {}))
   
