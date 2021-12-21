@@ -4,15 +4,10 @@
   
   const form = useFfw(['name', 'age'])
   globalThis.form1 = form
-  
-  // const name = form.name;
-  const {name} = form;
-  console.log('-----', 'name', name)
-  console.log($name)
 </script>
 
 <div>
-  <Input field={form.name}/>
+  <Input field={form.f.name}/>
 <!--  <input bind:value={$name}>-->
   <!--{$useName}-->
 </div>

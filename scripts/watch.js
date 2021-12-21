@@ -1,5 +1,4 @@
-import {spawnAsync, execAsync} from './utils.js';
-import {exec} from 'child_process';
+import {execAsync} from './utils.js';
 
 console.log('ffw-base build start');
 execAsync(`rollup -c -w packages/ffw-base/rollup.config.js`);

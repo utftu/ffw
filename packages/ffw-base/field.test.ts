@@ -1,5 +1,5 @@
 import Field from './field';
-import {jest} from '@jest/globals';
+import {jest, expect} from '@jest/globals';
 import Form from './form';
 import * as yup from 'yup';
 import {waitAsync} from 'utils';
@@ -7,7 +7,7 @@ import {waitAsync} from 'utils';
 const ageFieldParams = {
   value: 42,
   name: 'age',
-  getForm: jest.fn() as any,
+  form: null as any,
 };
 
 export const fieldMockExpectFunctions = {
@@ -24,7 +24,7 @@ describe('field', () => {
       expect(
         new Field({
           name: 'age',
-          getForm: jest.fn(),
+          form: null as any,
         })
       ).toMatchObject({
         value: '',
@@ -41,7 +41,7 @@ describe('field', () => {
           name: 'age',
           error: 'too young',
           touched: true,
-          getForm: jest.fn(),
+          form: null as any,
         })
       ).toMatchObject({
         value: 42,

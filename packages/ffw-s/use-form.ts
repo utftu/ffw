@@ -4,6 +4,8 @@ import type {Form} from 'ffw-base';
 function useForm(deps: string[]) {
   const form = getContext<Form>('ffw-s');
 
+  return form;
+
   return deps.reduce((store, dep) => {
     const field = form.getField(dep);
     store[dep] = {

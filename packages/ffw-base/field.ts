@@ -62,6 +62,7 @@ class Field {
 
   subscribe(listener) {
     this.listeners.push(listener);
+    return listener;
   }
 
   unsubscribe(listener) {

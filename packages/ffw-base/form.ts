@@ -6,6 +6,7 @@ export type FormProps = {
   options?: Options;
   onSubmit?: (form: Form) => void;
   batch?: any;
+  createField?: (form: Form, name: string) => Field;
 };
 
 type Options = {
@@ -113,6 +114,9 @@ class Form {
     this.initValues = props.initValues ?? {};
     if (props.batch) {
       this.batch = props.batch;
+    }
+    if (props.createField) {
+      this.createField = (name) => props.createField(this, name);
     }
 
     for (const initValueKey in this.initValues) {
