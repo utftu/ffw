@@ -1,6 +1,5 @@
 {
-  "include": ["packages/**/*", "scripts/*"],
-  "exclude": ["node_modules", "./src/*.test.*"],
+  "include": ["packages/**/*"],
   "compilerOptions": {
     "isolatedModules": true,
     "moduleResolution": "node",
