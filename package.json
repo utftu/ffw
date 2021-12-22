@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "test2": "rollup -c ./relax.config.mjs",
-    "build": "pnpm m exec build",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "types": "tsc -p tsconfig-declaration.json",

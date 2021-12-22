@@ -1,8 +1,4 @@
-import path, {dirname} from 'path';
-import {fileURLToPath} from 'url';
 import {exec} from './utils.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 console.log('ffw-base build start');
 exec(`rollup -c packages/ffw-base/rollup.config.js`);
