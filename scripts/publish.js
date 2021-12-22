@@ -5,5 +5,6 @@ exec('npm version patch');
 exec(`npm publish`);
 process.chdir('../..');
 process.chdir('./packages/ffw');
+exec('npm version patch');
 exec(`npm publish`);
 process.chdir('../..');
