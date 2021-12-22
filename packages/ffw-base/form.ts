@@ -15,14 +15,14 @@ type Options = {
   validateOnMount?: boolean;
 };
 
-class Form {
+class Form<FieldType extends Field = Field> {
   options: Options = {
     validateOnChange: true,
     validateOnBlur: true,
     validateOnMount: false,
   };
-  fields: Record<string, Field> = {};
-  f: Record<string, Field> = null;
+  fields: Record<string, FieldType> = {};
+  f: Record<string, FieldType> = null;
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
   globalListeners: Listener[] = [];
@@ -62,7 +62,7 @@ class Form {
     }
   }
 
-  addField(name: string, field: Field) {
+  addField(name: string, field: FieldType) {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
