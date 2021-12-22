@@ -26,7 +26,7 @@ class Form<FieldType extends Field = Field> {
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
   globalListeners: Listener[] = [];
-  globalFieldListener = (field: Field) => {
+  globalFieldListener = (field: FieldType) => {
     this.globalListeners.forEach((globalListener) => globalListener(field));
   };
   initValues: Record<string, any> = null;
