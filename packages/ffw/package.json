@@ -2,7 +2,13 @@
   "name": "ffw",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "dist/esm/prod.js",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\""

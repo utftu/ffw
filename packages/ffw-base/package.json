@@ -2,7 +2,13 @@
   "name": "ffw-base",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "dist/esm/prod.js",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build2": "rollup -c ./relax.config.mjs",
     "build": "rollup -c rollup.config.js",
@@ -12,5 +18,5 @@
     "utils": "file:../utils"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
