@@ -1,6 +1,6 @@
 import Form from './form';
 import * as yup from 'yup';
-import {waitAsync} from 'utils';
+import {waitAsync} from './utils';
 import {jest} from '@jest/globals';
 
 describe('form', () => {

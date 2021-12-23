@@ -3,7 +3,7 @@
  */
 
 import {render} from '@testing-library/react';
-import {waitAsync} from 'utils';
+import {waitAsync} from './utils';
 import React from 'react';
 import {Form} from '../ffw-base';
 import useInitForm from './use-init-form';

@@ -1,6 +1,6 @@
 {
   "name": "ffw-base",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "",
   "type": "module",
   "main": "./dist/cjs/index.js",
@@ -13,9 +13,6 @@
     "build2": "rollup -c ./relax.config.mjs",
     "build": "rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\""
-  },
-  "dependencies": {
-    "utils": "file:../utils"
   },
   "author": "",
   "license": "MIT"

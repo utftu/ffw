@@ -2,7 +2,7 @@ import Field from './field';
 import {jest, expect} from '@jest/globals';
 import Form from './form';
 import * as yup from 'yup';
-import {waitAsync} from 'utils';
+import {waitAsync} from './utils';
 
 const formMock = new Form({});
 
