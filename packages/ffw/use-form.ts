@@ -10,9 +10,6 @@ function useForm(...deps: any[]): Form {
   useMemo(() => {
     fieldNames.forEach((name) => {
       form.getField(name);
-      // if (!form.fields[name]) {
-      //   form.addField(name, new Field({name, value: ''}));
-      // }
     });
   }, fieldNames);
 
