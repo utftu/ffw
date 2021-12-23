@@ -52,7 +52,10 @@ class Field {
     }
     try {
       await fieldSchema.validate(this.value);
-      this.setError('');
+
+      if (this.error !== '') {
+        this.setError('');
+      }
       return true;
     } catch (error) {
       this.setError(error.errors[0]);
@@ -86,29 +89,6 @@ class Field {
       this.validate();
     }
   };
-
-  // getInputProps = () => {
-  //   return {
-  //     value: this.value,
-  //     name: this.name,
-  //     onChange: this.onChange,
-  //     onBlur: this.onBlur,
-  //   };
-  // };
-  //
-  // getSelectProps = () => {
-  //   return {
-  //     value: this.value,
-  //     name: this.name,
-  //     onChange: (value) =>
-  //       this.onChange({
-  //         target: {
-  //           value,
-  //         },
-  //       }),
-  //     onBlur: this.onBlur,
-  //   };
-  // };
 
   triggerListeners() {
     this.form.batch(() => {
