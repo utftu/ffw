@@ -1,5 +1,4 @@
 import Field, {Listener} from './field';
-//
 
 export type FormProps = {
   initValues?: Record<string, any>;
