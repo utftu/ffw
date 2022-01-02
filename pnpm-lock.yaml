@@ -60,12 +60,6 @@ importers:
       ffw-base: link:../ffw-base
 
   packages/ffw-base:
-    specifiers:
-      utils: file:../utils
-    dependencies:
-      utils: link:../utils
-
-  packages/ffw-base/dist/cjs:
     specifiers: {}
 
   packages/ffw-s:
@@ -76,12 +70,6 @@ importers:
       ffw-base: link:../ffw-base
     devDependencies:
       svelte: 3.44.3
-
-  packages/ffw/dist/cjs:
-    specifiers: {}
-
-  packages/utils:
-    specifiers: {}
 
 packages:
 
