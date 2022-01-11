@@ -1,10 +1,3 @@
-
-function Home() {
-  return (
-    <div>
-      home
-    </div>
-  )
-}
+import Home from 'src/routes/home'
 
 export default Home

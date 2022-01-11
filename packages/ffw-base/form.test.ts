@@ -81,8 +81,8 @@ describe('form', () => {
     });
     const ageListener = jest.fn();
     const nameListener = jest.fn();
-    form.fields.age.subscribe('error', ageListener)
-    form.fields.name.subscribe('error', nameListener)
+    form.fields.age.subscribe('error', ageListener);
+    form.fields.name.subscribe('error', nameListener);
     form.setErrors({
       age: 'error1',
       name: 'error2',
@@ -99,7 +99,7 @@ describe('form', () => {
       },
     });
     const listener = jest.fn();
-    form.fields.name.subscribe('error', listener)
+    form.fields.name.subscribe('error', listener);
     form.setError('name', 'you are bobbin');
     expect(form.fields.name.error).toBe('you are bobbin');
     expect(listener.mock.calls.length).toBe(1);
@@ -170,9 +170,9 @@ describe('form', () => {
     const ageListener = jest.fn();
     const nameListener = jest.fn();
     const addressListener = jest.fn();
-    form.fields.age.subscribe('value', ageListener)
-    form.fields.name.subscribe('value', nameListener)
-    form.fields.address.subscribe('value', addressListener)
+    form.fields.age.subscribe('value', ageListener);
+    form.fields.name.subscribe('value', nameListener);
+    form.fields.address.subscribe('value', addressListener);
 
     form.setValues({
       age: 43,
@@ -191,7 +191,7 @@ describe('form', () => {
       },
     });
     const listener = jest.fn();
-    form.fields.name.subscribe('value', listener)
+    form.fields.name.subscribe('value', listener);
     form.setValue('name', 'bobbin');
     expect(form.fields.name.value).toBe('bobbin');
     expect(listener.mock.calls.length).toBe(1);
@@ -218,8 +218,8 @@ describe('form', () => {
     });
     const ageListener = jest.fn();
     const nameListener = jest.fn();
-    form.fields.age.subscribe('touched', ageListener)
-    form.fields.name.subscribe('touched', nameListener)
+    form.fields.age.subscribe('touched', ageListener);
+    form.fields.name.subscribe('touched', nameListener);
 
     form.setTouches({
       age: true,

@@ -29,15 +29,15 @@ class SvelteField extends Field {
     function makeStore(name): any {
       return {
         set(newData) {
-          field.setData(name, newData)
+          field.setData(name, newData);
         },
         subscribe(cb) {
           cb(field.data[name]);
           return field.subscribe(name, () => {
             cb(field.data[name]);
           });
-        }
-      }
+        },
+      };
     }
     this.s = this.svelte = {
       makeStore,
@@ -47,7 +47,7 @@ class SvelteField extends Field {
       },
       value: makeStore('value'),
       error: makeStore('error'),
-      touched: makeStore('touched')
+      touched: makeStore('touched'),
     };
   }
 }

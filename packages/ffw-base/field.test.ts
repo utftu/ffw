@@ -56,7 +56,7 @@ describe('field', () => {
   it('set()', () => {
     const field = new Field(ageFieldParams);
     const listener = jest.fn();
-    field.subscribe('value', listener)
+    field.subscribe('value', listener);
     field.set(43);
 
     expect(field.value).toBe(43);
@@ -68,7 +68,7 @@ describe('field', () => {
   it('setError()', () => {
     const field = new Field(ageFieldParams);
     const listener: any = jest.fn();
-    field.subscribe('error', listener)
+    field.subscribe('error', listener);
     field.setError('Wrong value');
 
     expect(field.error).toBe('Wrong value');
@@ -79,7 +79,7 @@ describe('field', () => {
   it('setTouched()', () => {
     const field = new Field(ageFieldParams);
     const listener: any = jest.fn();
-    field.subscribe('touched', listener)
+    field.subscribe('touched', listener);
     field.setTouched(true);
 
     expect(field.touched).toBe(true);
@@ -140,7 +140,7 @@ describe('field', () => {
         validateSchema: yup.object({}),
       });
       const listener = jest.fn();
-      form.fields.age.subscribe('touched', listener)
+      form.fields.age.subscribe('touched', listener);
 
       form.fields.age.onBlur();
       expect(form.fields.age.touched).toBe(true);
@@ -186,7 +186,7 @@ describe('field', () => {
         validateSchema: yup.object({}),
       });
       const listener = jest.fn();
-      form.fields.age.subscribe('value', listener)
+      form.fields.age.subscribe('value', listener);
 
       form.fields.age.onChange({
         target: {

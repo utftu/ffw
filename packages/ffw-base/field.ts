@@ -6,35 +6,32 @@ export type Listener = (field: Field) => void;
 class Field {
   name = '';
   form: Form = null;
-  emitter: Emitter<any> = null
+  emitter: Emitter<any> = null;
 
-  data: Record<
-    string,
-    any
-    > & {
+  data: Record<string, any> & {
     value: string;
     error: string;
     touched: boolean;
   } = {
     value: '',
     error: '',
-    touched: false
+    touched: false,
   };
 
   constructor({
-                name,
-                value = '',
-                touched = false,
-                error = '',
-                form = null,
-              }: {
+    name,
+    value = '',
+    touched = false,
+    error = '',
+    form = null,
+  }: {
     name: string;
     value?: any;
     touched?: boolean;
     error?: string;
     form: any;
   }) {
-    this.emitter = mitt()
+    this.emitter = mitt();
     this.name = name;
     this.form = form;
 
@@ -74,7 +71,7 @@ class Field {
     this.data[name] = newData;
 
     this.form.batch(() => {
-      this.emitter.emit(name, this.data[name])
+      this.emitter.emit(name, this.data[name]);
     });
   }
 
@@ -109,13 +106,13 @@ class Field {
   }
 
   subscribe(name: string, listener: any) {
-    this.emitter.on(name, listener)
+    this.emitter.on(name, listener);
 
-    return () => this.emitter.off(name, listener)
+    return () => this.emitter.off(name, listener);
   }
 
   unsubscribe(name: string, listener: any) {
-    this.emitter.off(name, listener)
+    this.emitter.off(name, listener);
   }
 
   onChange = (event: {target: {value: string}}) => {
@@ -134,22 +131,22 @@ class Field {
     }
   };
 
-  protected globalListeners = []
+  protected globalListeners = [];
   protected globalListener = (...args) => {
-    this.globalListeners.forEach((listener) => listener(this, ...args))
-  }
+    this.globalListeners.forEach((listener) => listener(this, ...args));
+  };
   addGlobalListener(listener: any) {
     if (this.globalListeners.length === 0) {
-      this.emitter.on('*', this.globalListener)
+      this.emitter.on('*', this.globalListener);
     }
-    this.globalListeners.push(listener)
+    this.globalListeners.push(listener);
   }
   removeGlobalListener(listener: any) {
     this.globalListeners = this.globalListeners.filter(
       (globalListener) => globalListener !== listener
     );
     if (this.globalListeners.length === 0) {
-      this.emitter.off('*', this.globalListener)
+      this.emitter.off('*', this.globalListener);
     }
   }
 }

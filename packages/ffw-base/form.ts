@@ -29,7 +29,9 @@ class Form<FieldType extends Field = Field> {
   onSubmit: (form: Form) => void = null;
   globalListeners: any[] = [];
   globalFieldListener = (field: any, type: string, event: any) => {
-    this.globalListeners.forEach((globalListener) => globalListener(field, type, event));
+    this.globalListeners.forEach((globalListener) =>
+      globalListener(field, type, event)
+    );
   };
   initValues: Record<string, any> = null;
   batch(cb) {
@@ -45,7 +47,7 @@ class Form<FieldType extends Field = Field> {
   addGlobalListener(listener: Listener) {
     if (this.globalListeners.length === 0) {
       this.iterateFields((field) => {
-        field.addGlobalListener(this.globalFieldListener)
+        field.addGlobalListener(this.globalFieldListener);
       });
     }
     this.globalListeners.push(listener);
@@ -57,7 +59,7 @@ class Form<FieldType extends Field = Field> {
     );
     if (this.globalListeners.length === 0) {
       this.iterateFields((field) => {
-        field.removeGlobalListener(this.globalFieldListener)
+        field.removeGlobalListener(this.globalFieldListener);
       });
     }
   }
@@ -66,7 +68,7 @@ class Form<FieldType extends Field = Field> {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
-      this.fields[name].addGlobalListener(this.globalFieldListener)
+      this.fields[name].addGlobalListener(this.globalFieldListener);
     }
   }
 
@@ -112,8 +114,8 @@ class Form<FieldType extends Field = Field> {
     }
 
     for (const initValueKey in this.initValues) {
-      const field = this.getField(initValueKey)
-      field.set(this.initValues[initValueKey])
+      const field = this.getField(initValueKey);
+      field.set(this.initValues[initValueKey]);
     }
 
     for (const validateFieldKey in this.validateSchema.fields) {
@@ -147,11 +149,13 @@ class Form<FieldType extends Field = Field> {
   reset() {
     this.batch(() => {
       this.iterateFields((field) => {
-        field.set(field.name in this.initValues ? this.initValues[field.name] : '')
-        field.setError('')
-        field.setTouched(false)
+        field.set(
+          field.name in this.initValues ? this.initValues[field.name] : ''
+        );
+        field.setError('');
+        field.setTouched(false);
       });
-    })
+    });
   }
 
   setValue(name: string, value: any) {
@@ -188,7 +192,7 @@ class Form<FieldType extends Field = Field> {
     this.batch(() => {
       for (const touchedKey in touches) {
         const field = this.getField(touchedKey);
-        field.setTouched(touches[touchedKey])
+        field.setTouched(touches[touchedKey]);
       }
     });
   }
