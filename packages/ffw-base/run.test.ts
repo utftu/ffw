@@ -2,11 +2,12 @@ import Form from './form';
 
 it('should 12', function() {
   const form = new Form({
-    initValues: {
-      name: 'aleks'
+    initData: {
+      name: {
+        disabled: 'haha'
+      }
     }
   })
-  form.fields.a = 'b'
-  console.log('-----', 'form.fields', form._fields)
+  console.log('-----', 'form', form.fields.name.data)
   // console.log('-----', 'form', form)
 });

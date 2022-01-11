@@ -128,6 +128,15 @@ class Form<FieldType extends Field = Field> {
       this.createField = (name) => props.createField(this, name);
     }
 
+    for (const initDataKey in this.initData) {
+      const fieldData = this.initData[initDataKey]
+      const field = this.getField(initDataKey);
+
+      for (const fieldDataKey in fieldData) {
+        field.setData(fieldDataKey, fieldData[fieldDataKey]);
+      }
+    }
+
     for (const initValueKey in this.initValues) {
       const field = this.getField(initValueKey);
       field.set(this.initValues[initValueKey]);
