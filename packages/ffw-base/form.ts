@@ -2,6 +2,7 @@ import Field, {Listener} from './field';
 
 export type FormProps = {
   initValues?: Record<string, any>;
+  initData?: Record<string, any>
   validateSchema?: any;
   options?: Options;
   onSubmit?: (form: Form) => void;
@@ -23,8 +24,9 @@ class Form<FieldType extends Field = Field> {
     validateOnMount: false,
     checkPrevData: true,
   };
-  fields: Record<string, any> = {};
-  f: Record<string, any> = null;
+  protected _fields: Record<string, any> = {};
+  fields: any;
+  f: any;
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
   globalListeners: any[] = [];
@@ -34,13 +36,15 @@ class Form<FieldType extends Field = Field> {
     );
   };
   initValues: Record<string, any> = null;
+  initData: Record<string, any> = null;
+
   batch(cb) {
     cb();
   }
 
   private iterateFields(cb: (field: Field) => void) {
-    for (const fieldKey in this.fields) {
-      cb(this.fields[fieldKey]);
+    for (const name in this._fields) {
+      cb(this.getField(name));
     }
   }
 
@@ -68,7 +72,7 @@ class Form<FieldType extends Field = Field> {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
-      this.fields[name].addGlobalListener(this.globalFieldListener);
+      this.getField(name).addGlobalListener(this.globalFieldListener);
     }
   }
 
@@ -80,14 +84,15 @@ class Form<FieldType extends Field = Field> {
   }
 
   getField(name) {
-    if (!(name in this.fields)) {
+    if (!(name in this._fields)) {
       this.addField(name, this.createField(name));
     }
-    return this.fields[name];
+    return this._fields[name];
   }
 
-  constructor(props: FormProps) {
+  constructor(props: FormProps = {}) {
     let validateSchema;
+    const form = this;
 
     if (props.validateSchema) {
       if (props.validateSchema instanceof Function) {
@@ -101,11 +106,21 @@ class Form<FieldType extends Field = Field> {
       };
     }
 
+    this.fields = new Proxy(this._fields, {
+      get(_, prop) {
+        return form.getField(prop)
+      },
+      set(target, prop, newValue) {
+        Reflect.set(target, prop, newValue);
+        return true
+      }
+    })
     this.f = this.fields;
     this.validateSchema = validateSchema;
     this.options = {...this.options, ...props.options};
     this.onSubmit = props.onSubmit ?? function () {};
     this.initValues = props.initValues ?? {};
+    this.initData = props.initData ?? {}
     if (props.batch) {
       this.batch = props.batch;
     }
@@ -129,7 +144,7 @@ class Form<FieldType extends Field = Field> {
 
   async validate() {
     let error = false;
-    for (const fieldKey in this.fields) {
+    for (const fieldKey in this._fields) {
       const field = this.getField(fieldKey);
       const fieldValid = await field.validate();
       if (!fieldValid) {

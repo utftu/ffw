@@ -2,6 +2,7 @@ import {useInitFfw, FfwProvider} from 'ffw';
 import AgeInput from 'src/routes/home/age-input';
 import AgeListener from 'src/routes/home/age-listener';
 import GlobalListener from 'src/routes/home/global-listener';
+import NameInput from 'src/routes/home/name-input';
 
 function Home() {
   const ffw = useInitFfw({
@@ -17,6 +18,7 @@ function Home() {
         <AgeInput/>
         <AgeListener/>
         <GlobalListener/>
+        <NameInput/>
       </div>
     </FfwProvider>
   );
