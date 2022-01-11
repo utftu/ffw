@@ -33,7 +33,6 @@ describe('field', () => {
         name: 'age',
         error: '',
         touched: false,
-        listeners: [],
       });
     });
     it('all params', () => {
@@ -50,59 +49,42 @@ describe('field', () => {
         name: 'age',
         error: 'too young',
         touched: true,
-        listeners: [],
       });
-    });
-  });
-
-  it('triggerListeners()', () => {
-    const field = new Field(ageFieldParams);
-    const listener = jest.fn();
-    field.listeners.push(listener);
-    field.triggerListeners();
-
-    expect(listener.mock.calls.length).toBe(1);
-    expect(listener.mock.calls[0][0]).toMatchObject({
-      value: 42,
-      name: 'age',
-      error: '',
-      touched: false,
-      listeners: [listener],
     });
   });
 
   it('set()', () => {
     const field = new Field(ageFieldParams);
     const listener = jest.fn();
-    field.listeners.push(listener);
+    field.subscribe('value', listener)
     field.set(43);
 
     expect(field.value).toBe(43);
     expect(listener.mock.calls.length).toBe(1);
     // @ts-ignore
-    expect(listener.mock.calls[0][0].value).toBe(43);
+    expect(listener.mock.calls[0][0]).toBe(43);
   });
 
   it('setError()', () => {
     const field = new Field(ageFieldParams);
     const listener: any = jest.fn();
-    field.listeners.push(listener);
+    field.subscribe('error', listener)
     field.setError('Wrong value');
 
     expect(field.error).toBe('Wrong value');
     expect(listener.mock.calls.length).toBe(1);
-    expect(listener.mock.calls[0][0].error).toBe('Wrong value');
+    expect(listener.mock.calls[0][0]).toBe('Wrong value');
   });
 
   it('setTouched()', () => {
     const field = new Field(ageFieldParams);
     const listener: any = jest.fn();
-    field.listeners.push(listener);
+    field.subscribe('touched', listener)
     field.setTouched(true);
 
     expect(field.touched).toBe(true);
     expect(listener.mock.calls.length).toBe(1);
-    expect(listener.mock.calls[0][0].touched).toBe(true);
+    expect(listener.mock.calls[0][0]).toBe(true);
   });
 
   describe('validate()', () => {
@@ -158,7 +140,7 @@ describe('field', () => {
         validateSchema: yup.object({}),
       });
       const listener = jest.fn();
-      form.fields.age.listeners.push(listener);
+      form.fields.age.subscribe('touched', listener)
 
       form.fields.age.onBlur();
       expect(form.fields.age.touched).toBe(true);
@@ -204,7 +186,7 @@ describe('field', () => {
         validateSchema: yup.object({}),
       });
       const listener = jest.fn();
-      form.fields.age.listeners.push(listener);
+      form.fields.age.subscribe('value', listener)
 
       form.fields.age.onChange({
         target: {

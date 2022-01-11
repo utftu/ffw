@@ -1,48 +1,93 @@
 import Form from './form';
+import mitt, {Emitter, Handler} from 'mitt';
 
 export type Listener = (field: Field) => void;
 
 class Field {
-  value: any = '';
-  touched: boolean = false;
-  error = '';
   name = '';
   form: Form = null;
-  listeners: Listener[] = [];
+  emitter: Emitter<any> = null
+
+  data: Record<
+    string,
+    any
+    > & {
+    value: string;
+    error: string;
+    touched: boolean;
+  } = {
+    value: '',
+    error: '',
+    touched: false
+  };
 
   constructor({
-    name,
-    value = '',
-    touched = false,
-    error = '',
-    form = null,
-  }: {
+                name,
+                value = '',
+                touched = false,
+                error = '',
+                form = null,
+              }: {
     name: string;
     value?: any;
     touched?: boolean;
     error?: string;
-    form: Form;
+    form: any;
   }) {
+    this.emitter = mitt()
     this.name = name;
-    this.value = value;
-    this.touched = touched;
-    this.error = error;
     this.form = form;
+
+    this.data.value = value;
+    this.data.touched = touched;
+    this.data.error = error;
+  }
+
+  get value() {
+    return this.data.value;
+  }
+
+  set value(newValue) {
+    this.data.value = newValue;
+  }
+
+  get error() {
+    return this.data.error;
+  }
+
+  set error(newError) {
+    this.data.error = newError;
+  }
+
+  get touched() {
+    return this.data.touched;
+  }
+
+  set touched(newTouched) {
+    this.data.touched = newTouched;
+  }
+
+  setData(name, newData) {
+    if (this.form.options.checkPrevData && this.data[name] === newData) {
+      return;
+    }
+    this.data[name] = newData;
+
+    this.form.batch(() => {
+      this.emitter.emit(name, this.data[name])
+    });
   }
 
   setError(error: string) {
-    this.error = error;
-    this.triggerListeners();
+    this.setData('error', error);
   }
 
   setTouched(touched: boolean) {
-    this.touched = touched;
-    this.triggerListeners();
+    this.setData('touched', touched);
   }
 
   set(value: any) {
-    this.value = value;
-    this.triggerListeners();
+    this.setData('value', value);
   }
 
   async validate(): Promise<boolean> {
@@ -53,7 +98,7 @@ class Field {
     try {
       await fieldSchema.validate(this.value);
 
-      if (this.error !== '') {
+      if (this.data.error !== '') {
         this.setError('');
       }
       return true;
@@ -63,15 +108,14 @@ class Field {
     }
   }
 
-  subscribe(listener) {
-    this.listeners.push(listener);
-    return listener;
+  subscribe(name: string, listener: any) {
+    this.emitter.on(name, listener)
+
+    return () => this.emitter.off(name, listener)
   }
 
-  unsubscribe(listener) {
-    this.listeners = this.listeners.filter(
-      (compareListener) => listener !== compareListener
-    );
+  unsubscribe(name: string, listener: any) {
+    this.emitter.off(name, listener)
   }
 
   onChange = (event: {target: {value: string}}) => {
@@ -90,10 +134,23 @@ class Field {
     }
   };
 
-  triggerListeners() {
-    this.form.batch(() => {
-      this.listeners.forEach((listener) => listener(this));
-    });
+  protected globalListeners = []
+  protected globalListener = (...args) => {
+    this.globalListeners.forEach((listener) => listener(this, ...args))
+  }
+  addGlobalListener(listener: any) {
+    if (this.globalListeners.length === 0) {
+      this.emitter.on('*', this.globalListener)
+    }
+    this.globalListeners.push(listener)
+  }
+  removeGlobalListener(listener: any) {
+    this.globalListeners = this.globalListeners.filter(
+      (globalListener) => globalListener !== listener
+    );
+    if (this.globalListeners.length === 0) {
+      this.emitter.off('*', this.globalListener)
+    }
   }
 }
 

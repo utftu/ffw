@@ -15,5 +15,8 @@
     "test": "echo \"Error: no test specified\""
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mitt": "^3.0.0"
+  }
 }

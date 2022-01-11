@@ -13,6 +13,7 @@ type Options = {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
   validateOnMount?: boolean;
+  checkPrevData?: boolean;
 };
 
 class Form<FieldType extends Field = Field> {
@@ -20,14 +21,15 @@ class Form<FieldType extends Field = Field> {
     validateOnChange: true,
     validateOnBlur: true,
     validateOnMount: false,
+    checkPrevData: true,
   };
-  fields: Record<string, FieldType> = {};
-  f: Record<string, FieldType> = null;
+  fields: Record<string, any> = {};
+  f: Record<string, any> = null;
   validateSchema = null;
   onSubmit: (form: Form) => void = null;
-  globalListeners: Listener[] = [];
-  globalFieldListener = (field: FieldType) => {
-    this.globalListeners.forEach((globalListener) => globalListener(field));
+  globalListeners: any[] = [];
+  globalFieldListener = (field: any, type: string, event: any) => {
+    this.globalListeners.forEach((globalListener) => globalListener(field, type, event));
   };
   initValues: Record<string, any> = null;
   batch(cb) {
@@ -43,7 +45,7 @@ class Form<FieldType extends Field = Field> {
   addGlobalListener(listener: Listener) {
     if (this.globalListeners.length === 0) {
       this.iterateFields((field) => {
-        field.listeners.push(this.globalFieldListener);
+        field.addGlobalListener(this.globalFieldListener)
       });
     }
     this.globalListeners.push(listener);
@@ -55,18 +57,16 @@ class Form<FieldType extends Field = Field> {
     );
     if (this.globalListeners.length === 0) {
       this.iterateFields((field) => {
-        field.listeners = field.listeners.filter(
-          (fieldListener) => this.globalFieldListener !== fieldListener
-        );
+        field.removeGlobalListener(this.globalFieldListener)
       });
     }
   }
 
-  addField(name: string, field: FieldType) {
+  addField(name: string, field: any) {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
-      this.fields[name].listeners.push(this.globalFieldListener);
+      this.fields[name].addGlobalListener(this.globalFieldListener)
     }
   }
 
@@ -84,20 +84,12 @@ class Form<FieldType extends Field = Field> {
     return this.fields[name];
   }
 
-  private triggerFields() {
-    this.batch(() => {
-      this.iterateFields((field) => {
-        field.triggerListeners();
-      });
-    });
-  }
-
   constructor(props: FormProps) {
     let validateSchema;
 
     if (props.validateSchema) {
       if (props.validateSchema instanceof Function) {
-        validateSchema = props.validateSchema();
+        validateSchema = props.validateSchema(this);
       } else {
         validateSchema = props.validateSchema;
       }
@@ -120,9 +112,8 @@ class Form<FieldType extends Field = Field> {
     }
 
     for (const initValueKey in this.initValues) {
-      const field = this.createField(initValueKey);
-      field.value = this.initValues[initValueKey];
-      this.addField(initValueKey, field);
+      const field = this.getField(initValueKey)
+      field.set(this.initValues[initValueKey])
     }
 
     for (const validateFieldKey in this.validateSchema.fields) {
@@ -154,24 +145,13 @@ class Form<FieldType extends Field = Field> {
   };
 
   reset() {
-    this.iterateFields((field) => {
-      field.value =
-        field.name in this.initValues ? this.initValues[field.name] : '';
-      field.error = '';
-      field.touched = false;
-    });
-
-    this.triggerFields();
-  }
-
-  setErrors(errors: Record<string, string>) {
     this.batch(() => {
-      for (const errorKey in errors) {
-        const field = this.getField(errorKey);
-        field.error = errors[errorKey];
-        field.triggerListeners();
-      }
-    });
+      this.iterateFields((field) => {
+        field.set(field.name in this.initValues ? this.initValues[field.name] : '')
+        field.setError('')
+        field.setTouched(false)
+      });
+    })
   }
 
   setValue(name: string, value: any) {
@@ -186,22 +166,29 @@ class Form<FieldType extends Field = Field> {
     return this.getField(name).setError(error);
   }
 
-  setTouches(touches: Record<string, boolean>) {
-    this.batch(() => {
-      for (const touchedKey in touches) {
-        const field = this.getField(touchedKey);
-        field.touched = touches[touchedKey];
-        field.triggerListeners();
-      }
-    });
-  }
-
   setValues(values: Record<string, any>) {
     this.batch(() => {
       for (const valueKey in values) {
         const field = this.getField(valueKey);
-        field.value = values[valueKey];
-        field.triggerListeners();
+        field.set(values[valueKey]);
+      }
+    });
+  }
+
+  setErrors(errors: Record<string, string>) {
+    this.batch(() => {
+      for (const errorKey in errors) {
+        const field = this.getField(errorKey);
+        field.setError(errors[errorKey]);
+      }
+    });
+  }
+
+  setTouches(touches: Record<string, boolean>) {
+    this.batch(() => {
+      for (const touchedKey in touches) {
+        const field = this.getField(touchedKey);
+        field.setTouched(touches[touchedKey])
       }
     });
   }
