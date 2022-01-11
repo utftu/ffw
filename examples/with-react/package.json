@@ -1,0 +1,20 @@
+{
+  "name": "with-react",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "12.0.7",
+    "react-dom": "17.0.2",
+    "ffw": "file:../../packages/ffw"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.8",
+    "@types/react": "17.0.38",
+    "typescript": "4.5.4"
+  }
+}
