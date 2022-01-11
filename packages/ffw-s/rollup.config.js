@@ -8,7 +8,6 @@ export default createRollupConfig({
   inputDir: __dirname,
   outputDir: join(__dirname, 'dist'),
   config: {
-    external: ['svelte']
-  }
+    external: ['svelte'],
+  },
 });
-

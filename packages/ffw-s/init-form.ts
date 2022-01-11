@@ -2,18 +2,16 @@ import {Form, Field, FormProps} from 'ffw-base';
 
 interface Svelte {
   subscribe: any;
+  makeStore: any;
   value: {
-    prev: any;
     set: any;
     subscribe: any;
   };
   error: {
-    prev: string;
     set: any;
     subscribe: any;
   };
   touched: {
-    prev: boolean;
     set: any;
     subscribe: any;
   };
@@ -27,65 +25,34 @@ class SvelteField extends Field {
     super(...props);
 
     const field = this;
-    this.svelte = {
+
+    function makeStore(name): any {
+      return {
+        set(newData) {
+          field.setData(name, newData)
+        },
+        subscribe(cb) {
+          cb(field.data[name]);
+          return field.subscribe(name, () => {
+            cb(field.data[name]);
+          });
+        }
+      }
+    }
+    this.s = this.svelte = {
+      makeStore,
       subscribe(cb) {
         cb(field);
-        return field.subscribe(cb);
+        return field.subscribe('*', cb);
       },
-      value: {
-        prev: field.value,
-        set(value) {
-          field.set(value);
-        },
-        subscribe(cb) {
-          cb(field.value);
-          return field.subscribe(() => {
-            if (field.value === field.svelte.value.prev) {
-              return;
-            }
-            field.svelte.value.prev = field.value;
-            cb(field.value);
-          });
-        },
-      },
-      error: {
-        prev: field.error,
-        set(error) {
-          field.setError(error);
-        },
-        subscribe(cb) {
-          cb(field.error);
-          return field.subscribe(() => {
-            if (field.error === field.svelte.error.prev) {
-              return;
-            }
-            field.svelte.error.prev = field.error;
-            cb(field.error);
-          });
-        },
-      },
-      touched: {
-        prev: field.touched,
-        set(touched) {
-          field.set(touched);
-        },
-        subscribe(cb) {
-          cb(field.touched);
-          return field.subscribe(() => {
-            if (field.touched === field.svelte.touched.prev) {
-              return;
-            }
-            field.svelte.touched.prev = field.touched;
-            cb(field.touched);
-          });
-        },
-      },
+      value: makeStore('value'),
+      error: makeStore('error'),
+      touched: makeStore('touched')
     };
-    this.s = this.svelte;
   }
 }
 
-function initForm(options: FormProps = {}): Form {
+function initForm(options: FormProps = {}): Form<SvelteField> {
   return new Form({
     createField: (form, name) => new SvelteField({name, form}),
     ...options,

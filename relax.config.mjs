@@ -7,9 +7,11 @@ export default {
   input: join(__dirname, './packages/ffw-base/index.ts'),
   output: {
     dir: 'dist',
-    format: 'cjs'
+    format: 'cjs',
   },
-  plugins: [typescript({
-    tsconfig: join(__dirname, './tsconfig.json'),
-  })]
+  plugins: [
+    typescript({
+      tsconfig: join(__dirname, './tsconfig.json'),
+    }),
+  ],
 };

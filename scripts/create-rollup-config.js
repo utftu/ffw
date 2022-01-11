@@ -4,6 +4,7 @@ import {terser} from 'rollup-plugin-terser';
 
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
+import nodeResolve from '@rollup/plugin-node-resolve';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default function ({config, inputDir, outputDir}) {
@@ -42,6 +43,7 @@ export default function ({config, inputDir, outputDir}) {
               ? join(__dirname, '../tsconfig.prod.json')
               : join(__dirname, '../tsconfig.json'),
         }),
+        nodeResolve(),
         mode === 'prod' ? terser() : null,
       ],
       // external: ['react', 'react-dom', 'react-native'],

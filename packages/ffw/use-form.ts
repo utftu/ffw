@@ -30,8 +30,7 @@ function useForm(...deps: any[]): Form {
       form.addGlobalListener(listener);
     } else {
       fieldNames.forEach((fieldName) => {
-        form.fields[fieldName].subscribe(listener);
-        // form.fields[fieldName].listeners.push(listener);
+        form.fields[fieldName].subscribe('*', listener);
       });
     }
     return () => {
@@ -39,10 +38,7 @@ function useForm(...deps: any[]): Form {
         form.removeGlobalListener(listener);
       } else {
         deps.forEach((fieldName) => {
-          form.fields[fieldName].unsubscribe(listener);
-          // form.fields[fieldName].listeners = form.fields[
-          //   fieldName
-          // ].listeners.filter((listenerComp) => listenerComp !== listener);
+          form.fields[fieldName].unsubscribe('*', listener);
         });
       }
     };

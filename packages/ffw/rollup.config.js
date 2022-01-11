@@ -8,7 +8,6 @@ export default createRollupConfig({
   inputDir: __dirname,
   outputDir: join(__dirname, 'dist'),
   config: {
-    external: ['react', 'react-dom', 'react-native']
-  }
+    external: ['react', 'react-dom', 'react-native'],
+  },
 });
-
