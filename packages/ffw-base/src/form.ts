@@ -93,7 +93,7 @@ class Form<FieldType extends Field = Field> {
   constructor(props: FormProps = {}) {
     let validateSchema;
     const form = this;
-
+    
     if (props.validateSchema) {
       if (props.validateSchema instanceof Function) {
         validateSchema = props.validateSchema(this);
