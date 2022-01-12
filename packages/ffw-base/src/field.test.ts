@@ -12,14 +12,6 @@ const ageFieldParams = {
   form: formMock,
 };
 
-export const fieldMockExpectFunctions = {
-  getForm: expect.anything(),
-  onBlur: expect.anything(),
-  onChange: expect.anything(),
-  getInputField: expect.anything(),
-  getSelectField: expect.anything(),
-};
-
 describe('field', () => {
   describe('init', () => {
     it('required params', () => {

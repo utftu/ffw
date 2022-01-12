@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "main": "./dist/cjs/index.js",
-  "module": "dist/esm/prod.js",
+  "module": "./dist/esm/prod.js",
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist/**/*"

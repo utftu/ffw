@@ -1,7 +1,4 @@
 node_modules
 dist
 .idea
-coverage
-app
-app-svelte
-svelte-app
+.svelte-kit
