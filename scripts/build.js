@@ -1,8 +1,7 @@
-import {exec} from './utils.js';
+import path from 'path'
 
-console.log('ffw-base build start');
-exec(`rollup -c packages/ffw-base/rollup.config.js`);
-console.log('ffw build start');
-exec(`rollup -c packages/ffw/rollup.config.js`);
-console.log('ffw-s build start');
-exec(`rollup -c packages/ffw-s/rollup.config.js`);
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+
+await import(path.join(__dirname, '../packages/ffw-base/build.js'))
+await import(path.join(__dirname, '../packages/ffw/build.js'))
+await import(path.join(__dirname, '../packages/ffw-s/build.js'))

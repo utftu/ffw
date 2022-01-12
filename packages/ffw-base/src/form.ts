@@ -2,7 +2,7 @@ import Field, {Listener} from './field';
 
 export type FormProps = {
   initValues?: Record<string, any>;
-  initData?: Record<string, any>
+  initData?: Record<string, any>;
   validateSchema?: any;
   options?: Options;
   onSubmit?: (form: Form) => void;
@@ -108,19 +108,19 @@ class Form<FieldType extends Field = Field> {
 
     this.fields = new Proxy(this._fields, {
       get(_, prop) {
-        return form.getField(prop)
+        return form.getField(prop);
       },
       set(target, prop, newValue) {
         Reflect.set(target, prop, newValue);
-        return true
-      }
-    })
+        return true;
+      },
+    });
     this.f = this.fields;
     this.validateSchema = validateSchema;
     this.options = {...this.options, ...props.options};
     this.onSubmit = props.onSubmit ?? function () {};
     this.initValues = props.initValues ?? {};
-    this.initData = props.initData ?? {}
+    this.initData = props.initData ?? {};
     if (props.batch) {
       this.batch = props.batch;
     }
@@ -129,7 +129,7 @@ class Form<FieldType extends Field = Field> {
     }
 
     for (const initDataKey in this.initData) {
-      const fieldData = this.initData[initDataKey]
+      const fieldData = this.initData[initDataKey];
       const field = this.getField(initDataKey);
 
       for (const fieldDataKey in fieldData) {

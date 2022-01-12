@@ -1,8 +1,8 @@
-import { useFfw } from "ffw";
+import {useFfw} from 'ffw';
 
 function GlobalListener() {
   const form = useFfw();
-  console.log("-----", "GlobalListener");
+  console.log('-----', 'GlobalListener');
 
   return (
     <div>

@@ -1,8 +1,8 @@
-import { useFfw } from "ffw";
+import {useFfw} from 'ffw';
 
 function AgeListener() {
-  const form = useFfw("age");
-  console.log("-----", "AgeListener");
+  const form = useFfw('age');
+  console.log('-----', 'AgeListener');
 
   return (
     <div>

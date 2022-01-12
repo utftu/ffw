@@ -1,13 +1,13 @@
-import { useFfw } from "ffw";
+import {useFfw} from 'ffw';
 
 function AgeInput() {
-  const form = useFfw("age");
-  console.log("-----", "AgeInput");
+  const form = useFfw('age');
+  console.log('-----', 'AgeInput');
 
   return (
     <div>
       <span>
-        AgeInput: age = {""}
+        AgeInput: age = {''}
         <input {...form.fields.age.getInputProps()} />
       </span>
     </div>

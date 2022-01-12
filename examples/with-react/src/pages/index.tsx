@@ -1,3 +1,3 @@
-import Home from 'src/routes/home'
+import Home from 'src/routes/home';
 
-export default Home
+export default Home;

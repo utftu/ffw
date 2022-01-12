@@ -8,17 +8,17 @@ function Home() {
   const ffw = useInitFfw({
     initValues: {
       name: 'aleks',
-      age: 42
-    }
+      age: 42,
+    },
   });
-  globalThis.form = ffw
+  globalThis.form = ffw;
   return (
     <FfwProvider value={ffw}>
       <div>
-        <AgeInput/>
-        <AgeListener/>
-        <GlobalListener/>
-        <NameInput/>
+        <AgeInput />
+        <AgeListener />
+        <GlobalListener />
+        <NameInput />
       </div>
     </FfwProvider>
   );

@@ -15,9 +15,12 @@
     }),
   })
   globalThis.form = ffw
+  ffw.addGlobalListener((field, type, event) => {
+    console.log('-----', field.name, type, event)
+  })
 
   setFfwContext(ffw)
-  //
+
 </script>
 
 <AgeInput/>
