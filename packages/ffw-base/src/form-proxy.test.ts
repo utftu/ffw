@@ -1,5 +1,6 @@
 import Form from './form';
 import {createFormProxy} from './form-proxy';
+import {jest} from '@jest/globals';
 
 describe('form-proxy', () => {
   describe('.fields && .f', () => {

@@ -76,6 +76,7 @@ class Field {
   }
 
   setError(error: string) {
+    // console.log('-----', 'setError', error)
     this.setData('error', error);
   }
 
@@ -83,10 +84,17 @@ class Field {
     this.setData('touched', touched);
   }
 
-  set(value: any) {
+  set(value: any, validate = true) {
     this.setData('value', value);
 
-    this.validate()
+    if (validate) {
+      this.validate();
+    }
+
+    // if (this.form.options.validateOnChange) {
+    //   this.validate();
+    // }
+    // this.validate()
   }
 
   async validate(): Promise<boolean> {
@@ -118,7 +126,7 @@ class Field {
   }
 
   onChange = (event: {target: {value: string}}) => {
-    this.set(event.target.value);
+    this.set(event.target.value, false);
 
     if (this.form.options.validateOnChange) {
       this.validate();

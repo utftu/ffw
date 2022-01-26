@@ -9,6 +9,7 @@ import {Form} from 'ffw-base';
 import useInitForm from './use-init-form';
 import context from './conext';
 import useForm from './use-form';
+import {jest} from '@jest/globals';
 
 describe('use-form', () => {
   it('subscribe', async () => {

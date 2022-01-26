@@ -139,7 +139,7 @@ class Form<FieldType extends Field = Field> {
 
     for (const initValueKey in this.initValues) {
       const field = this.getField(initValueKey);
-      field.set(this.initValues[initValueKey]);
+      field.set(this.initValues[initValueKey], false);
     }
 
     for (const validateFieldKey in this.validateSchema.fields) {
@@ -174,7 +174,8 @@ class Form<FieldType extends Field = Field> {
     this.batch(() => {
       this.iterateFields((field) => {
         field.set(
-          field.name in this.initValues ? this.initValues[field.name] : ''
+          field.name in this.initValues ? this.initValues[field.name] : '',
+          false
         );
         field.setError('');
         field.setTouched(false);
@@ -198,7 +199,7 @@ class Form<FieldType extends Field = Field> {
     this.batch(() => {
       for (const valueKey in values) {
         const field = this.getField(valueKey);
-        field.set(values[valueKey]);
+        field.set(values[valueKey], false);
       }
     });
   }

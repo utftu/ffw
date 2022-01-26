@@ -204,7 +204,7 @@ describe('field', () => {
         },
       });
       await waitAsync();
-      expect(form.fields.age.error.length).not.toBe(0);
+      expect(form.fields.age.error).not.toBe('');
     });
     it('validateOnChange = false', async () => {
       const form = new Form({
