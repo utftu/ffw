@@ -6,7 +6,6 @@
     "test2": "rollup -c ./relax.config.mjs",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "types": "tsc -p tsconfig-declaration.json",
     "test": "jest",
     "pub": "npm run test && npm run typecheck && npm run types && npm run format && npm run build && npm version patch && npm publish"
   },

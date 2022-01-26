@@ -85,6 +85,8 @@ class Field {
 
   set(value: any) {
     this.setData('value', value);
+
+    this.validate()
   }
 
   async validate(): Promise<boolean> {
