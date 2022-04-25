@@ -3,6 +3,7 @@
  */
 
 import {render} from '@testing-library/react';
+import {act} from 'react-dom/test-utils';
 import {waitAsync} from './utils';
 import React from 'react';
 import {Form} from 'ffw-base';
@@ -41,12 +42,17 @@ describe('use-form', () => {
       ++unsubRenderCount;
       return <div>unsub</div>;
     }
-    render(<Parent />);
+    act(() => {
+      render(<Parent />);
+    });
+
     expect(form instanceof Form).toBe(true);
 
-    form.setValues({
-      name: 'bobbin',
-      age: 43,
+    act(() => {
+      form.setValues({
+        name: 'bobbin',
+        age: 43,
+      });
     });
 
     await waitAsync(0);
