@@ -1,7 +1,7 @@
 import {Field} from 'ffw-base';
 
 class FieldReact extends Field {
-  getInputProps = () => {
+  getInput = () => {
     return {
       value: this.value,
       name: this.name,
@@ -10,7 +10,7 @@ class FieldReact extends Field {
     };
   };
 
-  getSelectProps = () => {
+  getSelect = () => {
     return {
       value: this.value,
       name: this.name,

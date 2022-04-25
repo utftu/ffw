@@ -4,7 +4,7 @@ import FieldReact from './field-react';
 import {Form} from 'ffw-base';
 
 describe('', () => {
-  it('getInputProps()', () => {
+  it('getInput()', () => {
     const form = new Form<FieldReact>({
       createField: (form, name) =>
         new FieldReact({
@@ -16,16 +16,16 @@ describe('', () => {
       },
     });
 
-    expect(form.fields.name.getInputProps()).toEqual({
+    expect(form.fields.name.getInput()).toEqual({
       value: 'robbin',
       name: form.fields.name.name,
       onChange: expect.any(Function),
       onBlur: expect.any(Function),
     });
-    form.fields.name.getInputProps().onBlur();
+    form.fields.name.getInput().onBlur();
     expect(form.fields.name.touched).toBe(true);
     form.fields.name.setTouched(false);
-    form.fields.name.getInputProps().onChange({
+    form.fields.name.getInput().onChange({
       target: {
         value: 'bobbin',
       },
@@ -34,7 +34,7 @@ describe('', () => {
     expect(form.fields.name.touched).toBe(false);
   });
 
-  it('getSelectProps()', () => {
+  it('getSelect()', () => {
     const form = new Form<FieldReact>({
       createField: (form, name) =>
         new FieldReact({
@@ -46,16 +46,16 @@ describe('', () => {
       },
     });
 
-    expect(form.fields.name.getSelectProps()).toEqual({
+    expect(form.fields.name.getSelect()).toEqual({
       value: 'robbin',
       name: form.fields.name.name,
       onChange: expect.any(Function),
       onBlur: expect.any(Function),
     });
-    form.fields.name.getSelectProps().onBlur();
+    form.fields.name.getSelect().onBlur();
     expect(form.fields.name.touched).toBe(true);
     form.fields.name.setTouched(false);
-    form.fields.name.getSelectProps().onChange('bobbin');
+    form.fields.name.getSelect().onChange('bobbin');
     expect(form.fields.name.value).toBe('bobbin');
     expect(form.fields.name.touched).toBe(false);
   });
