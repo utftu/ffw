@@ -3,11 +3,12 @@
   "version": "1.0.12",
   "description": "",
   "scripts": {
-    "test2": "rollup -c ./relax.config.mjs",
+    "build": "node ./scripts/build.js",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "jest",
-    "pub": "npm run test && npm run typecheck && npm run types && npm run format && npm run build && npm version patch && npm publish"
+    "types": "node ./scripts/declare.js",
+    "pub": "npm run test && npm run typecheck && npm run types && npm run format && npm run build && node ./scripts/publish.js"
   },
   "type": "module",
   "main": "./dist/cjs/index.js",

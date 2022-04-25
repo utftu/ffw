@@ -10,7 +10,5 @@ import {cleanup, render} from '@testing-library/react';
 afterEach(cleanup);
 
 it('CheckboxWithLabel changes the text after click', () => {
-  const {queryByLabelText, getByLabelText} = render(
-    <div>hello</div>,
-  );
+  const {queryByLabelText, getByLabelText} = render(<div>hello</div>);
 });
