@@ -42,6 +42,10 @@ class Form<FieldType extends Field = Field> {
     cb();
   }
 
+  getFields() {
+    return this._fields;
+  }
+
   private iterateFields(cb: (field: Field) => void) {
     for (const name in this._fields) {
       cb(this.getField(name));
