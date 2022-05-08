@@ -34,15 +34,15 @@ function useForm(...deps: any[]): Form {
       });
     }
     return () => {
-      if (deps.length === 0) {
+      if (fieldNames.length === 0) {
         form.removeGlobalListener(listener);
       } else {
-        deps.forEach((fieldName) => {
+        fieldNames.forEach((fieldName) => {
           form.fields[fieldName].unsubscribe('*', listener);
         });
       }
     };
-  }, deps);
+  }, fieldNames);
 
   if (process.env.NODE_ENV === 'development') {
     return proxyForm;
