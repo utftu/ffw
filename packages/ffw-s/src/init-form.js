@@ -1,32 +1,15 @@
-import {Form, Field, FormProps} from 'ffw-base';
-
-interface Svelte {
-  subscribe: any;
-  makeStore: any;
-  value: {
-    set: any;
-    subscribe: any;
-  };
-  error: {
-    set: any;
-    subscribe: any;
-  };
-  touched: {
-    set: any;
-    subscribe: any;
-  };
-}
+import {Form, Field} from 'ffw-base';
 
 class SvelteField extends Field {
-  svelte: Svelte;
-  s: Svelte;
+  svelte = null;
+  s = null;
   constructor(...props) {
     // @ts-ignore
     super(...props);
 
     const field = this;
 
-    function makeStore(name): any {
+    function makeStore(name) {
       return {
         set(newData) {
           field.setData(name, newData);
@@ -52,7 +35,7 @@ class SvelteField extends Field {
   }
 }
 
-function initForm(options: FormProps = {}): Form<SvelteField> {
+function initForm(options = {}) {
   return new Form({
     createField: (form, name) => new SvelteField({name, form}),
     ...options,
