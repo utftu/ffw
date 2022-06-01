@@ -1,21 +1,11 @@
 import {useContext} from 'react';
 import context from './conext.js';
-import {Form} from 'ffw-base';
 
-export type Config =
-  | {
-      context: any;
-    }
-  | {form: Form};
-
-function useUnsubForm(deps: string[] | any[]): {
-  form: Form;
-  fieldNames: string[];
-} {
+function useUnsubForm(deps) {
   const lastArg = deps[deps.length - 1];
   const config =
     typeof lastArg !== 'string' && !Array.isArray(lastArg)
-      ? (lastArg as Config)
+      ? lastArg
       : null;
 
   let fieldNames;
@@ -29,8 +19,8 @@ function useUnsubForm(deps: string[] | any[]): {
     }
   }
 
-  const contextForm = useContext<Form>((config as any)?.context ?? context);
-  const form = (config as any)?.form ?? contextForm;
+  const contextForm = useContext(config?.context ?? context);
+  const form = config?.form ?? contextForm;
 
   return {
     form,

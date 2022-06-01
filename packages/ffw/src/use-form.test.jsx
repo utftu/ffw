@@ -4,12 +4,12 @@
 
 import {render} from '@testing-library/react';
 import {act} from 'react-dom/test-utils';
-import {waitAsync} from './utils';
+import {waitAsync} from './utils.js';
 import React from 'react';
 import {Form} from 'ffw-base';
-import useInitForm from './use-init-form';
+import useInitForm from './use-init-form.js';
 import context from './conext.js';
-import useForm from './use-form';
+import useForm from './use-form.js';
 
 describe('use-form', () => {
   it('subscribe', async () => {

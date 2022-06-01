@@ -1,5 +1,5 @@
 import {expect} from '@jest/globals';
-import FieldReact from './field-react';
+import FieldReact from './field-react.js';
 
 import {Form} from 'ffw-base';
 

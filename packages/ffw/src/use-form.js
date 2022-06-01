@@ -2,7 +2,7 @@ import {Form, createFormProxy} from 'ffw-base';
 import {useEffect, useMemo, useState} from 'react';
 import useUnsubForm from './use-unsub-form';
 
-function useForm(...deps: any[]): Form {
+function useForm(...deps) {
   const {form, fieldNames} = useUnsubForm(deps);
 
   const [, setUpdate] = useState(null);
