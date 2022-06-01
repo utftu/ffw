@@ -8,7 +8,7 @@ import {waitAsync} from './utils';
 import React from 'react';
 import {Form} from 'ffw-base';
 import useInitForm from './use-init-form';
-import context from './conext';
+import context from './conext.js';
 import useForm from './use-form';
 
 describe('use-form', () => {

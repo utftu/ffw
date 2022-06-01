@@ -1,5 +1,5 @@
 {
-  "include": ["packages/**/*"],
+  "include": ["packages/ffw/src/*"],
   "exclude": ["node_modules/*"],
   "compilerOptions": {
     "esModuleInterop": true,

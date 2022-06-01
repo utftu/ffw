@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import context from './conext';
+import context from './conext.js';
 import {Form} from 'ffw-base';
 
 export type Config =

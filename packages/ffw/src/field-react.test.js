@@ -5,7 +5,7 @@ import {Form} from 'ffw-base';
 
 describe('', () => {
   it('getInput()', () => {
-    const form = new Form<FieldReact>({
+    const form = new Form({
       createField: (form, name) =>
         new FieldReact({
           name,
@@ -35,7 +35,7 @@ describe('', () => {
   });
 
   it('getSelect()', () => {
-    const form = new Form<FieldReact>({
+    const form = new Form({
       createField: (form, name) =>
         new FieldReact({
           name,
