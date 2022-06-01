@@ -12,14 +12,15 @@ class DelayedCalls {
       this.promise = createExternalPromise()
       queueMicrotask(async () => {
         this.promise.resolve()
-        this.handleChanges()
+        await this.handleChanges()
+        this.changes = {}
         this.promise = null
       })
     }
     return this.promise
   }
   handleChanges() {
-    this.batch(() => {
+    return this.batch(() => {
       for (const changeKey in this.changes) {
         const callback = this.changes[changeKey]
         callback()

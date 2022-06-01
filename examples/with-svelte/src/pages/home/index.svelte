@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import * as yup from 'yup'
   import AgeInput from 'src/pages/home/age-input.svelte';
   import NameInput from 'src/pages/home/name-input.svelte';
@@ -20,7 +20,6 @@
   })
 
   setFfwContext(ffw)
-
 </script>
 
 <AgeInput/>

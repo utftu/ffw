@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import {getFfw} from 'ffw-s'
   import FfwInput from 'src/components/ffw-input.svelte'
   const ffw = getFfw()
