@@ -1,42 +1,27 @@
-import Field, {Listener} from './field';
+import Field from './field.js';
+import DelayedCalls from "./delayed-calls";
 
-export type FormProps = {
-  initValues?: Record<string, any>;
-  initData?: Record<string, any>;
-  validateSchema?: any;
-  options?: Options;
-  onSubmit?: (form: Form) => void;
-  batch?: any;
-  createField?: (form: Form, name: string) => Field;
-};
-
-type Options = {
-  validateOnChange?: boolean;
-  validateOnBlur?: boolean;
-  validateOnMount?: boolean;
-  checkPrevData?: boolean;
-};
-
-class Form<FieldType extends Field = Field> {
-  options: Options = {
+class Form {
+  options = {
     validateOnChange: true,
     validateOnBlur: true,
     validateOnMount: false,
     checkPrevData: true,
   };
-  protected _fields: Record<string, any> = {};
-  fields: any;
-  f: any;
+  _fields = {};
+  fields = null;
+  f = null;
+  calls = null;
   validateSchema = null;
-  onSubmit: (form: Form) => void = null;
-  globalListeners: any[] = [];
-  globalFieldListener = (field: any, type: string, event: any) => {
+  onSubmit = null;
+  globalListeners = [];
+  globalFieldListener = (field, type, event) => {
     this.globalListeners.forEach((globalListener) =>
       globalListener(field, type, event)
     );
   };
-  initValues: Record<string, any> = null;
-  initData: Record<string, any> = null;
+  initValues = null;
+  initData = null;
 
   batch(cb) {
     cb();
@@ -46,13 +31,13 @@ class Form<FieldType extends Field = Field> {
     return this._fields;
   }
 
-  private iterateFields(cb: (field: Field) => void) {
+  iterateFields(cb) {
     for (const name in this._fields) {
       cb(this.getField(name));
     }
   }
 
-  addGlobalListener(listener: Listener) {
+  addGlobalListener(listener) {
     if (this.globalListeners.length === 0) {
       this.iterateFields((field) => {
         field.addGlobalListener(this.globalFieldListener);
@@ -61,7 +46,7 @@ class Form<FieldType extends Field = Field> {
     this.globalListeners.push(listener);
   }
 
-  removeGlobalListener(listener: Listener) {
+  removeGlobalListener(listener) {
     this.globalListeners = this.globalListeners.filter(
       (globalListener) => listener !== globalListener
     );
@@ -72,7 +57,7 @@ class Form<FieldType extends Field = Field> {
     }
   }
 
-  addField(name: string, field: any) {
+  addField(name, field) {
     this.fields[name] = field;
 
     if (this.globalListeners.length) {
@@ -80,7 +65,7 @@ class Form<FieldType extends Field = Field> {
     }
   }
 
-  createField(name: string) {
+  createField(name) {
     return new Field({
       name,
       form: this,
@@ -94,7 +79,7 @@ class Form<FieldType extends Field = Field> {
     return this._fields[name];
   }
 
-  constructor(props: FormProps = {}) {
+  constructor(props = {}) {
     let validateSchema;
     const form = this;
 
@@ -128,6 +113,7 @@ class Form<FieldType extends Field = Field> {
     if (props.batch) {
       this.batch = props.batch;
     }
+    this.calls = new DelayedCalls(this.batch)
     if (props.createField) {
       this.createField = (name) => props.createField(this, name);
     }
@@ -137,13 +123,13 @@ class Form<FieldType extends Field = Field> {
       const field = this.getField(initDataKey);
 
       for (const fieldDataKey in fieldData) {
-        field.setData(fieldDataKey, fieldData[fieldDataKey]);
+        field.data[fieldDataKey] = fieldData[fieldDataKey]
       }
     }
 
     for (const initValueKey in this.initValues) {
       const field = this.getField(initValueKey);
-      field.set(this.initValues[initValueKey], false);
+      field.data.value = this.initValues[initValueKey]
     }
 
     for (const validateFieldKey in this.validateSchema.fields) {
@@ -187,19 +173,19 @@ class Form<FieldType extends Field = Field> {
     });
   }
 
-  setValue(name: string, value: any) {
+  setValue(name, value) {
     return this.getField(name).set(value);
   }
 
-  setTouched(name: string, touched: boolean) {
+  setTouched(name, touched) {
     return this.getField(name).setTouched(touched);
   }
 
-  setError(name: string, error: string) {
+  setError(name, error) {
     return this.getField(name).setError(error);
   }
 
-  setValues(values: Record<string, any>) {
+  setValues(values) {
     this.batch(() => {
       for (const valueKey in values) {
         const field = this.getField(valueKey);
@@ -208,7 +194,7 @@ class Form<FieldType extends Field = Field> {
     });
   }
 
-  setErrors(errors: Record<string, string>) {
+  setErrors(errors) {
     this.batch(() => {
       for (const errorKey in errors) {
         const field = this.getField(errorKey);
@@ -217,7 +203,7 @@ class Form<FieldType extends Field = Field> {
     });
   }
 
-  setTouches(touches: Record<string, boolean>) {
+  setTouches(touches) {
     this.batch(() => {
       for (const touchedKey in touches) {
         const field = this.getField(touchedKey);
@@ -226,7 +212,7 @@ class Form<FieldType extends Field = Field> {
     });
   }
 
-  getValues(): Record<string, any> {
+  getValues() {
     const store = {};
     this.iterateFields((field) => {
       store[field.name] = field.value;
@@ -234,7 +220,7 @@ class Form<FieldType extends Field = Field> {
     return store;
   }
 
-  getErrors(): Record<string, string> {
+  getErrors() {
     const store = {};
     this.iterateFields((field) => {
       if (field.error) {
@@ -244,7 +230,7 @@ class Form<FieldType extends Field = Field> {
     return store;
   }
 
-  getTouches(): Record<string, boolean> {
+  getTouches() {
     const store = {};
     this.iterateFields((field) => {
       store[field.name] = field.touched;

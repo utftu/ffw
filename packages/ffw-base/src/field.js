@@ -1,18 +1,11 @@
-import Form from './form';
-import mitt, {Emitter, Handler} from 'mitt';
-
-export type Listener = (field: Field) => void;
+import mitt from 'mitt';
 
 class Field {
   name = '';
-  form: Form = null;
-  emitter: Emitter<any> = null;
+  form = null;
+  emitter = null;
 
-  data: Record<string, any> & {
-    value: string;
-    error: string;
-    touched: boolean;
-  } = {
+  data = {
     value: '',
     error: '',
     touched: false,
@@ -24,12 +17,6 @@ class Field {
     touched = false,
     error = '',
     form = null,
-  }: {
-    name: string;
-    value?: any;
-    touched?: boolean;
-    error?: string;
-    form: any;
   }) {
     this.emitter = mitt();
     this.name = name;
@@ -70,21 +57,25 @@ class Field {
     }
     this.data[name] = newData;
 
-    this.form.batch(() => {
+    this.form.calls.addCall(`${this.name}:${name}`,() => {
       this.emitter.emit(name, this.data[name]);
-    });
+    })
+
+    // this.form.batch(() => {
+    //   this.emitter.emit(name, this.data[name]);
+    // });
   }
 
-  setError(error: string) {
+  setError(error) {
     // console.log('-----', 'setError', error)
     this.setData('error', error);
   }
 
-  setTouched(touched: boolean) {
+  setTouched(touched) {
     this.setData('touched', touched);
   }
 
-  set(value: any, validate = true) {
+  set(value, validate = true) {
     this.setData('value', value);
 
     if (validate) {
@@ -97,7 +88,7 @@ class Field {
     // this.validate()
   }
 
-  async validate(): Promise<boolean> {
+  async validate() {
     const fieldSchema = this.form.validateSchema.fields[this.name];
     if (!fieldSchema) {
       return true;
@@ -115,17 +106,17 @@ class Field {
     }
   }
 
-  subscribe(name: string, listener: any) {
+  subscribe(name, listener) {
     this.emitter.on(name, listener);
 
     return () => this.emitter.off(name, listener);
   }
 
-  unsubscribe(name: string, listener: any) {
+  unsubscribe(name, listener) {
     this.emitter.off(name, listener);
   }
 
-  onChange = (event: {target: {value: string}}) => {
+  onChange = (event) => {
     this.set(event.target.value, false);
 
     if (this.form.options.validateOnChange) {
@@ -141,17 +132,17 @@ class Field {
     }
   };
 
-  protected globalListeners = [];
-  protected globalListener = (...args) => {
+  globalListeners = [];
+  globalListener = (...args) => {
     this.globalListeners.forEach((listener) => listener(this, ...args));
   };
-  addGlobalListener(listener: any) {
+  addGlobalListener(listener) {
     if (this.globalListeners.length === 0) {
       this.emitter.on('*', this.globalListener);
     }
     this.globalListeners.push(listener);
   }
-  removeGlobalListener(listener: any) {
+  removeGlobalListener(listener) {
     this.globalListeners = this.globalListeners.filter(
       (globalListener) => globalListener !== listener
     );

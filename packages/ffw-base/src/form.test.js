@@ -71,7 +71,7 @@ describe('form', () => {
     expect(errors.age).not.toBe('');
     expect(errors.age1).not.toBe('');
   });
-  it('setErrors()', () => {
+  it('setErrors()', async () => {
     const form = new Form({
       initValues: {
         age: 42,
@@ -87,12 +87,13 @@ describe('form', () => {
       age: 'error1',
       name: 'error2',
     });
+    await waitAsync()
     expect(form.fields.age.error).toBe('error1');
     expect(form.fields.name.error).toBe('error2');
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(1);
   });
-  it('setError()', () => {
+  it('setError()', async () => {
     const form = new Form({
       initValues: {
         name: 'robbin',
@@ -101,6 +102,7 @@ describe('form', () => {
     const listener = jest.fn();
     form.fields.name.subscribe('error', listener);
     form.setError('name', 'you are bobbin');
+    await waitAsync()
     expect(form.fields.name.error).toBe('you are bobbin');
     expect(listener.mock.calls.length).toBe(1);
   });
@@ -158,7 +160,7 @@ describe('form', () => {
       address: false,
     });
   });
-  it('setValues()', () => {
+  it('setValues()', async () => {
     const form = new Form({
       initValues: {
         age: 42,
@@ -180,11 +182,12 @@ describe('form', () => {
     });
     expect(form.fields.age.value).toBe(43);
     expect(form.fields.name.value).toBe('bobbin');
+    await waitAsync()
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(1);
     expect(addressListener.mock.calls.length).toBe(0);
   });
-  it('setValue()', () => {
+  it('setValue()', async () => {
     const form = new Form({
       initValues: {
         name: 'robbin',
@@ -194,6 +197,7 @@ describe('form', () => {
     form.fields.name.subscribe('value', listener);
     form.setValue('name', 'bobbin');
     expect(form.fields.name.value).toBe('bobbin');
+    await waitAsync()
     expect(listener.mock.calls.length).toBe(1);
   });
   it('getValues() || .values', () => {
@@ -208,7 +212,7 @@ describe('form', () => {
     expect(form.getValues()).toEqual(values);
     expect(form.values).toEqual(values);
   });
-  it('setTouches()', () => {
+  it('setTouches()', async () => {
     const form = new Form({
       initValues: {
         age: 42,
@@ -227,10 +231,11 @@ describe('form', () => {
     });
     expect(form.fields.age.touched).toBe(true);
     expect(form.fields.name.touched).toBe(false);
+    await waitAsync()
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(0);
   });
-  it('setTouched()', () => {
+  it('setTouched()', async () => {
     const form = new Form({
       initValues: {
         name: 'robbin',
@@ -240,6 +245,7 @@ describe('form', () => {
     form.fields.name.subscribe('touched', listener);
     form.setTouched('name', true);
     expect(form.fields.name.touched).toBe(true);
+    await waitAsync()
     expect(listener.mock.calls.length).toBe(1);
   });
   it('getTouches() || touches', () => {

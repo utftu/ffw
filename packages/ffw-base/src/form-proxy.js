@@ -1,6 +1,4 @@
-import type Form from './form';
-
-export function createFormProxy(form: Form, deps: string[]) {
+export function createFormProxy(form, deps) {
   function checkAndThrow(property) {
     if (deps.length !== 0 && !deps.includes(property)) {
       throw new Error(`You don't have access to field - ${property}`);

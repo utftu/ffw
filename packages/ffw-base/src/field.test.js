@@ -45,35 +45,38 @@ describe('field', () => {
     });
   });
 
-  it('set()', () => {
+  it('set()', async () => {
     const field = new Field(ageFieldParams);
     const listener = jest.fn();
     field.subscribe('value', listener);
     field.set(43);
 
     expect(field.value).toBe(43);
+    await waitAsync()
     expect(listener.mock.calls.length).toBe(1);
     // @ts-ignore
     expect(listener.mock.calls[0][0]).toBe(43);
   });
 
-  it('setError()', () => {
+  it('setError()', async () => {
     const field = new Field(ageFieldParams);
-    const listener: any = jest.fn();
+    const listener = jest.fn();
     field.subscribe('error', listener);
     field.setError('Wrong value');
 
+    await waitAsync()
     expect(field.error).toBe('Wrong value');
     expect(listener.mock.calls.length).toBe(1);
     expect(listener.mock.calls[0][0]).toBe('Wrong value');
   });
 
-  it('setTouched()', () => {
+  it('setTouched()', async () => {
     const field = new Field(ageFieldParams);
-    const listener: any = jest.fn();
+    const listener = jest.fn();
     field.subscribe('touched', listener);
     field.setTouched(true);
 
+    await waitAsync()
     expect(field.touched).toBe(true);
     expect(listener.mock.calls.length).toBe(1);
     expect(listener.mock.calls[0][0]).toBe(true);
@@ -124,7 +127,7 @@ describe('field', () => {
   });
 
   describe('onBlur()', () => {
-    it('set touched', () => {
+    it('set touched', async () => {
       const form = new Form({
         initValues: {
           age: 42,
@@ -136,6 +139,7 @@ describe('field', () => {
 
       form.fields.age.onBlur();
       expect(form.fields.age.touched).toBe(true);
+      await waitAsync()
       expect(listener.mock.calls.length).toBe(1);
     });
     it('validateOnBlur = true', async () => {
@@ -170,7 +174,7 @@ describe('field', () => {
   });
 
   describe('onChange()', () => {
-    it('set value', () => {
+    it('set value', async () => {
       const form = new Form({
         initValues: {
           age: '42',
@@ -185,6 +189,7 @@ describe('field', () => {
           value: '43',
         },
       });
+      await waitAsync()
       expect(form.fields.age.value).toBe('43');
       expect(listener.mock.calls.length).toBe(1);
     });

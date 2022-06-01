@@ -24,6 +24,7 @@ describe('use-form', () => {
           name: 'robbin',
           age: 42,
         },
+        batch: act
       });
       return (
         <context.Provider value={form}>
