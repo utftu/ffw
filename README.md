@@ -20,11 +20,11 @@ npm i ffw
 ### Setting
 
 ```tsx
-import {useGlobalFfw, FfwProvider} from 'fww';
+import {useInitFfw, FfwProvider} from 'fww';
 import User from './user';
 
 function App() {
-  const form = useGlobalFfw({
+  const form = useInitFfw({
     initValues: {
       age: 42,
       name: 'Robbin',
