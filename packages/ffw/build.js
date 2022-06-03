@@ -1,6 +1,8 @@
 import esbuild from 'esbuild';
 import path from 'path';
 import fs from 'fs';
+import * as replacePlug from 'esbuild-plugin-replace';
+import textReplace from 'esbuild-plugin-text-replace'
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -15,16 +17,16 @@ fs.cpSync(
   path.join(__dirname, './dist/cjs/index.js'),
   {recursive: true}
 );
-esbuild.build({
-  entryPoints: [path.join(__dirname, './src/index.js')],
-  bundle: true,
-  format: 'esm',
-  minify: true,
-  platform: 'node',
-  external: ['react', 'react-dom'],
-  watch: !!process.env.WATCH,
-  outfile: path.join(__dirname, './dist/esm/prod.js'),
-});
+// esbuild.build({
+//   entryPoints: [path.join(__dirname, './src/index.js')],
+//   bundle: true,
+//   format: 'esm',
+//   minify: true,
+//   platform: 'node',
+//   external: ['react', 'react-dom'],
+//   watch: !!process.env.WATCH,
+//   outfile: path.join(__dirname, './dist/esm/prod.js'),
+// });
 
 esbuild.build({
   entryPoints: [path.join(__dirname, './src/index.js')],
@@ -35,26 +37,34 @@ esbuild.build({
   external: ['react', 'react-dom'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/dev.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/esm/dev.js'"],
+      ]
+    })
+  ],
 });
 
-esbuild.build({
-  entryPoints: [path.join(__dirname, './src/index.js')],
-  bundle: true,
-  format: 'cjs',
-  minify: true,
-  platform: 'node',
-  external: ['react', 'react-dom'],
-  watch: !!process.env.WATCH,
-  outfile: path.join(__dirname, './dist/cjs/prod.js'),
-});
-
-esbuild.build({
-  entryPoints: [path.join(__dirname, './src/index.js')],
-  bundle: true,
-  format: 'cjs',
-  minify: false,
-  platform: 'node',
-  external: ['react', 'react-dom'],
-  watch: !!process.env.WATCH,
-  outfile: path.join(__dirname, './dist/cjs/dev.js'),
-});
+// esbuild.build({
+//   entryPoints: [path.join(__dirname, './src/index.js')],
+//   bundle: true,
+//   format: 'cjs',
+//   minify: true,
+//   platform: 'node',
+//   external: ['react', 'react-dom'],
+//   watch: !!process.env.WATCH,
+//   outfile: path.join(__dirname, './dist/cjs/prod.js'),
+// });
+//
+// esbuild.build({
+//   entryPoints: [path.join(__dirname, './src/index.js')],
+//   bundle: true,
+//   format: 'cjs',
+//   minify: false,
+//   platform: 'node',
+//   external: ['react', 'react-dom'],
+//   watch: !!process.env.WATCH,
+//   outfile: path.join(__dirname, './dist/cjs/dev.js'),
+// });

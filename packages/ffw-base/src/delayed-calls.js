@@ -1,32 +1,32 @@
-import {createExternalPromise} from "./utils.js";
+import {createExternalPromise} from './utils.js';
 
 class DelayedCalls {
   constructor(batch) {
-    this.batch = batch
+    this.batch = batch;
   }
-  changes = {}
-  promise = null
+  changes = {};
+  promise = null;
   addCall(name, callback) {
-    this.changes[name] = callback
+    this.changes[name] = callback;
     if (!this.promise) {
-      this.promise = createExternalPromise()
+      this.promise = createExternalPromise();
       queueMicrotask(async () => {
-        this.promise.resolve()
-        await this.handleChanges()
-        this.changes = {}
-        this.promise = null
-      })
+        this.promise.resolve();
+        await this.handleChanges();
+        this.changes = {};
+        this.promise = null;
+      });
     }
-    return this.promise
+    return this.promise;
   }
   handleChanges() {
     return this.batch(() => {
       for (const changeKey in this.changes) {
-        const callback = this.changes[changeKey]
-        callback()
+        const callback = this.changes[changeKey];
+        callback();
       }
-    })
+    });
   }
 }
 
-export default DelayedCalls
+export default DelayedCalls;

@@ -1,9 +1,9 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import batch from './batch/react-batched-updates';
-import {FormProps, Form} from 'ffw-base';
+import {Form} from 'ffw-base';
 import FieldReact from './field-react';
 
-function useInitForm(options= {}) {
+function useInitForm(options = {}) {
   const [state] = useState(() => ({
     ffw: new Form({
       batch,

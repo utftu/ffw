@@ -15,6 +15,8 @@ importers:
       '@types/react-dom': ^18.0.5
       babel-jest: ^28.1.0
       esbuild: ^0.14.42
+      esbuild-plugin-replace: ^1.2.0
+      esbuild-plugin-text-replace: ^1.2.0
       jest: ^28.1.0
       jest-environment-jsdom: ^28.1.0
       jsdom: ^19.0.0
@@ -35,6 +37,8 @@ importers:
       '@types/react-dom': 18.0.5
       babel-jest: 28.1.0_@babel+core@7.18.2
       esbuild: 0.14.42
+      esbuild-plugin-replace: 1.2.0
+      esbuild-plugin-text-replace: 1.2.0
       jest: 28.1.0
       jest-environment-jsdom: 28.1.0
       jsdom: 19.0.0
@@ -2547,6 +2551,11 @@ packages:
       semver: 7.0.0
     dev: true
 
+  /core-js/3.22.8:
+    resolution: {integrity: sha512-UoGQ/cfzGYIuiq6Z7vWL1HfkE9U9IZ4Ub+0XSiJTCzvbZzgPA69oDF2f+lgJ6dFFLEdjW5O6svvoKzXX23xFkA==}
+    requiresBuild: true
+    dev: true
+
   /core-util-is/1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: true
@@ -2858,6 +2867,19 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /esbuild-plugin-replace/1.2.0:
+    resolution: {integrity: sha512-dYlDwjcKKgAi8fqsvLwDvO+03asnp1qyG4VU/qbvg061CIMfecF/qwkjr4QRetQP9Os2nJuNO95Y0rUUXhFAwg==}
+    dependencies:
+      magic-string: 0.25.9
+    dev: true
+
+  /esbuild-plugin-text-replace/1.2.0:
+    resolution: {integrity: sha512-04kdAMjxqGG+TEV/F+uGQVMFZlh65Eb11xo8b532io8FjOg5x2faoCXGicJo97BovXYARCPUhiZEECKZrFQq7Q==}
+    engines: {node: '>=10.1.0'}
+    dependencies:
+      ts-replace-all: 1.0.0
+    dev: true
 
   /esbuild-sunos-64/0.14.42:
     resolution: {integrity: sha512-uXV8TAZEw36DkgW8Ak3MpSJs1ofBb3Smkc/6pZ29sCAN1KzCAQzsje4sUwugf+FVicrHvlamCOlFZIXgct+iqQ==}
@@ -5233,6 +5255,12 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       punycode: 2.1.1
+    dev: true
+
+  /ts-replace-all/1.0.0:
+    resolution: {integrity: sha512-6uBtdkw3jHXkPtx/e9xB/5vcngMm17CyJYsS2YZeQ+9FdRnt6Ev5g931Sg2p+dxbtMGoCm13m3ax/obicTZIkQ==}
+    dependencies:
+      core-js: 3.22.8
     dev: true
 
   /tslib/2.4.0:

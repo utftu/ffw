@@ -52,7 +52,7 @@ describe('field', () => {
     field.set(43);
 
     expect(field.value).toBe(43);
-    await waitAsync()
+    await waitAsync();
     expect(listener.mock.calls.length).toBe(1);
     // @ts-ignore
     expect(listener.mock.calls[0][0]).toBe(43);
@@ -64,7 +64,7 @@ describe('field', () => {
     field.subscribe('error', listener);
     field.setError('Wrong value');
 
-    await waitAsync()
+    await waitAsync();
     expect(field.error).toBe('Wrong value');
     expect(listener.mock.calls.length).toBe(1);
     expect(listener.mock.calls[0][0]).toBe('Wrong value');
@@ -76,7 +76,7 @@ describe('field', () => {
     field.subscribe('touched', listener);
     field.setTouched(true);
 
-    await waitAsync()
+    await waitAsync();
     expect(field.touched).toBe(true);
     expect(listener.mock.calls.length).toBe(1);
     expect(listener.mock.calls[0][0]).toBe(true);
@@ -139,7 +139,7 @@ describe('field', () => {
 
       form.fields.age.onBlur();
       expect(form.fields.age.touched).toBe(true);
-      await waitAsync()
+      await waitAsync();
       expect(listener.mock.calls.length).toBe(1);
     });
     it('validateOnBlur = true', async () => {
@@ -189,7 +189,7 @@ describe('field', () => {
           value: '43',
         },
       });
-      await waitAsync()
+      await waitAsync();
       expect(form.fields.age.value).toBe('43');
       expect(listener.mock.calls.length).toBe(1);
     });

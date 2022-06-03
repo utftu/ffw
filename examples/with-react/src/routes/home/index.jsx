@@ -11,8 +11,8 @@ function Home() {
       age: 42,
     },
     options: {
-      checkPrevData: false
-    }
+      checkPrevData: false,
+    },
   });
   globalThis.form = ffw;
   return (
@@ -22,10 +22,14 @@ function Home() {
         <AgeListener />
         <GlobalListener />
         <NameInput />
-        <div onClick={() => {
-          ffw.f.name.set('1')
-          ffw.f.age.set('2')
-        }}>click</div>
+        <div
+          onClick={() => {
+            ffw.f.name.set('1');
+            ffw.f.age.set('2');
+          }}
+        >
+          click
+        </div>
       </div>
     </FfwProvider>
   );

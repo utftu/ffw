@@ -1,5 +1,5 @@
 import Field from './field.js';
-import DelayedCalls from "./delayed-calls";
+import DelayedCalls from './delayed-calls';
 
 class Form {
   options = {
@@ -113,7 +113,7 @@ class Form {
     if (props.batch) {
       this.batch = props.batch;
     }
-    this.calls = new DelayedCalls(this.batch)
+    this.calls = new DelayedCalls(this.batch);
     if (props.createField) {
       this.createField = (name) => props.createField(this, name);
     }
@@ -123,13 +123,13 @@ class Form {
       const field = this.getField(initDataKey);
 
       for (const fieldDataKey in fieldData) {
-        field.data[fieldDataKey] = fieldData[fieldDataKey]
+        field.data[fieldDataKey] = fieldData[fieldDataKey];
       }
     }
 
     for (const initValueKey in this.initValues) {
       const field = this.getField(initValueKey);
-      field.data.value = this.initValues[initValueKey]
+      field.data.value = this.initValues[initValueKey];
     }
 
     for (const validateFieldKey in this.validateSchema.fields) {

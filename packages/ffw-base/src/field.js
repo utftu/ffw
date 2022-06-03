@@ -11,13 +11,7 @@ class Field {
     touched: false,
   };
 
-  constructor({
-    name,
-    value = '',
-    touched = false,
-    error = '',
-    form = null,
-  }) {
+  constructor({name, value = '', touched = false, error = '', form = null}) {
     this.emitter = mitt();
     this.name = name;
     this.form = form;
@@ -57,9 +51,9 @@ class Field {
     }
     this.data[name] = newData;
 
-    this.form.calls.addCall(`${this.name}:${name}`,() => {
+    this.form.calls.addCall(`${this.name}:${name}`, () => {
       this.emitter.emit(name, this.data[name]);
-    })
+    });
 
     // this.form.batch(() => {
     //   this.emitter.emit(name, this.data[name]);

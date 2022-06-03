@@ -4,9 +4,7 @@ import context from './conext.js';
 function useUnsubForm(deps) {
   const lastArg = deps[deps.length - 1];
   const config =
-    typeof lastArg !== 'string' && !Array.isArray(lastArg)
-      ? lastArg
-      : null;
+    typeof lastArg !== 'string' && !Array.isArray(lastArg) ? lastArg : null;
 
   let fieldNames;
   if (Array.isArray(deps[0])) {

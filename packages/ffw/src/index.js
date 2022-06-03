@@ -4,6 +4,7 @@ import useInitForm from './use-init-form';
 import useField from './use-field';
 
 const Provider = context.Provider;
+export const HAHA = "hehehe";
 export {
   useForm as useFfw,
   Provider as FfwProvider,

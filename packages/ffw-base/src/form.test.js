@@ -87,7 +87,7 @@ describe('form', () => {
       age: 'error1',
       name: 'error2',
     });
-    await waitAsync()
+    await waitAsync();
     expect(form.fields.age.error).toBe('error1');
     expect(form.fields.name.error).toBe('error2');
     expect(ageListener.mock.calls.length).toBe(1);
@@ -102,7 +102,7 @@ describe('form', () => {
     const listener = jest.fn();
     form.fields.name.subscribe('error', listener);
     form.setError('name', 'you are bobbin');
-    await waitAsync()
+    await waitAsync();
     expect(form.fields.name.error).toBe('you are bobbin');
     expect(listener.mock.calls.length).toBe(1);
   });
@@ -182,7 +182,7 @@ describe('form', () => {
     });
     expect(form.fields.age.value).toBe(43);
     expect(form.fields.name.value).toBe('bobbin');
-    await waitAsync()
+    await waitAsync();
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(1);
     expect(addressListener.mock.calls.length).toBe(0);
@@ -197,7 +197,7 @@ describe('form', () => {
     form.fields.name.subscribe('value', listener);
     form.setValue('name', 'bobbin');
     expect(form.fields.name.value).toBe('bobbin');
-    await waitAsync()
+    await waitAsync();
     expect(listener.mock.calls.length).toBe(1);
   });
   it('getValues() || .values', () => {
@@ -231,7 +231,7 @@ describe('form', () => {
     });
     expect(form.fields.age.touched).toBe(true);
     expect(form.fields.name.touched).toBe(false);
-    await waitAsync()
+    await waitAsync();
     expect(ageListener.mock.calls.length).toBe(1);
     expect(nameListener.mock.calls.length).toBe(0);
   });
@@ -245,7 +245,7 @@ describe('form', () => {
     form.fields.name.subscribe('touched', listener);
     form.setTouched('name', true);
     expect(form.fields.name.touched).toBe(true);
-    await waitAsync()
+    await waitAsync();
     expect(listener.mock.calls.length).toBe(1);
   });
   it('getTouches() || touches', () => {
