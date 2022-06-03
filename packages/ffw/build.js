@@ -17,16 +17,16 @@ fs.cpSync(
   path.join(__dirname, './dist/cjs/index.js'),
   {recursive: true}
 );
-// esbuild.build({
-//   entryPoints: [path.join(__dirname, './src/index.js')],
-//   bundle: true,
-//   format: 'esm',
-//   minify: true,
-//   platform: 'node',
-//   external: ['react', 'react-dom'],
-//   watch: !!process.env.WATCH,
-//   outfile: path.join(__dirname, './dist/esm/prod.js'),
-// });
+esbuild.build({
+  entryPoints: [path.join(__dirname, './src/index.js')],
+  bundle: true,
+  format: 'esm',
+  minify: true,
+  platform: 'node',
+  external: ['react', 'react-dom'],
+  watch: !!process.env.WATCH,
+  outfile: path.join(__dirname, './dist/esm/prod.js'),
+});
 
 esbuild.build({
   entryPoints: [path.join(__dirname, './src/index.js')],
