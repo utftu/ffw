@@ -1,8 +1,7 @@
 import esbuild from 'esbuild';
 import path from 'path';
 import fs from 'fs';
-import textReplace from 'esbuild-plugin-text-replace'
-
+import textReplace from 'esbuild-plugin-text-replace';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -29,10 +28,8 @@ esbuild.build({
   plugins: [
     textReplace({
       include: /.*/,
-      pattern: [
-        ["from 'ffw-base'", "from 'ffw-base/dist/esm/prod.js'"],
-      ]
-    })
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/esm/prod.js'"]],
+    }),
   ],
 });
 
@@ -48,10 +45,8 @@ esbuild.build({
   plugins: [
     textReplace({
       include: /.*/,
-      pattern: [
-        ["from 'ffw-base'", "from 'ffw-base/dist/esm/dev.js'"],
-      ]
-    })
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/esm/dev.js'"]],
+    }),
   ],
 });
 
@@ -67,10 +62,8 @@ esbuild.build({
   plugins: [
     textReplace({
       include: /.*/,
-      pattern: [
-        ["from 'ffw-base'", "from 'ffw-base/dist/cjs/prod.js'"],
-      ]
-    })
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/cjs/prod.js'"]],
+    }),
   ],
 });
 
@@ -86,9 +79,7 @@ esbuild.build({
   plugins: [
     textReplace({
       include: /.*/,
-      pattern: [
-        ["from 'ffw-base'", "from 'ffw-base/dist/cjs/dev.js'"],
-      ]
-    })
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/cjs/dev.js'"]],
+    }),
   ],
 });
