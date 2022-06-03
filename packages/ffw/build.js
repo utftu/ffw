@@ -1,7 +1,6 @@
 import esbuild from 'esbuild';
 import path from 'path';
 import fs from 'fs';
-import * as replacePlug from 'esbuild-plugin-replace';
 import textReplace from 'esbuild-plugin-text-replace'
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
@@ -26,6 +25,14 @@ esbuild.build({
   external: ['react', 'react-dom'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/prod.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/esm/prod.js'"],
+      ]
+    })
+  ],
 });
 
 esbuild.build({
@@ -47,24 +54,40 @@ esbuild.build({
   ],
 });
 
-// esbuild.build({
-//   entryPoints: [path.join(__dirname, './src/index.js')],
-//   bundle: true,
-//   format: 'cjs',
-//   minify: true,
-//   platform: 'node',
-//   external: ['react', 'react-dom'],
-//   watch: !!process.env.WATCH,
-//   outfile: path.join(__dirname, './dist/cjs/prod.js'),
-// });
-//
-// esbuild.build({
-//   entryPoints: [path.join(__dirname, './src/index.js')],
-//   bundle: true,
-//   format: 'cjs',
-//   minify: false,
-//   platform: 'node',
-//   external: ['react', 'react-dom'],
-//   watch: !!process.env.WATCH,
-//   outfile: path.join(__dirname, './dist/cjs/dev.js'),
-// });
+esbuild.build({
+  entryPoints: [path.join(__dirname, './src/index.js')],
+  bundle: true,
+  format: 'cjs',
+  minify: true,
+  platform: 'node',
+  external: ['react', 'react-dom'],
+  watch: !!process.env.WATCH,
+  outfile: path.join(__dirname, './dist/cjs/prod.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/cjs/prod.js'"],
+      ]
+    })
+  ],
+});
+
+esbuild.build({
+  entryPoints: [path.join(__dirname, './src/index.js')],
+  bundle: true,
+  format: 'cjs',
+  minify: false,
+  platform: 'node',
+  external: ['react', 'react-dom'],
+  watch: !!process.env.WATCH,
+  outfile: path.join(__dirname, './dist/cjs/dev.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/cjs/dev.js'"],
+      ]
+    })
+  ],
+});

@@ -1,6 +1,8 @@
 import esbuild from 'esbuild';
 import path from 'path';
 import fs from 'fs';
+import textReplace from 'esbuild-plugin-text-replace'
+
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -24,6 +26,14 @@ esbuild.build({
   external: ['svelte'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/prod.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/esm/prod.js'"],
+      ]
+    })
+  ],
 });
 
 esbuild.build({
@@ -35,6 +45,14 @@ esbuild.build({
   external: ['svelte'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/dev.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/esm/dev.js'"],
+      ]
+    })
+  ],
 });
 
 esbuild.build({
@@ -46,6 +64,14 @@ esbuild.build({
   external: ['svelte'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/prod.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/cjs/prod.js'"],
+      ]
+    })
+  ],
 });
 
 esbuild.build({
@@ -57,4 +83,12 @@ esbuild.build({
   external: ['svelte'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/dev.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [
+        ["from 'ffw-base'", "from 'ffw-base/dist/cjs/dev.js'"],
+      ]
+    })
+  ],
 });
