@@ -5,7 +5,9 @@ import textReplace from 'esbuild-plugin-text-replace';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-fs.cpSync(path.join(__dirname, 'types'), path.join(__dirname, 'dist/types'), {recursive: true});
+fs.cpSync(path.join(__dirname, 'types'), path.join(__dirname, 'dist/types'), {
+  recursive: true,
+});
 
 fs.cpSync(
   path.join(__dirname, '../../static/package-cjs.json'),

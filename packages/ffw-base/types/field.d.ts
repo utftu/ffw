@@ -1,14 +1,14 @@
-import {Emitter} from "mitt";
-import {Form} from "./types";
+import {Emitter} from 'mitt';
+import {Form} from './types';
 
 declare class Field<TValue = string> {
   name: string;
   form: Form;
   emitter: Emitter<{
-    value: TValue,
+    value: TValue;
     error: string;
-    touched: boolean,
-    [name: string| number]: any
+    touched: boolean;
+    [name: string | number]: any;
   }>;
 
   get value(): TValue;
@@ -26,10 +26,10 @@ declare class Field<TValue = string> {
   set(value: TValue): void;
 
   validate(): Promise<boolean>;
-  subscribe(name: string, listener: (newData: any) => void): void
-  unsubscribe(name: string, listener: (newData: any) => void): void
+  subscribe(name: string, listener: (newData: any) => void): void;
+  unsubscribe(name: string, listener: (newData: any) => void): void;
   onChange(event: {target: {value: string}}): void;
   onBlur(): void;
 }
 
-export default Field
+export default Field;

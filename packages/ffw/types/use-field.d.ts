@@ -1,5 +1,5 @@
-import FieldReact from './field-react'
+import FieldReact from './field-react';
 
-type useField = (name: string, config: any) => FieldReact
+type useField = (name: string, config: any) => FieldReact;
 
 export default useField;

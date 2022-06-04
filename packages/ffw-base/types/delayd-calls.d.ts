@@ -6,4 +6,4 @@ declare class DelayedCalls {
   handleChanges(): void;
 }
 
-export default DelayedCalls
+export default DelayedCalls;
