@@ -1,4 +1,4 @@
-import {Field} from 'ffw-base/dist/types/index.js';
+import {Field} from 'ffw-base';
 
 class FieldSvelte extends Field {
   svelte = null;

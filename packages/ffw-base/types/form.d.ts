@@ -8,7 +8,7 @@ declare class Form<TField extends Field = Field> {
     validateOnMount: boolean;
     checkPrevData: boolean;
   };
-  _fields: Record<string, TField>
+  _fields: Record<string, TField>;
   fields: this['_fields'];
   f: this['_fields'];
   calls: DelayedCalls;

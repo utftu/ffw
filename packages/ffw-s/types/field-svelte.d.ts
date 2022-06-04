@@ -15,9 +15,12 @@ type Svelte<TName extends keyof TForm['_fields'], TForm extends Form = Form> = {
   touched: Store<'touched'>;
 };
 
-declare class FieldSvelte<TName extends keyof TForm = any, TForm extends Form = Form> {
-  svelte: Svelte<TName, TForm>
-  s: Svelte<TName, TForm>
+declare class FieldSvelte<
+  TName extends keyof TForm = any,
+  TForm extends Form = Form
+> {
+  svelte: Svelte<TName, TForm>;
+  s: Svelte<TName, TForm>;
 }
 
 export default FieldSvelte;
