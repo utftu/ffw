@@ -1,4 +1,5 @@
-import {DelayedCalls, Field} from "./types";
+import type DelayedCalls from "./delayd-calls";
+import type Field from './field'
 
 declare class Form<TField extends Field = Field> {
   options: {
