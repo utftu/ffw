@@ -1,5 +1,5 @@
 import {Emitter} from 'mitt';
-import {Form} from './types';
+import Form from './form'
 
 declare class Field<TValue = string> {
   name: string;
@@ -8,7 +8,7 @@ declare class Field<TValue = string> {
     value: TValue;
     error: string;
     touched: boolean;
-    [name: string | number]: any;
+    [name: string | number | symbol]: any;
   }>;
 
   get value(): TValue;

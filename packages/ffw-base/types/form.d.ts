@@ -8,7 +8,7 @@ declare class Form<TField extends Field = Field> {
     validateOnMount: boolean;
     checkPrevData: boolean;
   };
-  _fields: Record<string, Field<any>>;
+  _fields: Record<string, TField>
   fields: this['_fields'];
   f: this['_fields'];
   calls: DelayedCalls;
@@ -20,9 +20,9 @@ declare class Form<TField extends Field = Field> {
   getField<TName extends keyof this['_fields']>(
     name: TName
   ): this['_fields'][TName];
-  onSubmit(form: Form): void;
+  onSubmit(form: this): void;
   batch(): void;
-  getFields(): Form['_fields'];
+  getFields(): this['_fields'];
   iterateFields(cb: (field: Field<any>) => void): void;
   addGlobalListener(
     listener: (field: Field, dataName: string, data: any) => void
