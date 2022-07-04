@@ -8,7 +8,7 @@ type Store<TName extends keyof TForm['_fields'], TForm extends Form = Form> = {
 type Svelte<TName extends keyof TForm['_fields'], TForm extends Form = Form> = {
   makeStore(name: TName): Store<TName>;
   subscribe<TValueName extends keyof TForm['_fields'][TName]>(
-    cb: (name: string, data: TForm['_fields'][TName][TValueName]) => void
+    cb: (name: keyof TForm['_fields'][TName]['data'], data: TForm['_fields'][TName][TValueName]) => void
   ): () => void;
   value: Store<'value'>;
   error: Store<'error'>;

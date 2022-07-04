@@ -1,14 +1,23 @@
 import {Emitter} from 'mitt';
 import Form from './form';
+import {string} from "yup";
 
 declare class Field<TValue = string> {
   name: string;
-  form: Form;
+  form: Form<Field<any>>;
+
+  data: {
+    value: TValue;
+    error: string;
+    touched: boolean;
+    [name: string]: any;
+  };
+
   emitter: Emitter<{
     value: TValue;
     error: string;
     touched: boolean;
-    [name: string | number | symbol]: any;
+    [name: string]: any;
   }>;
 
   get value(): TValue;
@@ -20,14 +29,14 @@ declare class Field<TValue = string> {
   get touched(): boolean;
   set touched(touched: boolean);
 
-  setData(name: string, newData: any): void;
+  setData(name: string, newData: TValue): void;
   setError(error: string): void;
   setTouched(touched: boolean): void;
   set(value: TValue): void;
 
   validate(): Promise<boolean>;
-  subscribe(name: string, listener: (newData: any) => void): void;
-  unsubscribe(name: string, listener: (newData: any) => void): void;
+  subscribe(name: string, listener: (newData: TValue) => void): void;
+  unsubscribe(name: string, listener: (newData: TValue) => void): void;
   onChange(event: {target: {value: string}}): void;
   onBlur(): void;
 }

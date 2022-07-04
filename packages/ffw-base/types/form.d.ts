@@ -1,7 +1,7 @@
 import type DelayedCalls from './delayd-calls';
 import type Field from './field';
 
-declare class Form<TField extends Field = Field> {
+declare class Form<TField extends Field<any>> {
   options: {
     validateOnChange: boolean;
     validateOnBlur: boolean;
@@ -14,18 +14,18 @@ declare class Form<TField extends Field = Field> {
   calls: DelayedCalls;
   validateSchema: any;
   addField<TValue>(name: string, field: Field<TValue>): void;
-  createField<TName extends keyof this['_fields']>(
-    name: TName
-  ): this['_fields'][TName];
+  createField<TValue>(
+    name: string
+  ): Field<TValue>;
   getField<TName extends keyof this['_fields']>(
     name: TName
   ): this['_fields'][TName];
   onSubmit(form: this): void;
   batch(): void;
   getFields(): this['_fields'];
-  iterateFields(cb: (field: Field<any>) => void): void;
+  iterateFields(cb: (field: TField) => void): void;
   addGlobalListener(
-    listener: (field: Field, dataName: string, data: any) => void
+    listener: (field: TField, dataName: string, data: any) => void
   ): void;
   reset(): void;
   setValue(
@@ -49,3 +49,8 @@ declare class Form<TField extends Field = Field> {
 }
 
 export default Form;
+
+
+declare class Box<Type> {
+  contents: Type;
+}
