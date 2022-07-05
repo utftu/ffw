@@ -6,16 +6,18 @@ type Store<
   TName extends keyof TForm['_fields'],
   TForm extends Form<FieldSvelte<TValue, TName, TForm>>,
   TDataName extends keyof TForm['_fields'][TName]['data']
-  > = {
+> = {
   set(data: TForm['_fields'][TName]['data'][TDataName]);
-  subscribe(cb: (data: TForm['_fields'][TName]['data'][TDataName]) => () => void);
+  subscribe(
+    cb: (data: TForm['_fields'][TName]['data'][TDataName]) => () => void
+  );
 };
 
 type Svelte<
   TValue,
   TName extends keyof TForm['_fields'],
   TForm extends Form<FieldSvelte<TValue, TName, TForm>>
-  > = {
+> = {
   makeStore<TDataName extends keyof TForm['_fields'][TName]['data']>(
     name: TDataName
   ): Store<TValue, TName, TForm, TDataName>;
@@ -34,7 +36,7 @@ declare class FieldSvelte<
   TValue,
   TName extends keyof TForm['_fields'],
   TForm extends Form<FieldSvelte<TValue, TName, TForm>>
-  > extends Field<TValue> {
+> extends Field<TValue, TName, TForm> {
   svelte: Svelte<TValue, TName, TForm>;
   s: Svelte<TValue, TName, TForm>;
 }

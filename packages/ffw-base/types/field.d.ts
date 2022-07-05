@@ -2,9 +2,21 @@ import {Emitter} from 'mitt';
 import Form from './form';
 import {string} from 'yup';
 
-declare class Field<TValue = string> {
+declare class Field<
+  TValue,
+  TName,
+  TForm extends Form<Field<TValue, TName, TForm>>
+> {
+  constructor(props: {
+    name: string;
+    value: TValue;
+    error: string;
+    touched: boolean;
+    form: TForm;
+  });
+
   name: string;
-  form: Form<Field<any>>;
+  form: TForm;
 
   data: {
     value: TValue;

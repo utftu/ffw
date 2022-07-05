@@ -1,7 +1,22 @@
 import type DelayedCalls from './delayd-calls';
 import type Field from './field';
+import type {BaseSchema} from 'yup';
 
 declare class Form<TField extends Field<any>> {
+  constructor(props: {
+    validateSchema?: BaseSchema;
+    onSubmit?: (form: Form<TField>) => void;
+    initValues?: Record<string, any>;
+    initData?: Record<string, any>;
+    batch?: (cb: () => void) => void;
+    createField: (name: string) => TField;
+    options: {
+      validateOnChange: boolean;
+      validateOnBlur: boolean;
+      validateOnMount: boolean;
+      checkPrevData: boolean;
+    };
+  });
   options: {
     validateOnChange: boolean;
     validateOnBlur: boolean;

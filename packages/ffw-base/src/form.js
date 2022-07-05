@@ -1,6 +1,6 @@
 import Field from './field.js';
 import DelayedCalls from './delayed-calls';
-import mitt from 'mitt'
+import mitt from 'mitt';
 
 class Form {
   options = {
@@ -16,12 +16,8 @@ class Form {
   validateSchema = null;
   onSubmit = null;
   globalListeners = [];
-  // #if NODE_DEV
-  debugEmitter = mitt()
   emitter = mitt();
   globalFieldListener = (field, type, event) => {
-    // #if NODE_DEV
-    this.debugEmitter.emit('globalFieldListener', [field, type, event])
     this.globalListeners.forEach((globalListener) =>
       globalListener(field, type, event)
     );
@@ -158,15 +154,15 @@ class Form {
     }
     return !error;
   }
-  
+
   get valid() {
     for (let key in this._fields) {
-      const field = this._fields[key]
+      const field = this._fields[key];
       if (field.error) {
-        return false
+        return false;
       }
     }
-    return true
+    return true;
   }
 
   submit = async () => {

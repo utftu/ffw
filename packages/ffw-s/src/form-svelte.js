@@ -1,20 +1,24 @@
-import {Form} from 'ffw-base'
+import {Form} from 'ffw-base';
 
-class FormSvelte extends Form{
+class FormSvelte extends Form {
   constructor(...args) {
-    super(...args)
+    super(...args);
     
+    const form = this;
+
     this.svelte = this.s = {
       valid: {
         subscribe(cb) {
-          cb(this.valid)
+          cb(form.valid);
           function handle() {
-            cb(this.valid)
+            cb(form.valid);
           }
-          this.emitter.subscribe('ffw.valid', handle)
-          return () => this.emitter.unsubscribe('ffw.valid', handle)
-        }
-      }
-    }
+          form.emitter.on('ffw.valid', handle);
+          return () => form.emitter.off('ffw.valid', handle);
+        },
+      },
+    };
   }
 }
+
+export default FormSvelte;

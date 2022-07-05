@@ -50,21 +50,27 @@ class Field {
       return;
     }
     this.data[name] = newData;
+    
+    if (name === 'error') {
+      this.form.calls.addCall('ffw.valid', () => {
+        this.form.emitter.emit('ffw.valid');
+      });
+    }
 
     this.form.calls.addCall(`ffw.fields.${this.name}.${name}`, () => {
       this.emitter.emit(name, this.data[name]);
+      this.form.emitter.emit(
+        `ffw.fields.${this.name}.${name}`,
+        this.data[name]
+      );
     });
-
-    // this.form.batch(() => {
-    //   this.emitter.emit(name, this.data[name]);
-    // });
   }
 
   setError(error) {
     this.setData('error', error);
-    this.form.calls.addCall('ffw.valid', () => {
-      this.form.emitter.emit('ffw.valid')
-    })
+    // this.form.calls.addCall('ffw.valid', () => {
+    //   this.form.emitter.emit('ffw.valid');
+    // });
   }
 
   setTouched(touched) {
