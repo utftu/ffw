@@ -51,7 +51,7 @@ class Field {
     }
     this.data[name] = newData;
 
-    this.form.calls.addCall(`${this.name}:${name}`, () => {
+    this.form.calls.addCall(`ffw.fields.${this.name}.${name}`, () => {
       this.emitter.emit(name, this.data[name]);
     });
 
@@ -61,8 +61,10 @@ class Field {
   }
 
   setError(error) {
-    // console.log('-----', 'setError', error)
     this.setData('error', error);
+    this.form.calls.addCall('ffw.valid', () => {
+      this.form.emitter.emit('ffw.valid')
+    })
   }
 
   setTouched(touched) {

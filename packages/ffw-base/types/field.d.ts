@@ -1,6 +1,6 @@
 import {Emitter} from 'mitt';
 import Form from './form';
-import {string} from "yup";
+import {string} from 'yup';
 
 declare class Field<TValue = string> {
   name: string;

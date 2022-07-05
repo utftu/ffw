@@ -14,9 +14,7 @@ declare class Form<TField extends Field<any>> {
   calls: DelayedCalls;
   validateSchema: any;
   addField<TValue>(name: string, field: Field<TValue>): void;
-  createField<TValue>(
-    name: string
-  ): Field<TValue>;
+  createField<TValue>(name: string): Field<TValue>;
   getField<TName extends keyof this['_fields']>(
     name: TName
   ): this['_fields'][TName];
@@ -49,7 +47,6 @@ declare class Form<TField extends Field<any>> {
 }
 
 export default Form;
-
 
 declare class Box<Type> {
   contents: Type;
