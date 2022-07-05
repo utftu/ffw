@@ -50,7 +50,7 @@ class Field {
       return;
     }
     this.data[name] = newData;
-    
+
     if (name === 'error') {
       this.form.calls.addCall('ffw.valid', () => {
         this.form.emitter.emit('ffw.valid');

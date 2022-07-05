@@ -3,7 +3,7 @@ import {Form} from 'ffw-base';
 class FormSvelte extends Form {
   constructor(...args) {
     super(...args);
-    
+
     const form = this;
 
     this.svelte = this.s = {

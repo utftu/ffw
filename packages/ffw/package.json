@@ -1,6 +1,6 @@
 {
   "name": "ffw",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "",
   "type": "module",
   "types": "dist/types/index.d.ts",
