@@ -4,10 +4,9 @@
   import NameInput from 'src/pages/home/name-input.svelte';
   import AgeListener from 'src/pages/home/age-listener.svelte';
   import {setFfwContext, initFFw} from 'ffw-s'
-  import {setContext} from 'svelte'
   const ffw = initFFw({
     initValues: {
-      // age: 42,
+      age: 42,
       name: "Robbin"
     },
     validateSchema: yup.object({
@@ -20,29 +19,11 @@
     console.log('-----', field.name, type, event)
   })
   
-  ffw.emitter.on('*', (...args) => {
-    console.log('here', args)
+  ffw.emitter.on('*', (field, ...args) => {
+    console.log(field, args)
   })
-  
-  ffw.validate()
-
-  setContext('ffw-s', ffw)
-  
-  ffw.s.valid.subscribe((valid) => {
-    console.log('-----', 's valid', valid)
-  })
-  console.log('before')
-  console.log('setFfwContext', setFfwContext)
-  // setFfwContext(ffw)
-  console.log('after')
-  
+  setFfwContext(ffw)
   const valid = ffw.s.valid
-  // console.log(valid.subscribe)
-  // console.log($valid)
-  // console.log('-----', 'ffw.s', valid)
-  $: () => {
-    console.log('$valid', $valid)
-  }
 </script>
 
 {#if $valid}

@@ -57,10 +57,10 @@ class Field {
       });
     }
 
-    this.form.calls.addCall(`ffw.fields.${this.name}.${name}`, () => {
+    this.form.calls.addCall(`ffw.fields.${this.name}.data.${name}`, () => {
       this.emitter.emit(name, this.data[name]);
       this.form.emitter.emit(
-        `ffw.fields.${this.name}.${name}`,
+        `ffw.fields.${this.name}.data.${name}`,
         this.data[name]
       );
     });
