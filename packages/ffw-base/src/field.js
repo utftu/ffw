@@ -1,5 +1,6 @@
 import mitt from 'mitt';
-import createLazyFunc from 'utftu/createLazyFunc';
+// import createLazyFunc from 'utftu/createLazyFunc';
+import createLazyFunc from 'utftu/dist/create-lazy-func/esm/dev.js';
 
 class Field {
   name = '';
@@ -22,15 +23,6 @@ class Field {
     this.data.error = error;
     
     const field = this
-
-    // const emitErrorTouched = () => {
-    //   const errorTouched = this.errorTouched
-    //   this.emitter.emit('errorTouched', errorTouched);
-    //   this.form.emitter.emit(
-    //     `ffw.fields.${this.name}.errorTouched`,
-    //     errorTouched
-    //   );
-    // };
     const lazyEmitErrorTouched = createLazyFunc(
       () => {
         const errorTouched = this.errorTouched;
@@ -40,7 +32,8 @@ class Field {
           errorTouched
         );
       },
-      () => [this.errorTouched]
+      () => [this.errorTouched],
+      [this.errorTouched]
     );
     this.emitter.on('error', lazyEmitErrorTouched);
     this.emitter.on('touched', lazyEmitErrorTouched);

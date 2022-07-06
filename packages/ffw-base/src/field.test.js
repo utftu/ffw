@@ -254,23 +254,25 @@ describe('field', () => {
     field.set('error text', false);
 
     expect(field.errorTouched).toBe('');
+    expect(listener.mock.calls.length).toBe(0);
 
     field.setTouched(true);
 
     expect(field.errorTouched).toBe('');
+    expect(listener.mock.calls.length).toBe(0);
 
     await field.validate();
 
     expect(field.errorTouched).not.toBe('');
+    expect(listener.mock.calls.length).toBe(1);
 
     field.set('42');
     await field.validate();
 
     expect(field.errorTouched).toBe('');
-
-    expect(listener.mock.calls.length).toBe(3);
+    expect(listener.mock.calls.length).toBe(2);
   });
-  it('emits', () => {
+  it('emits', async () => {
     const form = new Form({
       initValues: {
         age: '42',
@@ -280,17 +282,39 @@ describe('field', () => {
       }),
     });
     const field = form.f.age;
-    const valueListeners = jest.fn();
-    const errorListeners = jest.fn();
-    const touchedListeners = jest.fn();
-    const errorTouched = jest.fn()
+    // field.emitter.on('*', (...args) => {
+    //   console.log('-----', 'args', args)
+    // })
+    const valueListener = jest.fn();
+    const errorListener = jest.fn();
+    const touchedListener = jest.fn();
+    const errorTouchedListener = jest.fn()
 
-    field.subscribe('value', valueListeners);
-    field.subscribe('error', errorListeners);
-    field.subscribe('touched', touchedListeners);
-    field.subscribe('errorTouched', () => {})
+    field.subscribe('value', valueListener);
+    field.subscribe('error', errorListener);
+    field.subscribe('touched', touchedListener);
+    field.subscribe('errorTouched', errorTouchedListener)
 
-    field.set({});
-    expect(valueListeners);
+    field.set('hehe', false);
+    await waitAsync()
+    expect(valueListener.mock.calls.length).toBe(1);
+    expect(errorListener.mock.calls.length).toBe(0);
+    expect(touchedListener.mock.calls.length).toBe(0);
+    expect(errorTouchedListener.mock.calls.length).toBe(0);
+  
+    field.setError('hehe');
+    await waitAsync(100)
+    expect(valueListener.mock.calls.length).toBe(1);
+    expect(errorListener.mock.calls.length).toBe(1);
+    expect(touchedListener.mock.calls.length).toBe(0);
+    expect(errorTouchedListener.mock.calls.length).toBe(0);
+  
+    field.setTouched(true);
+    await waitAsync()
+
+    expect(valueListener.mock.calls.length).toBe(1);
+    expect(errorListener.mock.calls.length).toBe(1);
+    expect(touchedListener.mock.calls.length).toBe(1);
+    expect(errorTouchedListener.mock.calls.length).toBe(1);
   });
 });
