@@ -288,29 +288,29 @@ describe('field', () => {
     const valueListener = jest.fn();
     const errorListener = jest.fn();
     const touchedListener = jest.fn();
-    const errorTouchedListener = jest.fn()
+    const errorTouchedListener = jest.fn();
 
     field.subscribe('value', valueListener);
     field.subscribe('error', errorListener);
     field.subscribe('touched', touchedListener);
-    field.subscribe('errorTouched', errorTouchedListener)
+    field.subscribe('errorTouched', errorTouchedListener);
 
     field.set('hehe', false);
-    await waitAsync()
+    await waitAsync();
     expect(valueListener.mock.calls.length).toBe(1);
     expect(errorListener.mock.calls.length).toBe(0);
     expect(touchedListener.mock.calls.length).toBe(0);
     expect(errorTouchedListener.mock.calls.length).toBe(0);
-  
+
     field.setError('hehe');
-    await waitAsync(100)
+    await waitAsync(100);
     expect(valueListener.mock.calls.length).toBe(1);
     expect(errorListener.mock.calls.length).toBe(1);
     expect(touchedListener.mock.calls.length).toBe(0);
     expect(errorTouchedListener.mock.calls.length).toBe(0);
-  
+
     field.setTouched(true);
-    await waitAsync()
+    await waitAsync();
 
     expect(valueListener.mock.calls.length).toBe(1);
     expect(errorListener.mock.calls.length).toBe(1);

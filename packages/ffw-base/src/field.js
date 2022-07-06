@@ -21,8 +21,8 @@ class Field {
     this.data.value = value;
     this.data.touched = touched;
     this.data.error = error;
-    
-    const field = this
+
+    const field = this;
     const lazyEmitErrorTouched = createLazyFunc(
       () => {
         const errorTouched = this.errorTouched;
