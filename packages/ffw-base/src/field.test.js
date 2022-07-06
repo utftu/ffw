@@ -1,8 +1,12 @@
-import Field from './field';
+/**
+ * @jest-environment jsdom
+ */
+
+import Field from './field.js';
 import {jest, expect} from '@jest/globals';
-import Form from './form';
+import Form from './form.js';
 import * as yup from 'yup';
-import {waitAsync} from './utils';
+import {waitAsync} from './utils.js';
 
 const formMock = new Form({});
 
@@ -279,10 +283,12 @@ describe('field', () => {
     const valueListeners = jest.fn();
     const errorListeners = jest.fn();
     const touchedListeners = jest.fn();
+    const errorTouched = jest.fn()
 
     field.subscribe('value', valueListeners);
     field.subscribe('error', errorListeners);
-    field.subscribe('touched');
+    field.subscribe('touched', touchedListeners);
+    field.subscribe('errorTouched', () => {})
 
     field.set({});
     expect(valueListeners);
