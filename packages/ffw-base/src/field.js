@@ -104,7 +104,7 @@ class Field {
   set(value, validate = true) {
     this.setData('value', value);
 
-    if (validate) {
+    if (validate || this.form.options.validateOnChange) {
       this.validate();
     }
   }
@@ -140,9 +140,9 @@ class Field {
   onChange = (event) => {
     this.set(event.target.value, false);
 
-    if (this.form.options.validateOnChange) {
-      this.validate();
-    }
+    // if (this.form.options.validateOnChange) {
+    //   this.validate();
+    // }
   };
 
   onBlur = () => {

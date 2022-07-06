@@ -200,6 +200,9 @@ describe('field', () => {
 
     it('validateOnChange = true', async () => {
       const form = new Form({
+        options: {
+          validateOnChange: true,
+        },
         initValues: {
           age: 42,
         },
@@ -295,17 +298,17 @@ describe('field', () => {
     field.subscribe('touched', touchedListener);
     field.subscribe('errorTouched', errorTouchedListener);
 
-    field.set('hehe', false);
+    field.set('hehe');
     await waitAsync();
     expect(valueListener.mock.calls.length).toBe(1);
-    expect(errorListener.mock.calls.length).toBe(0);
+    expect(errorListener.mock.calls.length).toBe(1);
     expect(touchedListener.mock.calls.length).toBe(0);
     expect(errorTouchedListener.mock.calls.length).toBe(0);
 
     field.setError('hehe');
-    await waitAsync(100);
+    await waitAsync();
     expect(valueListener.mock.calls.length).toBe(1);
-    expect(errorListener.mock.calls.length).toBe(1);
+    expect(errorListener.mock.calls.length).toBe(2);
     expect(touchedListener.mock.calls.length).toBe(0);
     expect(errorTouchedListener.mock.calls.length).toBe(0);
 
@@ -313,7 +316,7 @@ describe('field', () => {
     await waitAsync();
 
     expect(valueListener.mock.calls.length).toBe(1);
-    expect(errorListener.mock.calls.length).toBe(1);
+    expect(errorListener.mock.calls.length).toBe(2);
     expect(touchedListener.mock.calls.length).toBe(1);
     expect(errorTouchedListener.mock.calls.length).toBe(1);
   });
