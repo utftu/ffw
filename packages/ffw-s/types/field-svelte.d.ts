@@ -1,5 +1,4 @@
-import type {Form} from 'ffw-base';
-import {Field} from 'ffw-base';
+import type {Form, Field} from 'ffw-base';
 
 type Store<
   TValue,

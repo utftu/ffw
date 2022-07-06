@@ -29,6 +29,14 @@ class FieldSvelte extends Field {
       },
       value: makeStore('value'),
       error: makeStore('error'),
+      errorTouched: {
+        subscribe: (cb) => {
+          cb(field.errorTouched);
+          return field.subscribe('errorTouched', (name) => {
+            cb(field.errorTouched);
+          });
+        },
+      },
       touched: makeStore('touched'),
     };
   }

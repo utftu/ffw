@@ -1,0 +1,23 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/Users/aleksey/projects/ffw"
+  },
+  "1 error pnpm": {
+    "code": "ELIFECYCLE",
+    "errno": "ENOENT",
+    "syscall": "spawn",
+    "file": "sh",
+    "pkgid": "with-svelte@0.0.1",
+    "stage": "dev",
+    "script": "svelte-kit dev \"--port\" \"3001\"",
+    "pkgname": "with-svelte",
+    "err": {
+      "name": "pnpm",
+      "message": "with-svelte@0.0.1 dev: `svelte-kit dev \"--port\" \"3001\"`\nspawn ENOENT",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: with-svelte@0.0.1 dev: `svelte-kit dev \"--port\" \"3001\"`\nspawn ENOENT\n    at ChildProcess.<anonymous> (/opt/homebrew/Cellar/pnpm/7.1.0/libexec/lib/node_modules/pnpm/dist/pnpm.cjs:93448:22)\n    at ChildProcess.emit (node:events:527:28)\n    at maybeClose (node:internal/child_process:1090:16)\n    at ChildProcess._handle.onexit (node:internal/child_process:302:5)"
+    }
+  },
+  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
+}

@@ -1,17 +1,22 @@
 import type {Field} from 'ffw-base';
+import {Form} from 'ffw-base';
 
-declare class FieldReact<TValue = string> extends Field<TValue> {
+declare class FieldReact<
+  TValue,
+  TName,
+  TForm extends Form<FieldReact<TValue, TName, TForm>>
+> extends Field<TValue, TName, TForm> {
   getInput(): {
     value: TValue;
-    name: string;
-    onChange: any;
+    name: TName;
+    onChange: (event: {target: {value: string}}) => void;
     onBlur: () => void;
   };
 
   getSelect(): {
     value: TValue;
-    name: string;
-    onChange: any;
+    name: TName;
+    onChange: (newValue: TValue) => void;
     onBlur: () => void;
   };
 }

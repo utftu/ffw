@@ -19,6 +19,17 @@ class Field {
     this.data.value = value;
     this.data.touched = touched;
     this.data.error = error;
+
+    const handleSetTouched = () => {
+      const errorTouched = this.errorTouched
+      this.emitter.emit('errorTouched', errorTouched);
+      this.form.emitter.emit(
+        `ffw.fields.${this.name}.errorTouched`,
+        errorTouched
+      );
+    };
+    this.emitter.on('error', handleSetTouched);
+    this.emitter.on('touched', handleSetTouched);
   }
 
   get value() {
@@ -26,7 +37,7 @@ class Field {
   }
 
   set value(newValue) {
-    this.data.value = newValue;
+    this.set(newValue);
   }
 
   get error() {
@@ -34,7 +45,15 @@ class Field {
   }
 
   set error(newError) {
-    this.data.error = newError;
+    this.setError(newError);
+  }
+
+  get errorTouched() {
+    if (this.touched === false) {
+      return '';
+    } else {
+      return this.error;
+    }
   }
 
   get touched() {
@@ -42,13 +61,14 @@ class Field {
   }
 
   set touched(newTouched) {
-    this.data.touched = newTouched;
+    this.setTouched(newTouched);
   }
 
   setData(name, newData) {
     if (this.form.options.checkPrevData && this.data[name] === newData) {
       return;
     }
+
     this.data[name] = newData;
 
     if (name === 'error') {
@@ -68,9 +88,6 @@ class Field {
 
   setError(error) {
     this.setData('error', error);
-    // this.form.calls.addCall('ffw.valid', () => {
-    //   this.form.emitter.emit('ffw.valid');
-    // });
   }
 
   setTouched(touched) {
@@ -83,11 +100,6 @@ class Field {
     if (validate) {
       this.validate();
     }
-
-    // if (this.form.options.validateOnChange) {
-    //   this.validate();
-    // }
-    // this.validate()
   }
 
   async validate() {
