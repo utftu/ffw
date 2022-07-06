@@ -3,7 +3,7 @@ import {Form} from 'ffw-base';
 
 type useField = <
   TName extends keyof TForm['_fields'],
-  TForm extends Form<FieldReact<TForm["_fields"][], any, any>>
+  TForm extends Form<FieldReact<TForm['_fields'][], any, any>>
 >(
   name: string,
   config: any

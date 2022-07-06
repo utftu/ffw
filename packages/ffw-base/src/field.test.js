@@ -232,59 +232,59 @@ describe('field', () => {
       expect(form.fields.age.error).toBe('');
     });
   });
-    it('errorTouched', async () => {
-      const form = new Form({
-        initValues: {
-          age: '42',
-        },
-        validateSchema: yup.object({
-          age: yup.number().required()
-        }),
-      });
-      const field = form.fields.age
-      const listener = jest.fn();
-      field.subscribe('errorTouched', listener)
-      
-      expect(field.errorTouched).toBe('')
-
-      field.set('error text', false)
-      
-      expect(field.errorTouched).toBe('')
-
-      field.setTouched(true)
-  
-      expect(field.errorTouched).toBe('')
-      
-      await field.validate()
-      
-      expect(field.errorTouched).not.toBe('')
-
-      field.set('42')
-      await field.validate()
-
-      expect(field.errorTouched).toBe('')
-      
-      expect(listener.mock.calls.length).toBe(3)
+  it('errorTouched', async () => {
+    const form = new Form({
+      initValues: {
+        age: '42',
+      },
+      validateSchema: yup.object({
+        age: yup.number().required(),
+      }),
     });
-    it('emits', () => {
-      const form = new Form({
-        initValues: {
-          age: '42',
-        },
-        validateSchema: yup.object({
-          age: yup.number().required()
-        }),
-      });
-      const field = form.f.age
-      const valueListeners = jest.fn()
-      const errorListeners = jest.fn()
-      const touchedListeners = jest.fn()
-  
-      field.subscribe('value', valueListeners)
-      field.subscribe('error', errorListeners)
-      field.subscribe('touched')
-      
-      field.set({})
-      expect(valueListeners)
-    })
+    const field = form.fields.age;
+    const listener = jest.fn();
+    field.subscribe('errorTouched', listener);
+
+    expect(field.errorTouched).toBe('');
+
+    field.set('error text', false);
+
+    expect(field.errorTouched).toBe('');
+
+    field.setTouched(true);
+
+    expect(field.errorTouched).toBe('');
+
+    await field.validate();
+
+    expect(field.errorTouched).not.toBe('');
+
+    field.set('42');
+    await field.validate();
+
+    expect(field.errorTouched).toBe('');
+
+    expect(listener.mock.calls.length).toBe(3);
+  });
+  it('emits', () => {
+    const form = new Form({
+      initValues: {
+        age: '42',
+      },
+      validateSchema: yup.object({
+        age: yup.number().required(),
+      }),
+    });
+    const field = form.f.age;
+    const valueListeners = jest.fn();
+    const errorListeners = jest.fn();
+    const touchedListeners = jest.fn();
+
+    field.subscribe('value', valueListeners);
+    field.subscribe('error', errorListeners);
+    field.subscribe('touched');
+
+    field.set({});
+    expect(valueListeners);
+  });
 });

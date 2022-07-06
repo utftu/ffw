@@ -3,7 +3,7 @@
  */
 
 import {render} from '@testing-library/react';
-import React, {createElement} from 'react'
+import React, {createElement} from 'react';
 import {Form} from 'ffw-base';
 import useInitForm from './use-init-form.js';
 import {jest} from '@jest/globals';

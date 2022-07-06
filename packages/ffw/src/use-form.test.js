@@ -26,9 +26,10 @@ describe('use-form', () => {
         },
         batch: act,
       });
-      return (
-        createElement(context.Provider, {value: form}, [createElement(Child,  {key: '0'}), createElement(UnsubChild, {key: '1'})])
-      )
+      return createElement(context.Provider, {value: form}, [
+        createElement(Child, {key: '0'}),
+        createElement(UnsubChild, {key: '1'}),
+      ]);
     }
     function Child() {
       ++childRenderCount;
@@ -38,7 +39,7 @@ describe('use-form', () => {
     }
     function UnsubChild() {
       ++unsubRenderCount;
-      return  createElement('div', null, 'unsub');
+      return createElement('div', null, 'unsub');
     }
     act(() => {
       render(createElement(Parent));
