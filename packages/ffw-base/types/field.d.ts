@@ -44,7 +44,7 @@ declare class Field<
   setData(name: string, newData: TValue): void;
   setError(error: string): void;
   setTouched(touched: boolean): void;
-  set(value: TValue, validate: boolean): void;
+  set(value: TValue, validate?: boolean): void;
 
   validate(): Promise<boolean>;
   subscribe(name: string, listener: (newData: TValue) => void): void;

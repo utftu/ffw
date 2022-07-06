@@ -1,0 +1,15 @@
+<script type="module">
+  const input = document.getElementById('input')
+  const div = document.getElementById('div')
+  
+  input.onblur = () => {
+    console.log('-----', 'onblur')
+  }
+  
+  div.addEventListener('pointerdown', () => {
+    console.log('-----', 'pointerdown')
+  })
+</script>
+
+<input id="input"/>
+<div id="div">div</div>
