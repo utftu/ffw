@@ -101,10 +101,19 @@ class Field {
     this.setData('touched', touched);
   }
 
-  set(value, validate = true) {
+  set(value, validate) {
     this.setData('value', value);
 
-    if (validate || this.form.options.validateOnChange) {
+    if (validate === true) {
+      this.validate();
+      return;
+    }
+
+    if (validate === false) {
+      return;
+    }
+
+    if (validate === undefined && this.form.options.validateOnChange) {
       this.validate();
     }
   }
@@ -138,11 +147,7 @@ class Field {
   }
 
   onChange = (event) => {
-    this.set(event.target.value, false);
-
-    // if (this.form.options.validateOnChange) {
-    //   this.validate();
-    // }
+    this.set(event.target.value);
   };
 
   onBlur = () => {
