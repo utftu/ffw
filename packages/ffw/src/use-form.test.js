@@ -5,7 +5,7 @@
 import {render} from '@testing-library/react';
 import {act} from 'react-dom/test-utils';
 import {waitAsync} from './utils.js';
-import React from 'react';
+import React, {createElement} from 'react';
 import {Form} from 'ffw-base';
 import useInitForm from './use-init-form.js';
 import context from './conext.js';
@@ -27,24 +27,21 @@ describe('use-form', () => {
         batch: act,
       });
       return (
-        <context.Provider value={form}>
-          <Child />
-          <UnsubChild />
-        </context.Provider>
-      );
+        createElement(context.Provider, {value: form}, [createElement(Child,  {key: '0'}), createElement(UnsubChild, {key: '1'})])
+      )
     }
     function Child() {
       ++childRenderCount;
       form = useForm('name', 'age');
 
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
     function UnsubChild() {
       ++unsubRenderCount;
-      return <div>unsub</div>;
+      return  createElement('div', null, 'unsub');
     }
     act(() => {
-      render(<Parent />);
+      render(createElement(Parent));
     });
 
     expect(form instanceof Form).toBe(true);

@@ -3,7 +3,7 @@
  */
 
 import {render} from '@testing-library/react';
-import React from 'react';
+import React, {createElement} from 'react'
 import {Form} from 'ffw-base';
 import useInitForm from './use-init-form.js';
 import {jest} from '@jest/globals';
@@ -12,8 +12,8 @@ test('return form', async () => {
   let form;
   function Component() {
     form = useInitForm();
-    return <div>test</div>;
+    return createElement('div', null, 'test');
   }
-  render(<Component />);
+  render(createElement(Component));
   expect(form instanceof Form).toBe(true);
 });

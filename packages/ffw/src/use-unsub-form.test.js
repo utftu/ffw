@@ -3,7 +3,7 @@
  */
 
 import {render} from '@testing-library/react';
-import React from 'react';
+import React, {createElement} from 'react'
 import {Form} from 'ffw-base';
 import context from './conext.js';
 import useUnsubForm from './use-unsub-form.js';
@@ -20,16 +20,14 @@ describe('useUnsubForm', () => {
         },
       });
       return (
-        <context.Provider value={form}>
-          <Child />
-        </context.Provider>
-      );
+        createElement(context.Provider, {value: form}, createElement(Child))
+      )
     }
     function Child() {
       result = useUnsubForm([]);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent))
     expect(result.form instanceof Form).toBe(true);
     expect(result.form.fields.name.value).toBe('robbin');
   });
@@ -38,16 +36,14 @@ describe('useUnsubForm', () => {
     function Parent() {
       const form = useInitForm();
       return (
-        <context.Provider value={form}>
-          <Child />
-        </context.Provider>
+        createElement(context.Provider, {value: form}, createElement(Child))
       );
     }
     function Child() {
       result = useUnsubForm([['test1', 'test2']]);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent))
     expect(result.form instanceof Form).toBe(true);
     expect(result.fieldNames).toEqual(['test1', 'test2']);
   });
@@ -56,16 +52,14 @@ describe('useUnsubForm', () => {
     function Parent() {
       const form = useInitForm();
       return (
-        <context.Provider value={form}>
-          <Child />
-        </context.Provider>
+        createElement(context.Provider, {value: form}, createElement(Child))
       );
     }
     function Child() {
       result = useUnsubForm([['test1', 'test2'], {context}]);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent))
     expect(result.form instanceof Form).toBe(true);
     expect(result.fieldNames).toEqual(['test1', 'test2']);
   });
@@ -75,9 +69,7 @@ describe('useUnsubForm', () => {
     function Parent() {
       form = useInitForm();
       return (
-        <context.Provider value={null}>
-          <Child />
-        </context.Provider>
+        createElement(context.Provider, {value: null}, createElement(Child))
       );
     }
     function Child() {
@@ -87,9 +79,9 @@ describe('useUnsubForm', () => {
           form,
         },
       ]);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent))
     expect(result.form instanceof Form).toBe(true);
     expect(result.fieldNames).toEqual(['test1', 'test2']);
   });
@@ -98,16 +90,14 @@ describe('useUnsubForm', () => {
     function Parent() {
       const form = useInitForm();
       return (
-        <context.Provider value={form}>
-          <Child />
-        </context.Provider>
+        createElement(context.Provider, {value: form}, createElement(Child))
       );
     }
     function Child() {
       result = useUnsubForm(['test1', 'test2']);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent));
     expect(result.form instanceof Form).toBe(true);
     expect(result.fieldNames).toEqual(['test1', 'test2']);
   });
@@ -116,16 +106,14 @@ describe('useUnsubForm', () => {
     function Parent() {
       const form = useInitForm();
       return (
-        <context.Provider value={form}>
-          <Child />
-        </context.Provider>
+        createElement(context.Provider, {value: form}, createElement(Child))
       );
     }
     function Child() {
       result = useUnsubForm(['test1', 'test2', {context}]);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent));
     expect(result.form instanceof Form).toBe(true);
     expect(result.fieldNames).toEqual(['test1', 'test2']);
   });
@@ -135,16 +123,14 @@ describe('useUnsubForm', () => {
     function Parent() {
       form = useInitForm();
       return (
-        <context.Provider value={null}>
-          <Child />
-        </context.Provider>
+        createElement(context.Provider, {value: null}, createElement(Child))
       );
     }
     function Child() {
       result = useUnsubForm(['test1', 'test2', {form}]);
-      return <div>Child</div>;
+      return createElement('div', null, 'Child');
     }
-    render(<Parent />);
+    render(createElement(Parent));
     expect(result.form instanceof Form).toBe(true);
     expect(result.fieldNames).toEqual(['test1', 'test2']);
   });

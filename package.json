@@ -6,7 +6,7 @@
     "build": "node ./scripts/build.js",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "jest",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "types": "node ./scripts/declare.js",
     "pub": "npm run format && npm run build && npm run test && node ./scripts/publish.js"
   },
@@ -46,6 +46,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "esbuild-ifdef": "^0.1.8"
+    "esbuild-ifdef": "^0.1.8",
+    "utftu": "^1.0.0"
   }
 }
