@@ -1,6 +1,6 @@
 {
   "name": "ffw-base",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "",
   "type": "module",
   "types": "./dist/types/index.d.ts",
