@@ -1,18 +1,18 @@
 import type {Form} from 'ffw-base';
 import type FieldSvelte from './field-svelte';
 
-type TTrackedReadable = {
-  subscribe: <TValue>(cb: (data: TValue) => void) => void;
+type TTrackedReadable<TValue> = {
+  subscribe: (cb: (data: TValue) => void) => void;
 };
 
 declare class FormSvelte<
-  TField extends FieldSvelte<any, string, FormSvelte<any>>
-> extends Form<any> {
+  TField extends FieldSvelte<any, any, FormSvelte<TField>>
+> extends Form<TField> {
   s: {
-    valid: TTrackedReadable;
+    valid: TTrackedReadable<boolean>;
   };
   svelte: {
-    valid: TTrackedReadable;
+    valid: TTrackedReadable<boolean>;
   };
 }
 

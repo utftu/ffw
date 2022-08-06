@@ -1,12 +1,7 @@
 import {Emitter} from 'mitt';
 import Form from './form';
-import {string} from 'yup';
 
-declare class Field<
-  TValue,
-  TName,
-  TForm extends Form<Field<TValue, TName, TForm>>
-> {
+declare class Field<TValue, TForm extends Form<Field<TValue, TForm>>> {
   constructor(props: {
     name: string;
     value: TValue;
@@ -22,14 +17,14 @@ declare class Field<
     value: TValue;
     error: string;
     touched: boolean;
-    [name: string]: any;
+    [name: string | number | symbol]: any;
   };
 
   emitter: Emitter<{
     value: TValue;
     error: string;
     touched: boolean;
-    [name: string]: any;
+    [name: string | number | symbol]: any;
   }>;
 
   get value(): TValue;

@@ -5,7 +5,7 @@ declare class FieldReact<
   TValue,
   TName,
   TForm extends Form<FieldReact<TValue, TName, TForm>>
-> extends Field<TValue, TName, TForm> {
+> extends Field<TValue, TForm> {
   getInput(): {
     value: TValue;
     name: TName;

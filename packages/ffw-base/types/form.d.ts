@@ -2,7 +2,7 @@ import type DelayedCalls from './delayd-calls';
 import type Field from './field';
 import type {BaseSchema} from 'yup';
 
-declare class Form<TField extends Field<any, string, any>> {
+declare class Form<TField extends Field<any, Form<TField>>> {
   constructor(props: {
     validateSchema?: BaseSchema;
     onSubmit?: (form: Form<TField>) => void;
@@ -42,7 +42,7 @@ declare class Form<TField extends Field<any, string, any>> {
   ): void;
   reset(): void;
   setValue(
-    name: keyof this['_fields'] | string,
+    name: keyof this['_fields'],
     value: keyof this['_fields'][typeof name]
   ): void;
   setTouched(name: keyof this['_fields'] | string, touched: boolean): void;

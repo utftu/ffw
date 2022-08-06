@@ -1,9 +1,10 @@
 import type {Form, Field} from 'ffw-base';
+import type FormSvelte from './form-svelte';
 
 type Store<
   TValue,
   TName extends keyof TForm['_fields'],
-  TForm extends Form<FieldSvelte<TValue, TName, TForm>>,
+  TForm extends FormSvelte<FieldSvelte<TValue, TName, TForm>>,
   TDataName extends keyof TForm['_fields'][TName]['data']
 > = {
   set(data: TForm['_fields'][TName]['data'][TDataName]);
@@ -15,14 +16,15 @@ type Store<
 type Svelte<
   TValue,
   TName extends keyof TForm['_fields'],
-  TForm extends Form<FieldSvelte<TValue, TName, TForm>>
+  TForm extends FormSvelte<FieldSvelte<TValue, TName, TForm>>
 > = {
   makeStore<TDataName extends keyof TForm['_fields'][TName]['data']>(
     name: TDataName
   ): Store<TValue, TName, TForm, TDataName>;
   subscribe<TValueName extends keyof TForm['_fields'][TName]['data']>(
     cb: (
-      name: keyof TForm['_fields'][TName]['data'],
+      // todo check types
+      name: keyof TForm['_fields'][TName]['data'] | string | number | symbol,
       data: TForm['_fields'][TName]['data'][TValueName]
     ) => void
   ): () => void;
@@ -34,8 +36,8 @@ type Svelte<
 declare class FieldSvelte<
   TValue,
   TName extends keyof TForm['_fields'],
-  TForm extends Form<FieldSvelte<TValue, TName, TForm>>
-> extends Field<TValue, TName, TForm> {
+  TForm extends FormSvelte<FieldSvelte<TValue, TName, TForm>>
+> extends Field<TValue, TForm> {
   svelte: Svelte<TValue, TName, TForm>;
   s: Svelte<TValue, TName, TForm>;
 }
