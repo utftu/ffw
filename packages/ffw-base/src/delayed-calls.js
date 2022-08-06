@@ -11,8 +11,8 @@ class DelayedCalls {
     if (!this.promise) {
       this.promise = createExternalPromise();
       queueMicrotask(async () => {
-        this.promise.resolve();
         await this.handleChanges();
+        this.promise.resolve();
         this.changes = {};
         this.promise = null;
       });
