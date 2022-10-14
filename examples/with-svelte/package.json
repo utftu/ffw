@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "ffw-s": "file:../../packages/ffw-s",
+    "vite": "^3.1.8",
     "yup": "^0.32.11"
   },
   "type": "module"
