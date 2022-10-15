@@ -1,46 +1,30 @@
 import mitt from 'mitt';
-// import createLazyFunc from 'utftu/createLazyFunc';
 import createLazyFunc from 'utftu/dist/create-lazy-func/esm/dev.js';
+import {} from 'strangelove';
 
 class Field {
   name = '';
   form = null;
   emitter = null;
 
-  data = {
-    value: '',
-    error: '',
-    touched: false,
-  };
+  atoms = {};
 
   constructor({name, value = '', touched = false, error = '', form = null}) {
-    this.emitter = mitt();
-    this.name = name;
     this.form = form;
 
-    this.data.value = value;
-    this.data.touched = touched;
-    this.data.error = error;
-
-    const field = this;
-    const lazyEmitErrorTouched = createLazyFunc(
-      () => {
-        const errorTouched = this.errorTouched;
-        this.emitter.emit('errorTouched', errorTouched);
-        this.form.emitter.emit(
-          `ffw.fields.${field.name}.errorTouched`,
-          errorTouched
-        );
-      },
-      () => [this.errorTouched],
-      [this.errorTouched]
-    );
-    this.emitter.on('error', lazyEmitErrorTouched);
-    this.emitter.on('touched', lazyEmitErrorTouched);
+    this.atoms.value = form.root.createStateAtomSync(value);
+    this.atoms.touched = form.root.createStateAtomSync(touched);
+    this.atoms.error = form.root.createStateAtomSync(error);
+    this.atoms.errorTouched = form.root.select(() => {
+      if (!touched) {
+        return '';
+      }
+      return error;
+    });
   }
 
   get value() {
-    return this.data.value;
+    return this.data.value.get();
   }
 
   set value(newValue) {
@@ -48,7 +32,7 @@ class Field {
   }
 
   get error() {
-    return this.data.error;
+    return this.data.error.get();
   }
 
   set error(newError) {
@@ -56,11 +40,7 @@ class Field {
   }
 
   get errorTouched() {
-    if (this.touched === false) {
-      return '';
-    } else {
-      return this.error;
-    }
+    return this.atoms.errorTouched.get();
   }
 
   get touched() {
@@ -72,6 +52,13 @@ class Field {
   }
 
   setData(name, newData) {
+    if (!this.atoms[name]) {
+      const atom = this.form.root.createStateAtomSync(newData);
+      this.atoms[name] = atom;
+      if (this.form) {
+      }
+    }
+
     if (this.form.options.checkPrevData && this.data[name] === newData) {
       return;
     }

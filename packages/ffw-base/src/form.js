@@ -1,3 +1,4 @@
+import {RootConnected, AtomSync, ReadSync, Atom} from 'strangelove';
 import Field from './field.js';
 import DelayedCalls from './delayed-calls';
 import mitt from 'mitt';
@@ -24,6 +25,50 @@ class Form {
   };
   initValues = null;
   initData = null;
+
+  root = new RootConnected();
+
+  atoms = {
+    values: new AtomSync({
+      value: new ReadSync({
+        get() {
+          return this.getValues();
+        },
+      }),
+    }),
+    errors: new AtomSync({
+      value: new ReadSync({
+        get() {
+          return this.getErrors();
+        },
+      }),
+    }),
+    touches: new AtomSync({
+      value: new ReadSync({
+        get() {
+          return this.getErrors();
+        },
+      }),
+    }),
+    valid: (() => {
+      const form = this;
+      const atom = new AtomSync({
+        onBeforeUpdate() {
+          if (atom.value.get() === form.valid) {
+            return false;
+          }
+          return true;
+        },
+        value: new ReadSync({
+          get() {
+            return form.valid;
+          },
+        }),
+      });
+      Atom.connect(atom, this.atoms.errors);
+      return atom;
+    })(),
+  };
 
   batch(cb) {
     cb();
