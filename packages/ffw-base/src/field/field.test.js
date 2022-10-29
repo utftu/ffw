@@ -4,9 +4,10 @@
 
 import Field from './field.js';
 import {jest, expect} from '@jest/globals';
-import Form from './form.js';
+import Form from '../form/form.js';
 import * as yup from 'yup';
-import {waitAsync} from './utils.js';
+import waitTime from 'utftu/wait-time.js';
+import {prepareYup} from '../validators/yup.js';
 
 const formMock = new Form({});
 
@@ -18,72 +19,62 @@ const ageFieldParams = {
 
 describe('field', () => {
   describe('init', () => {
-    it('required params', () => {
-      expect(
-        new Field({
-          name: 'age',
-          form: formMock,
-        })
-      ).toMatchObject({
-        value: '',
-        name: 'age',
-        error: '',
-        touched: false,
+    it('default params', () => {
+      const field = new Field({
+        form: formMock,
       });
+      expect(field.value).toBe('');
+      expect(field.error).toBe('');
+      expect(field.touched).toBe(false);
+      expect(field.errorTouched).toBe('');
     });
     it('all params', () => {
-      expect(
-        new Field({
-          value: 42,
-          name: 'age',
-          error: 'too young',
-          touched: true,
-          form: formMock,
-        })
-      ).toMatchObject({
-        value: 42,
-        name: 'age',
-        error: 'too young',
+      const field = new Field({
+        form: formMock,
+        value: 'value',
+        error: 'error',
         touched: true,
       });
+      expect(field.value).toBe('value');
+      expect(field.error).toBe('error');
+      expect(field.touched).toBe(true);
+      expect(field.errorTouched).toBe('error');
     });
   });
-
   it('set()', async () => {
     const field = new Field(ageFieldParams);
     const listener = jest.fn();
-    field.subscribe('value', listener);
+    field.atoms.value.listeners.subscribe(listener);
     field.set(43);
 
     expect(field.value).toBe(43);
-    await waitAsync();
+    await waitTime();
     expect(listener.mock.calls.length).toBe(1);
-    // @ts-ignore
-    expect(listener.mock.calls[0][0]).toBe(43);
+    expect(listener.mock.calls[0][0].get()).toBe(43);
   });
 
   it('setError()', async () => {
     const field = new Field(ageFieldParams);
     const listener = jest.fn();
-    field.subscribe('error', listener);
+    field.atoms.error.subscribe(listener);
     field.setError('Wrong value');
 
-    await waitAsync();
+    await waitTime();
     expect(field.error).toBe('Wrong value');
     expect(listener.mock.calls.length).toBe(1);
-    expect(listener.mock.calls[0][0]).toBe('Wrong value');
+    expect(listener.mock.calls[0][0].get()).toBe('Wrong value');
   });
 
   it('setTouched()', async () => {
     const field = new Field(ageFieldParams);
     const listener = jest.fn();
-    field.subscribe('touched', listener);
+    field.atoms.touched.subscribe(listener);
     field.setTouched(true);
 
-    await waitAsync();
+    await waitTime();
     expect(field.touched).toBe(true);
     expect(listener.mock.calls.length).toBe(1);
-    expect(listener.mock.calls[0][0]).toBe(true);
+    expect(listener.mock.calls[0][0].get()).toBe(true);
   });
 
   describe('validate()', () => {
@@ -92,38 +83,38 @@ describe('field', () => {
         initValues: {
           age: 'wrong',
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
       });
       const validateResult = await form.fields.age.validate();
-      expect(form.fields.age.error.length).not.toBe(0);
-      expect(validateResult).toBe(false);
+      expect(form.fields.age.error).not.toBe('');
+      expect(validateResult).not.toBe('');
     });
     it('valid', async () => {
       const form = new Form({
         initValues: {
           age: 42,
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
       });
       const validateResult = await form.fields.age.validate();
-      expect(form.fields.age.error.length).toBe(0);
-      expect(validateResult).toBe(true);
+      expect(form.fields.age.error).toBe('');
+      expect(validateResult).toBe('');
     });
     it('invalid -> valid', async () => {
       const form = new Form({
         initValues: {
           age: 'wrong',
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
       });
       await form.fields.age.validate();
-      expect(form.fields.age.error.length).not.toBe(0);
+      expect(form.fields.age.error).not.toBe('');
       form.fields.age.set(43);
       await form.fields.age.validate();
       expect(form.fields.age.error).toBe('');
@@ -136,14 +127,14 @@ describe('field', () => {
         initValues: {
           age: 42,
         },
-        validateSchema: yup.object({}),
+        validateSchema: prepareYup({}),
       });
       const listener = jest.fn();
-      form.fields.age.subscribe('touched', listener);
+      form.fields.age.atoms.touched.subscribe(listener);
 
       form.fields.age.onBlur();
       expect(form.fields.age.touched).toBe(true);
-      await waitAsync();
+      await waitTime();
       expect(listener.mock.calls.length).toBe(1);
     });
     it('validateOnBlur = true', async () => {
@@ -151,12 +142,12 @@ describe('field', () => {
         initValues: {
           age: 'invalid',
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
       });
       form.fields.age.onBlur();
-      await waitAsync();
+      await waitTime();
       expect(form.fields.age.error).not.toBe('');
     });
     it('validateOnBlur = false', async () => {
@@ -164,7 +155,7 @@ describe('field', () => {
         initValues: {
           age: 'invalid',
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
         options: {
@@ -172,7 +163,7 @@ describe('field', () => {
         },
       });
       form.fields.age.onBlur();
-      await waitAsync();
+      await waitTime();
       expect(form.fields.age.error).toBe('');
     });
   });
@@ -183,17 +174,17 @@ describe('field', () => {
         initValues: {
           age: '42',
         },
-        validateSchema: yup.object({}),
+        validateSchema: prepareYup({}),
       });
       const listener = jest.fn();
-      form.fields.age.subscribe('value', listener);
+      form.fields.age.atoms.value.subscribe(listener);
 
       form.fields.age.onChange({
         target: {
           value: '43',
         },
       });
-      await waitAsync();
+      await waitTime();
       expect(form.fields.age.value).toBe('43');
       expect(listener.mock.calls.length).toBe(1);
     });
@@ -206,7 +197,7 @@ describe('field', () => {
         initValues: {
           age: 42,
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
       });
@@ -215,7 +206,7 @@ describe('field', () => {
           value: 'invalid',
         },
       });
-      await waitAsync();
+      await waitTime();
       expect(form.fields.age.error).not.toBe('');
     });
     it('validateOnChange = false', async () => {
@@ -226,7 +217,7 @@ describe('field', () => {
         initValues: {
           age: 42,
         },
-        validateSchema: yup.object({
+        validateSchema: prepareYup({
           age: yup.number().required(),
         }),
       });
@@ -235,7 +226,7 @@ describe('field', () => {
           value: 'invalid',
         },
       });
-      await waitAsync();
+      await waitTime();
       expect(form.fields.age.error).toBe('');
     });
   });
@@ -244,76 +235,73 @@ describe('field', () => {
       initValues: {
         age: '42',
       },
-      validateSchema: yup.object({
+      validateSchema: prepareYup({
         age: yup.number().required(),
       }),
     });
     const field = form.fields.age;
     const listener = jest.fn();
-    field.subscribe('errorTouched', listener);
+    field.atoms.errorTouched.subscribe(listener);
 
     expect(field.errorTouched).toBe('');
+    field.set('error text');
 
-    field.set('error text', false);
+    await waitTime();
 
     expect(field.errorTouched).toBe('');
     expect(listener.mock.calls.length).toBe(0);
+
+    field.set(43);
+    await waitTime();
 
     field.setTouched(true);
+    await waitTime();
 
     expect(field.errorTouched).toBe('');
     expect(listener.mock.calls.length).toBe(0);
 
-    await field.validate();
+    field.set('error text');
 
+    await waitTime();
     expect(field.errorTouched).not.toBe('');
     expect(listener.mock.calls.length).toBe(1);
-
-    field.set('42');
-    await field.validate();
-
-    expect(field.errorTouched).toBe('');
-    expect(listener.mock.calls.length).toBe(2);
   });
   it('emits', async () => {
     const form = new Form({
       initValues: {
         age: '42',
       },
-      validateSchema: yup.object({
+      validateSchema: prepareYup({
         age: yup.number().required(),
       }),
     });
     const field = form.f.age;
-    // field.emitter.on('*', (...args) => {
-    //   console.log('-----', 'args', args)
-    // })
     const valueListener = jest.fn();
     const errorListener = jest.fn();
     const touchedListener = jest.fn();
     const errorTouchedListener = jest.fn();
 
-    field.subscribe('value', valueListener);
-    field.subscribe('error', errorListener);
-    field.subscribe('touched', touchedListener);
-    field.subscribe('errorTouched', errorTouchedListener);
+    field.atoms.value.listeners.subscribe(valueListener);
+    field.atoms.error.listeners.subscribe(errorListener);
+    field.atoms.touched.listeners.subscribe(touchedListener);
+    field.atoms.errorTouched.listeners.subscribe(errorTouchedListener);
 
     field.set('hehe');
-    await waitAsync();
+    await waitTime();
     expect(valueListener.mock.calls.length).toBe(1);
     expect(errorListener.mock.calls.length).toBe(1);
     expect(touchedListener.mock.calls.length).toBe(0);
     expect(errorTouchedListener.mock.calls.length).toBe(0);
 
     field.setError('hehe');
-    await waitAsync();
+    await waitTime();
     expect(valueListener.mock.calls.length).toBe(1);
     expect(errorListener.mock.calls.length).toBe(2);
     expect(touchedListener.mock.calls.length).toBe(0);
     expect(errorTouchedListener.mock.calls.length).toBe(0);
 
     field.setTouched(true);
-    await waitAsync();
+    await waitTime();
 
     expect(valueListener.mock.calls.length).toBe(1);
     expect(errorListener.mock.calls.length).toBe(2);

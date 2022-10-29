@@ -2,17 +2,17 @@ import transformStructure from '../transform-structure/transform-structure.js';
 import * as yup from 'yup';
 
 function yupToTest(yupSchema) {
-  return async () => {
+  return async (value) => {
     try {
-      await yupSchema.validate(this.value);
+      await yupSchema.validate(value);
       return '';
     } catch (error) {
-      return error.errors[0];
+      return error.message;
     }
   };
 }
 
-const prepareYup = (structure) => {
+export const prepareYup = (structure) => {
   return transformStructure(
     structure,
     (yupSchema) => {

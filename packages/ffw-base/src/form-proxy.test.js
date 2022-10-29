@@ -1,4 +1,4 @@
-import Form from './form';
+import Form from 'packages/ffw-base/src/form/form.js';
 import {createFormProxy} from './form-proxy';
 
 describe('form-proxy', () => {

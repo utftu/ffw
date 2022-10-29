@@ -28,7 +28,8 @@
     "test": "echo \"Error: no test specified\""
   },
   "dependencies": {
-    "ffw-base": "workspace:*"
+    "ffw-base": "workspace:*",
+    "utftu": "^1.0.4"
   },
   "author": "",
   "license": "ISC"

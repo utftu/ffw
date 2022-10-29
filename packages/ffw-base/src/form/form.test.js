@@ -1,10 +1,10 @@
-import Form from './form';
+import Form from 'packages/ffw-base/src/form/form.js';
 import * as yup from 'yup';
-import {waitAsync} from './utils';
+import {waitAsync} from 'packages/ffw-base/src/utils.js';
 import {jest} from '@jest/globals';
 
 describe('form', () => {
-  it('initValues', () => {
+  it.only('initValues', () => {
     const form = new Form({
       initValues: {
         age: 42,

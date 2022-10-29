@@ -22,6 +22,7 @@ importers:
       jest: ^28.1.2
       jest-environment-jsdom: ^28.1.2
       jsdom: ^19.0.0
+      nanostores: ^0.7.0
       prettier: 2.6.2
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -50,6 +51,7 @@ importers:
       jest: 28.1.2
       jest-environment-jsdom: 28.1.2
       jsdom: 19.0.0
+      nanostores: 0.7.0
       prettier: 2.6.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -101,17 +103,19 @@ importers:
   packages/ffw:
     specifiers:
       ffw-base: workspace:*
+      utftu: ^1.0.4
     dependencies:
       ffw-base: link:../ffw-base
+      utftu: 1.0.4
 
   packages/ffw-base:
     specifiers:
-      mitt: ^3.0.0
-      strangelove: ^1.0.3
+      strangelove: ^1.0.4
+      utftu: ^1.0.11
     dependencies:
-      mitt: 3.0.0
+      strangelove: 1.0.4
     devDependencies:
-      strangelove: 1.0.3
+      utftu: 1.0.11
 
   packages/ffw-base/dist/cjs:
     specifiers: {}
@@ -1895,8 +1899,8 @@ packages:
       '@types/cookie': 0.5.1
       cookie: 0.5.0
       devalue: 4.0.0
-      kleur: 4.1.4
-      magic-string: 0.26.2
+      kleur: 4.1.5
+      magic-string: 0.26.7
       mime: 3.0.0
       sade: 1.8.1
       set-cookie-parser: 2.4.8
@@ -4135,11 +4139,6 @@ packages:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
 
-  /kleur/4.1.4:
-    resolution: {integrity: sha512-8QADVssbrFjivHWQU7KkMgptGTl6WAcSdlbBPY4uNF+mWr6DGcKrvY2w4FQJoXch7+fKMjj0dRrL75vk3k23OA==}
-    engines: {node: '>=6'}
-    dev: true
-
   /kleur/4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
@@ -4195,13 +4194,6 @@ packages:
 
   /magic-string/0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
-    dependencies:
-      sourcemap-codec: 1.4.8
-    dev: true
-
-  /magic-string/0.26.2:
-    resolution: {integrity: sha512-NzzlXpclt5zAbmo6h6jNc8zl2gNRGHvmsZW4IvZhTC4W7k4OlLP+S5YLussa/r3ixNT66KOQfNORlXHSOy/X4A==}
-    engines: {node: '>=12'}
     dependencies:
       sourcemap-codec: 1.4.8
     dev: true
@@ -4293,10 +4285,6 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /mitt/3.0.0:
-    resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==}
-    dev: false
-
   /mkdirp/0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
@@ -4330,6 +4318,11 @@ packages:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /nanostores/0.7.0:
+    resolution: {integrity: sha512-y+ma9MVXuPzXKEXaRYW/iL/xG/HtMwB8fmFcMfUqt5fCNR/na2kDubbZGV4furUMTgmxfySJs0cQjORWhaPDyA==}
+    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
+    dev: true
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -4966,9 +4959,9 @@ packages:
     dependencies:
       escape-string-regexp: 2.0.0
 
-  /strangelove/1.0.3:
-    resolution: {integrity: sha512-wRnWrpgj4HjLlukiPoqSDseCxcos/PB7vTmeS8U08MDSo0YYA7PxiKTkn/6C5jDQhJpQGkV0x+MuGm0QV7X6Ow==}
-    dev: true
+  /strangelove/1.0.4:
+    resolution: {integrity: sha512-5NPiDMlms58DVCumCHnJD6gUHuUrXpqhGBNGX9cYv+exzHgDSh5Wtk3mF81I8SiDChDrub95HVLjzE9y2bOszg==}
+    dev: false
 
   /streamsearch/1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
@@ -5358,6 +5351,10 @@ packages:
       browserslist: 4.21.1
       escalade: 3.1.1
       picocolors: 1.0.0
+
+  /utftu/1.0.11:
+    resolution: {integrity: sha512-bvz382nEYvit7lKYPOmDtINVuZsgZiZPQvfQ3XjxW/C4ymGm/wXejH9gN1W9Nobwg379ssHkWDjApl4SdijwPQ==}
+    dev: true
 
   /utftu/1.0.4:
     resolution: {integrity: sha512-aXVr/Kkb3+gl1F4+Agn8P5tW8kwVdOPnksqv4s3ag9HQD5LuhZBbbqrkG968XCqupb+3q4GFa+kAgaHYxDK0KQ==}
