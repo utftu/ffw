@@ -34,6 +34,6 @@
     "utftu": "^1.0.11"
   },
   "dependencies": {
-    "strangelove": "^1.0.4"
+    "strangelove": "^1.0.7"
   }
 }

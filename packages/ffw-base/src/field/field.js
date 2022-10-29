@@ -1,4 +1,4 @@
-import {Atom} from 'strangelove';
+import {Atom, createStateAtomSyncRoot, selectRoot} from 'strangelove';
 
 const defaultTest = () => '';
 
@@ -23,33 +23,32 @@ class Field {
       test,
     };
     this.test = test;
-    debugger;
-    this.atom = form.root.createStateAtomSync();
+    this.atom = createStateAtomSyncRoot(null, form.root);
 
-    this.atoms.value = form.root.createStateAtomSync(value);
+    this.atoms.value = createStateAtomSyncRoot(value, form.root);
     this.atoms.value.name = 'value';
     Atom.connect(this.atoms.value, this.atom);
     Atom.connect(this.atoms.value, form.atoms.values);
     Atom.connect(this.atoms.value, form.atoms.global);
 
-    this.atoms.touched = form.root.createStateAtomSync(touched);
+    this.atoms.touched = createStateAtomSyncRoot(touched, form.root);
     this.atoms.touched.name = 'touched';
     Atom.connect(this.atoms.touched, this.atom);
     Atom.connect(this.atoms.touched, form.atoms.touches);
     Atom.connect(this.atoms.touched, form.atoms.global);
 
-    this.atoms.error = form.root.createStateAtomSync(error);
+    this.atoms.error = createStateAtomSyncRoot(error, form.root);
     this.atoms.error.name = 'error';
     Atom.connect(this.atoms.error, this.atom);
     Atom.connect(this.atoms.error, form.atoms.errors);
     Atom.connect(this.atoms.error, form.atoms.global);
 
-    this.atoms.errorTouched = form.root.select((get) => {
+    this.atoms.errorTouched = selectRoot((get) => {
       if (!get(this.atoms.touched)) {
         return '';
       }
       return get(this.atoms.error);
-    });
+    }, form.root);
     this.atoms.errorTouched.name = 'errorTouched';
     this.atoms.errorTouched.onBeforeUpdate = (atom) => {
       if (atom.get() === atom.value.externalGet()) {
@@ -89,7 +88,7 @@ class Field {
 
   setData(name, newData) {
     if (!this.atoms[name]) {
-      const atom = this.form.root.createStateAtomSync(newData);
+      const atom = createStateAtomSyncRoot(newData, this.form.root);
       this.atoms[name] = atom;
       Atom.connect(atom, this.atom);
       Atom.connect(atom, this.form.atoms.global);

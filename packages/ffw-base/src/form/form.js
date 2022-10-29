@@ -1,5 +1,5 @@
 import transformStructure from '../transform-structure/transform-structure.js';
-import {RootConnected, AtomSync, ReadSync, Atom} from 'strangelove';
+import {Root, AtomSync, ReadValueSync, Atom, SyncUpdater} from 'strangelove';
 import Field from '../field/field.js';
 
 function flatFields(fields) {
@@ -27,26 +27,28 @@ class Form {
   onSubmit = () => {};
   initValues = {};
 
-  root = new RootConnected();
+  root = new Root({
+    updater: new SyncUpdater(),
+  });
 
   initAtoms() {
     const form = this;
     this.atoms.values = new AtomSync({
-      value: new ReadSync({
+      value: new ReadValueSync({
         get() {
           return form.getValues();
         },
       }),
     });
     this.atoms.errors = new AtomSync({
-      value: new ReadSync({
+      value: new ReadValueSync({
         get() {
           return form.getErrors();
         },
       }),
     });
     this.atoms.touches = new AtomSync({
-      value: new ReadSync({
+      value: new ReadValueSync({
         get() {
           return form.getErrors();
         },
@@ -59,7 +61,7 @@ class Form {
         }
         return true;
       },
-      value: new ReadSync({
+      value: new ReadValueSync({
         get() {
           return form.valid;
         },
@@ -67,7 +69,7 @@ class Form {
     });
     Atom.connect(this.atoms.valid, this.atoms.errors);
     this.atoms.global = new AtomSync({
-      value: new ReadSync({
+      value: new ReadValueSync({
         get() {
           return form;
         },
