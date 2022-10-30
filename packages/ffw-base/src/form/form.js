@@ -1,10 +1,21 @@
-import transformStructure from '../transform-structure/transform-structure.js';
+import find from '../transform-structure/find.js';
+import transform from '../transform-structure/transform.js';
 import {Root, AtomSync, ReadValueSync, Atom, SyncUpdater} from 'strangelove';
 import Field from '../field/field.js';
 
+function traceFields(fields, getProperty) {
+  return transform(
+    fields,
+    (field) => {
+      return traceFields(getProperty(field), getProperty);
+    },
+    (target) => target instanceof Field
+  );
+}
+
 function flatFields(fields) {
   const flatFields = [];
-  transformStructure(
+  transform(
     fields,
     (field) => {
       flatFields.push(field);
@@ -177,23 +188,38 @@ class Form {
   }
 
   getValues() {
-    return transformStructure(
-      this.fields,
-      (field) => field.value,
-      (value) => value instanceof Field
-    );
+    return traceFields(this.fields, (field) => field.value);
+    // return transformStructure(
+    //   this.fields,
+    //   (field) => field.value,
+    //   (value) => value instanceof Field
+    // );
   }
 
   getErrors() {
-    return transformStructure(
-      this.fields,
-      (field) => field.error,
-      (value) => value instanceof Field
-    );
+    return traceFields(this.fields, (field) => {
+      if (find(field.value, (data) => data instanceof Field)) {
+        return field.value;
+      } else {
+        return field.error;
+      }
+      // if (field.value instanceof Field) {
+      //   console.log('-----', 'field.value', field.value);
+      //   return field.value;
+      // } else {
+      //   // console.log('-----', 'field', field);
+      //   return '123';
+      // }
+    });
+    // return transformStructure(
+    //   this.fields,
+    //   (field) => field.error,
+    //   (value) => value instanceof Field
+    // );
   }
 
   getTouches() {
-    return transformStructure(
+    return transform(
       this.fields,
       (field) => field.touched,
       (value) => value instanceof Field

@@ -110,10 +110,10 @@ importers:
 
   packages/ffw-base:
     specifiers:
-      strangelove: ^1.0.7
+      strangelove: ^1.0.8
       utftu: ^1.0.11
     dependencies:
-      strangelove: 1.0.7
+      strangelove: 1.0.8
     devDependencies:
       utftu: 1.0.11
 
@@ -4950,8 +4950,8 @@ packages:
     dependencies:
       escape-string-regexp: 2.0.0
 
-  /strangelove/1.0.7:
-    resolution: {integrity: sha512-VoHBAuwNaYJpnvz0TVSRBeElApu5DMk54DEI+JVQFu7T+jow+HVI7XtUqU58eZk1QcpZUUMzGUNI366eBLgvWQ==}
+  /strangelove/1.0.8:
+    resolution: {integrity: sha512-7GkpxdOcb5HY2s2BVlfg4FOT+Gn1s7QWpaIt/suw/kyy0M8zNXnPkpWe1ftdksmJKS5SAzLEK99LvFi0L4k2HQ==}
     dev: false
 
   /streamsearch/1.1.0:

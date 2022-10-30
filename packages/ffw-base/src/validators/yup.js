@@ -1,4 +1,4 @@
-import transformStructure from '../transform-structure/transform-structure.js';
+import transform from '../transform-structure/transform.js';
 import * as yup from 'yup';
 
 function yupToTest(yupSchema) {
@@ -13,7 +13,7 @@ function yupToTest(yupSchema) {
 }
 
 export const prepareYup = (structure) => {
-  return transformStructure(
+  return transform(
     structure,
     (yupSchema) => {
       return yupToTest(yupSchema);
