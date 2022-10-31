@@ -23,7 +23,7 @@ describe('form-proxy', () => {
       expect(() => proxy.fields.age.value).toThrow();
     });
   });
-  describe('set multi data', () => {
+  describe.skip('set multi data', () => {
     it('setValues()', () => {
       const form = new Form({
         initValues: {
@@ -42,7 +42,7 @@ describe('form-proxy', () => {
         })
       ).toThrow();
     });
-    it('setErrors()', () => {
+    it.skip('setErrors()', () => {
       const form = new Form({
         initValues: {
           age: 42,
@@ -60,7 +60,7 @@ describe('form-proxy', () => {
         })
       ).toThrow();
     });
-    it('setTouches()', () => {
+    it.skip('setTouches()', () => {
       const form = new Form({
         initValues: {
           age: 42,
