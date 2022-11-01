@@ -15,6 +15,7 @@ class Field {
     form = null,
   }) {
     this.form = form;
+    this.test = defaultTest;
 
     this.initParams = {
       value,
@@ -28,20 +29,14 @@ class Field {
     this.atoms.value = createStateAtomSyncRoot(value, form.root);
     this.atoms.value.name = 'value';
     Atom.connect(this.atoms.value, this.atom);
-    Atom.connect(this.atoms.value, form.atoms.values);
-    Atom.connect(this.atoms.value, form.atoms.global);
 
     this.atoms.touched = createStateAtomSyncRoot(touched, form.root);
     this.atoms.touched.name = 'touched';
     Atom.connect(this.atoms.touched, this.atom);
-    Atom.connect(this.atoms.touched, form.atoms.touches);
-    Atom.connect(this.atoms.touched, form.atoms.global);
 
     this.atoms.error = createStateAtomSyncRoot(error, form.root);
     this.atoms.error.name = 'error';
     Atom.connect(this.atoms.error, this.atom);
-    Atom.connect(this.atoms.error, form.atoms.errors);
-    Atom.connect(this.atoms.error, form.atoms.global);
 
     this.atoms.errorTouched = selectRoot((get) => {
       if (!get(this.atoms.touched)) {
@@ -56,6 +51,8 @@ class Field {
       }
       return true;
     };
+
+    form.addField(this);
   }
 
   get value() {
@@ -154,8 +151,17 @@ class Field {
 
   reset() {
     this.setData('value', this.initParams.value);
-    this.setData('touched', this.initParams.value);
-    this.setData('error', this.initParams.value);
+    this.setData('touched', this.initParams.touched);
+    this.setData('error', this.initParams.error);
+  }
+
+  _childrenFields = new Set();
+  addChildrenField(field) {
+    this._childrenFields.add(field);
+  }
+
+  removeChildrenField(field) {
+    this._childrenFields.delete(field);
   }
 }
 

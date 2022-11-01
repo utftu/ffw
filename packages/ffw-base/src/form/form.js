@@ -1,6 +1,14 @@
+import findAsync from '../transform-structure/find-async.js';
 import find from '../transform-structure/find.js';
 import transform from '../transform-structure/transform.js';
-import {Root, AtomSync, ReadValueSync, Atom, SyncUpdater} from 'strangelove';
+import {
+  Root,
+  AtomSync,
+  ReadValueSync,
+  Atom,
+  SyncUpdater,
+  createStateAtomSyncRoot,
+} from 'strangelove';
 import Field from '../field/field.js';
 
 function traceFields(fields, getProperty) {
@@ -44,27 +52,10 @@ class Form {
 
   initAtoms() {
     const form = this;
-    this.atoms.values = new AtomSync({
-      value: new ReadValueSync({
-        get() {
-          return form.getValues();
-        },
-      }),
-    });
-    this.atoms.errors = new AtomSync({
-      value: new ReadValueSync({
-        get() {
-          return form.getErrors();
-        },
-      }),
-    });
-    this.atoms.touches = new AtomSync({
-      value: new ReadValueSync({
-        get() {
-          return form.getErrors();
-        },
-      }),
-    });
+    this.atoms.atoms = new AtomSync();
+    this.atoms.values = new AtomSync();
+    this.atoms.errors = new AtomSync();
+    this.atoms.touches = new AtomSync();
     this.atoms.valid = new AtomSync({
       onBeforeUpdate(atom) {
         if (atom.value.get() === form.valid) {
@@ -151,19 +142,57 @@ class Form {
     }
 
     if (this.options.validateOnMount) {
+      console.log(
+        '-----',
+        'this.options.validateOnMount',
+        this.options.validateOnMount
+      );
       this.validate();
     }
   }
 
   async validate() {
-    const flattedFields = flatFields(this.fields);
-    const errors = await Promise.all(
-      flattedFields.map((field) => field.validate())
-    );
-    if (errors.every((error) => error === '')) {
-      return true;
+    async function checkError(data) {
+      const hasError = await findAsync(data, async (field) => {
+        if (field instanceof Field) {
+          const fieldError = await field.validate();
+          if (fieldError !== '') {
+            return true;
+          }
+          if (field._childrenFields.size > 0) {
+            return checkError(field.value);
+          }
+
+          return false;
+        }
+      });
+      return hasError;
     }
-    return false;
+
+    const hasError = await checkError(this.fields);
+    return !hasError;
+    // return checkValid(this.fields, (field) => {
+    //   if (field instanceof Field) {
+    //     if (field._childrenFields.size > 0) {
+    //       return checkValid(field.value);
+    //     }
+    //   }
+    // });
+    // return find(this.fields, (field) => {
+    //   if (field instanceof Field) {
+    //     if (field._childrenFields.size > 0) {
+    //       return;
+    //     }
+    //   }
+    // });
+    // const flattedFields = flatFields(this.fields);
+    // const errors = await Promise.all(
+    //   flattedFields.map((field) => field.validate())
+    // );
+    // if (errors.every((error) => error === '')) {
+    //   return true;
+    // }
+    // return false;
   }
 
   get valid() {
@@ -187,6 +216,27 @@ class Form {
     flattedFields.forEach((field) => field.reset());
   }
 
+  getStructure() {
+    function a(data) {
+      return traceFields(data, (field) => {
+        return {
+          error: field.error,
+          touched: field.touched,
+          value: a(field.value),
+        };
+      });
+    }
+    return a(this.fields);
+    // return traceFields(this.fields, (field) => {
+    //   return {
+    //     error: field.error,
+    //     touched: field.touched,
+    //     value: traceFields(field.value),
+    //   };
+    //   // field.value
+    // });
+  }
+
   getValues() {
     return traceFields(this.fields, (field) => field.value);
     // return transformStructure(
@@ -198,32 +248,30 @@ class Form {
 
   getErrors() {
     return traceFields(this.fields, (field) => {
+      if (field._childrenFields.size === 0) {
+        return field.error;
+      }
       if (find(field.value, (data) => data instanceof Field)) {
         return field.value;
       } else {
         return field.error;
       }
-      // if (field.value instanceof Field) {
-      //   console.log('-----', 'field.value', field.value);
-      //   return field.value;
-      // } else {
-      //   // console.log('-----', 'field', field);
-      //   return '123';
-      // }
     });
-    // return transformStructure(
-    //   this.fields,
-    //   (field) => field.error,
-    //   (value) => value instanceof Field
-    // );
   }
 
   getTouches() {
-    return transform(
-      this.fields,
-      (field) => field.touched,
-      (value) => value instanceof Field
-    );
+    return traceFields(this.fields, (field) => {
+      if (find(field.value, (data) => data instanceof Field)) {
+        return field.value;
+      } else {
+        return field.touched;
+      }
+    });
+    // return transform(
+    //   this.fields,
+    //   (field) => field.touched,
+    //   (value) => value instanceof Field
+    // );
   }
 
   get values() {
@@ -236,6 +284,30 @@ class Form {
 
   get touches() {
     return this.getTouches();
+  }
+
+  _flatFields = new Set();
+  addField(field) {
+    this._flatFields.add(field);
+    Atom.connect(field.atom, this.atoms.global);
+    Atom.connect(field.atoms.value, this.atoms.values);
+    Atom.connect(field.atoms.touched, this.atoms.touches);
+    Atom.connect(field.atoms.error, this.atoms.errors);
+
+    for (const fieldAtom of field.atoms) {
+      Atom.connect(fieldAtom, this.atoms.global);
+    }
+  }
+  removeField(field) {
+    this._flatFields.delete(field);
+    Atom.disconnect(field.atom, this.atoms.global);
+    Atom.disconnect(field.atoms.value, this.atoms.values);
+    Atom.disconnect(field.atoms.touched, this.atoms.touches);
+    Atom.disconnect(field.atoms.error, this.atoms.errors);
+
+    for (const fieldAtom of field.atoms) {
+      Atom.disconnect(fieldAtom, this.atoms.global);
+    }
   }
 }
 

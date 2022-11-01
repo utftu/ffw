@@ -1,5 +1,8 @@
 import * as yup from 'yup';
+import {jest} from '@jest/globals';
 import Field from '../field/field.js';
+import {waitAsync} from '../utils.js';
+import {prepareYup} from '../validators/yup.js';
 import Form from './form.js';
 
 describe('form', () => {
@@ -9,7 +12,6 @@ describe('form', () => {
         age: 42,
         name: 'robbin',
       },
-      validateSchema: yup.object({}),
     });
     expect(form.fields.age.value).toBe(42);
     expect(form.fields.name.value).toBe('robbin');
@@ -58,7 +60,7 @@ describe('form', () => {
         age: 'wrong',
         name: 'robbin',
       },
-      validateSchema: yup.object({
+      validateSchema: prepareYup({
         age: yup.number().required(),
         name: yup.string().required(),
       }),
@@ -77,7 +79,7 @@ describe('form', () => {
         name: 'robbin',
       },
       onSubmit: submitListener,
-      validateSchema: yup.object({
+      validateSchema: prepareYup({
         age: yup.number().required(),
         name: yup.string().required(),
       }),
@@ -98,12 +100,12 @@ describe('form', () => {
         age: 'wrong',
         age1: 'wrong1',
       },
-      validateSchema: yup.object({
+      validateSchema: prepareYup({
         age: yup.number().required(),
         age1: yup.number().required(),
       }),
     });
-    await waitAsync();
+    await waitAsync(100);
     const errors = form.getErrors();
     expect(errors.age).not.toBe('');
     expect(errors.age1).not.toBe('');
@@ -302,6 +304,103 @@ describe('form', () => {
     expect(form.touches).toEqual({
       age: true,
       name: false,
+    });
+  });
+  describe('validate()', () => {
+    it('valid shallow', async () => {
+      const form = new Form({
+        initValues: {
+          age: 'hello',
+        },
+        validateSchema: {
+          age: () => '',
+        },
+      });
+      const valid = await form.validate();
+      expect(valid).toBe(true);
+    });
+    it.only('valid inner', async () => {
+      const form = new Form({
+        initValues: {
+          outerField: '',
+        },
+      });
+      form.fields.outerField.set({
+        inner1: {
+          inner2: {
+            innerField: new Field({
+              form,
+              test: () => '',
+            }),
+          },
+        },
+      });
+      form.fields.outerField.addChildrenField(
+        form.fields.outerField.value.inner1.inner2.innerField
+      );
+      console.log(
+        '-----',
+        'form.',
+        form.getStructure().outerField.value.inner1.inner2
+      );
+      const valid = await form.validate();
+      expect(valid).toBe(true);
+    });
+    // it('valid inner', async () => {
+    //   const form = new Form({
+    //     initValues: {
+    //       outerField: '',
+    //     },
+    //   });
+    //   form.fields.outerField.set({
+    //     inner1: {
+    //       inner2: {
+    //         innerField: new Field({
+    //           form,
+    //           test: () => '',
+    //         }),
+    //       },
+    //     },
+    //   });
+    //   form.fields.outerField.addChildrenField(
+    //     form.fields.outerField.value.inner1.inner2.innerField
+    //   );
+    //   const valid = await form.validate();
+    //   expect(valid).toBe(true);
+    // });
+    it('error shallow', async () => {
+      const form = new Form({
+        initValues: {
+          age: 'hello',
+        },
+        validateSchema: {
+          age: () => 'age error',
+        },
+      });
+      const valid = await form.validate();
+      expect(valid).toBe(false);
+    });
+    it('error inner', async () => {
+      const form = new Form({
+        initValues: {
+          outerField: '',
+        },
+      });
+      form.fields.outerField.set({
+        inner1: {
+          inner2: {
+            innerField: new Field({
+              form,
+              test: () => 'innerField error',
+            }),
+          },
+        },
+      });
+      form.fields.outerField.addChildrenField(
+        form.fields.outerField.value.inner1.inner2.innerField
+      );
+      const valid = await form.validate();
+      expect(valid).toBe(false);
     });
   });
 });
