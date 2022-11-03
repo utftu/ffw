@@ -1,4 +1,4 @@
-import {Atom, createStateAtomSyncRoot, selectRoot} from 'strangelove';
+// import {Atom, createStateAtomSyncRoot, selectRoot} from 'strangelove';
 
 const defaultTest = () => '';
 
@@ -95,6 +95,12 @@ class Field {
     }
   }
 
+  getData(name) {
+    if (name in this.atoms) {
+      this.atoms[name].get();
+    }
+  }
+
   setError(error) {
     this.setData('error', error);
   }
@@ -122,8 +128,22 @@ class Field {
 
   async validate() {
     const error = await this.test(this.atoms.value.get());
+    const oldError = this.error;
 
     this.setError(error);
+
+    if (error !== '' && oldError === '') {
+      this.form.errors++;
+      if (this.form.errors === 0) {
+        this.form.atoms.valid.update();
+      }
+    } else if (error === '' && oldError !== '') {
+      this.form.errors--;
+      if (this.form.errors === 0) {
+        this.form.atoms.valid.update();
+      }
+    }
+
     return error;
   }
 

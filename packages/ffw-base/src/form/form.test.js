@@ -160,7 +160,7 @@ describe('form', () => {
       age: 'error',
       name: 'error1',
     });
-    expect(form.errors).toEqual({
+    expect(form._errors).toEqual({
       age: 'error',
       name: 'error1',
     });
