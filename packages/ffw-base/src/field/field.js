@@ -1,11 +1,16 @@
-// import {Atom, createStateAtomSyncRoot, selectRoot} from 'strangelove';
+import ee from 'utftu/ee.js';
 
 const defaultTest = () => '';
 
 class Field {
   form = null;
-  atoms = {};
-  atom = null;
+
+  ee = ee();
+  data = {
+    value: '',
+    error: '',
+    touched: false,
+  };
 
   constructor({
     value = '',
@@ -24,39 +29,16 @@ class Field {
       test,
     };
     this.test = test;
-    this.atom = createStateAtomSyncRoot(null, form.root);
 
-    this.atoms.value = createStateAtomSyncRoot(value, form.root);
-    this.atoms.value.name = 'value';
-    Atom.connect(this.atoms.value, this.atom);
-
-    this.atoms.touched = createStateAtomSyncRoot(touched, form.root);
-    this.atoms.touched.name = 'touched';
-    Atom.connect(this.atoms.touched, this.atom);
-
-    this.atoms.error = createStateAtomSyncRoot(error, form.root);
-    this.atoms.error.name = 'error';
-    Atom.connect(this.atoms.error, this.atom);
-
-    this.atoms.errorTouched = selectRoot((get) => {
-      if (!get(this.atoms.touched)) {
-        return '';
-      }
-      return get(this.atoms.error);
-    }, form.root);
-    this.atoms.errorTouched.name = 'errorTouched';
-    this.atoms.errorTouched.onBeforeUpdate = (atom) => {
-      if (atom.get() === atom.value.externalGet()) {
-        return false;
-      }
-      return true;
-    };
+    this.data.value = value;
+    this.data.error = error;
+    this.data.touched = touched;
 
     form.addField(this);
   }
 
   get value() {
-    return this.atoms.value.get();
+    return this.data.value;
   }
 
   set value(newValue) {
@@ -64,41 +46,51 @@ class Field {
   }
 
   get error() {
-    return this.atoms.error.get();
+    return this.data.error;
   }
 
   set error(newError) {
     this.setError(newError);
   }
 
-  get errorTouched() {
-    return this.atoms.errorTouched.get();
-  }
-
   get touched() {
-    return this.atoms.touched.get();
+    return this.data.touched;
   }
 
   set touched(newTouched) {
     this.setTouched(newTouched);
   }
 
+  get errorTouched() {
+    if (this.data.touched === false) {
+      return '';
+    }
+    return this.data.error;
+  }
+
   setData(name, newData) {
-    if (!this.atoms[name]) {
-      const atom = createStateAtomSyncRoot(newData, this.form.root);
-      this.atoms[name] = atom;
-      Atom.connect(atom, this.atom);
-      Atom.connect(atom, this.form.atoms.global);
-      this.form.root.update(atom);
-    } else {
-      this.atoms[name].set(newData);
+    const prevData = this.data[name];
+    if (prevData === newData) {
+      return;
+    }
+    const oldErrorTouched = this.errorTouched;
+    this.data[name] = newData;
+    this.form.calls.add(this, name, () => this.ee.emit(name, newData));
+    this.form.calls.add(this.form, '*', () => this.form.ee.emit('global'));
+
+    if (name === 'error' || name === 'touched') {
+      if (oldErrorTouched === this.errorTouched) {
+        return;
+      }
+      this.form.calls.add(this, 'errorTouched', () =>
+        this.ee.emit('errorTouched', this.errorTouched)
+      );
     }
   }
 
-  getData(name) {
-    if (name in this.atoms) {
-      this.atoms[name].get();
-    }
+  update() {
+    this.form.calls.add(this, '*', () => this.ee.emit('*'));
+    this.form.calls.add(this.form, '*', () => this.form.ee.emit('*'));
   }
 
   setError(error) {
@@ -127,34 +119,38 @@ class Field {
   }
 
   async validate() {
-    const error = await this.test(this.atoms.value.get());
+    const error = await this.test(this.data.value);
     const oldError = this.error;
 
     this.setError(error);
 
     if (error !== '' && oldError === '') {
-      this.form.errors++;
-      if (this.form.errors === 0) {
-        this.form.atoms.valid.update();
+      this.form._errors++;
+      if (this.form._errors === 1) {
+        this.form.calls.add(this.form, 'valid', () =>
+          this.form.ee.emit('valid', false)
+        );
       }
     } else if (error === '' && oldError !== '') {
-      this.form.errors--;
-      if (this.form.errors === 0) {
-        this.form.atoms.valid.update();
+      this.form._errors--;
+      if (this.form._errors === 0) {
+        this.form.calls.add(this.form, 'valid', () =>
+          this.form.ee.emit('valid', true)
+        );
       }
     }
 
     return error;
   }
 
-  subscribe(listener) {
-    this.atom.listeners.add(listener);
+  on(name, cb) {
+    this.ee.on(name, cb);
 
-    return () => this.atom.listeners.remove(listener);
+    return () => this.ee.off(name, cb);
   }
 
-  unsubscribe(listener) {
-    this.atom.listeners.remove(listener);
+  off(name, cb) {
+    return () => this.ee.off(name, cb);
   }
 
   onChange = (event) => {
@@ -173,15 +169,6 @@ class Field {
     this.setData('value', this.initParams.value);
     this.setData('touched', this.initParams.touched);
     this.setData('error', this.initParams.error);
-  }
-
-  _childrenFields = new Set();
-  addChildrenField(field) {
-    this._childrenFields.add(field);
-  }
-
-  removeChildrenField(field) {
-    this._childrenFields.delete(field);
   }
 }
 

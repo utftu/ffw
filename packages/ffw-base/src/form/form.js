@@ -1,14 +1,14 @@
-import findAsync from '../transform-structure/find-async.js';
+import ee from 'utftu/ee.js';
+import DelayedCalls from '../delayed-calls/delayed-calls.js';
 import find from '../transform-structure/find.js';
 import transform from '../transform-structure/transform.js';
-import {Atom} from 'strangelove';
 import Field from '../field/field.js';
 
-function traceFields(fields, getProperty) {
+function transformFields(fields, getProperty) {
   return transform(
     fields,
     (field) => {
-      return traceFields(getProperty(field), getProperty);
+      return transformFields(getProperty(field), getProperty);
     },
     (target) => target instanceof Field
   );
@@ -27,29 +27,8 @@ class Form {
   onSubmit = () => {};
   initValues = {};
 
-  root = new Root({
-    updater: new SyncUpdater(),
-  });
-
-  initAtoms() {
-    const form = this;
-    this.atoms.valid = new AtomSync({
-      value: new ReadValueSync({
-        get() {
-          return form.valid;
-        },
-      }),
-    });
-    this.atoms.global = new AtomSync({
-      value: new ReadValueSync({
-        get() {
-          return form;
-        },
-      }),
-    });
-  }
-
-  atoms = {};
+  calls = new DelayedCalls();
+  ee = ee();
 
   batch(cb) {
     cb();
@@ -77,10 +56,6 @@ class Form {
   }
 
   constructor(props = {}) {
-    this.initAtoms();
-
-    const form = this;
-
     this.f = this.fields;
 
     this.options = {...this.options, ...props.options};
@@ -108,7 +83,7 @@ class Form {
     for (const fieldName in this.initValues) {
       const defaultValue = this.initValues[fieldName];
       const field = this._getFieldOrCreate(this.fields, fieldName);
-      field.atoms.value.value.setCache(defaultValue);
+      field.data.value = defaultValue;
     }
 
     if (this.options.validateOnMount) {
@@ -117,13 +92,17 @@ class Form {
   }
 
   async validate() {
-    return Promise.all([...this._flatFields].map((field) => field.validate()))
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        return false;
-      });
+    const errors = await Promise.all(
+      [...this._flatFields].map((field) => field.validate())
+    );
+    return errors.every((error) => error === '');
+    // return Promise.all([...this._flatFields].map((field) => field.validate()))
+    //   .then(() => {
+    //     return true;
+    //   })
+    //   .catch(() => {
+    //     return false;
+    //   });
   }
 
   getValid() {
@@ -135,12 +114,6 @@ class Form {
 
   get valid() {
     return this.getValid();
-    // const flattedFields = flatFields(this.fields);
-    // const errors = flattedFields.map((field) => field.error());
-    // if (errors.every((error) => error === '')) {
-    //   return true;
-    // }
-    // return false;
   }
 
   submit = async () => {
@@ -158,7 +131,7 @@ class Form {
 
   getStructure() {
     function rec(data) {
-      return traceFields(data, (field) => {
+      return transformFields(data, (field) => {
         return {
           error: field.error,
           touched: field.touched,
@@ -170,21 +143,27 @@ class Form {
   }
 
   getValues() {
-    return traceFields(this.fields, (field) => field.value);
+    const values = transformFields(this.fields, (field) => field.value);
+    console.log('-----', 'values', values);
+    return values;
   }
 
   getErrors() {
-    return traceFields(this.fields, (field) => {
+    const errors = transformFields(this.fields, (field) => {
       if (find(field.value, (data) => data instanceof Field)) {
         return field.value;
       } else {
-        return field.error;
+        if (field.error !== '') {
+          return field.error;
+        }
       }
     });
+
+    return errors;
   }
 
   getTouches() {
-    return traceFields(this.fields, (field) => {
+    return transformFields(this.fields, (field) => {
       if (find(field.value, (data) => data instanceof Field)) {
         return field.value;
       } else {
@@ -212,28 +191,12 @@ class Form {
       this._errors++;
     }
     this._flatFields.add(field);
-    Atom.connect(field.atom, this.atoms.global);
-    Atom.connect(field.atoms.value, this.atoms.values);
-    Atom.connect(field.atoms.touched, this.atoms.touches);
-    Atom.connect(field.atoms.error, this.atoms.errors);
-
-    for (const fieldAtom of field.atoms) {
-      Atom.connect(fieldAtom, this.atoms.global);
-    }
   }
   removeField(field) {
     if (field.error !== '') {
       this._errors--;
     }
     this._flatFields.delete(field);
-    Atom.disconnect(field.atom, this.atoms.global);
-    Atom.disconnect(field.atoms.value, this.atoms.values);
-    Atom.disconnect(field.atoms.touched, this.atoms.touches);
-    Atom.disconnect(field.atoms.error, this.atoms.errors);
-
-    for (const fieldAtom of field.atoms) {
-      Atom.disconnect(fieldAtom, this.atoms.global);
-    }
   }
 }
 

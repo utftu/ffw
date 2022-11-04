@@ -110,41 +110,41 @@ describe('form', () => {
     expect(errors.age).not.toBe('');
     expect(errors.age1).not.toBe('');
   });
-  it('setErrors()', async () => {
-    const form = new Form({
-      initValues: {
-        age: 42,
-        name: 'robbin',
-      },
-      validateSchema: yup.object({}),
-    });
-    const ageListener = jest.fn();
-    const nameListener = jest.fn();
-    form.fields.age.subscribe('error', ageListener);
-    form.fields.name.subscribe('error', nameListener);
-    form.setErrors({
-      age: 'error1',
-      name: 'error2',
-    });
-    await waitAsync();
-    expect(form.fields.age.error).toBe('error1');
-    expect(form.fields.name.error).toBe('error2');
-    expect(ageListener.mock.calls.length).toBe(1);
-    expect(nameListener.mock.calls.length).toBe(1);
-  });
-  it('setError()', async () => {
-    const form = new Form({
-      initValues: {
-        name: 'robbin',
-      },
-    });
-    const listener = jest.fn();
-    form.fields.name.subscribe('error', listener);
-    form.setError('name', 'you are bobbin');
-    await waitAsync();
-    expect(form.fields.name.error).toBe('you are bobbin');
-    expect(listener.mock.calls.length).toBe(1);
-  });
+  // it.only('setErrors()', async () => {
+  //   const form = new Form({
+  //     initValues: {
+  //       age: 42,
+  //       name: 'robbin',
+  //     },
+  //     validateSchema: yup.object({}),
+  //   });
+  //   const ageListener = jest.fn();
+  //   const nameListener = jest.fn();
+  //   form.fields.age.subscribe('error', ageListener);
+  //   form.fields.name.subscribe('error', nameListener);
+  //   form.setErrors({
+  //     age: 'error1',
+  //     name: 'error2',
+  //   });
+  //   await waitAsync();
+  //   expect(form.fields.age.error).toBe('error1');
+  //   expect(form.fields.name.error).toBe('error2');
+  //   expect(ageListener.mock.calls.length).toBe(1);
+  //   expect(nameListener.mock.calls.length).toBe(1);
+  // });
+  // it('setError()', async () => {
+  //   const form = new Form({
+  //     initValues: {
+  //       name: 'robbin',
+  //     },
+  //   });
+  //   const listener = jest.fn();
+  //   form.fields.name.subscribe('error', listener);
+  //   form.setError('name', 'you are bobbin');
+  //   await waitAsync();
+  //   expect(form.fields.name.error).toBe('you are bobbin');
+  //   expect(listener.mock.calls.length).toBe(1);
+  // });
   it('getErrors() || errors', () => {
     const form = new Form({
       initValues: {
@@ -160,13 +160,13 @@ describe('form', () => {
       age: 'error',
       name: 'error1',
     });
-    expect(form._errors).toEqual({
+    expect(form.errors).toEqual({
       age: 'error',
       name: 'error1',
     });
   });
 
-  it('reset()', () => {
+  it.only('reset()', () => {
     const form = new Form({
       initValues: {
         age: 42,
@@ -174,19 +174,34 @@ describe('form', () => {
         address: 'Moscow',
       },
     });
-    form.setValues({
-      age: 43,
-      name: 'bobbin',
-      address: 'London',
-    });
-    form.setTouches({
-      age: true,
-    });
-    form.setErrors({
-      name: 'WRONG NAME!',
-    });
+    const age = form.fields.age;
+    const name = form.fields.name;
+    const address = form.fields.address;
+
+    age.data.value = 43;
+    age.data.touched = true;
+
+    name.data.value = 'bobbin';
+    name.data.error = 'WRONG NAME';
+
+    address.data.value = 'London';
+
+    // age.set(43, false);
+    //
+    // form.setValues({
+    //   age: 43,
+    //   name: 'bobbin',
+    //   address: 'London',
+    // });
+    // form.setTouches({
+    //   age: true,
+    // });
+    // form.setErrors({
+    //   name: 'WRONG NAME!',
+    // });
     form.reset();
 
+    console.log('-----', 'form.getValues()', form.getValues());
     expect(form.getValues()).toEqual({
       age: 42,
       name: 'robbin',
@@ -319,7 +334,7 @@ describe('form', () => {
       const valid = await form.validate();
       expect(valid).toBe(true);
     });
-    it.only('valid inner', async () => {
+    it('valid inner', async () => {
       const form = new Form({
         initValues: {
           outerField: '',
@@ -337,11 +352,6 @@ describe('form', () => {
       });
       form.fields.outerField.addChildrenField(
         form.fields.outerField.value.inner1.inner2.innerField
-      );
-      console.log(
-        '-----',
-        'form.',
-        form.getStructure().outerField.value.inner1.inner2
       );
       const valid = await form.validate();
       expect(valid).toBe(true);
