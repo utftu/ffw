@@ -12,11 +12,11 @@ function find(structure, checkTarget) {
 
   const iterateResult = iterate(structure, type, (elem) => {
     if (find(elem, checkTarget)) {
-      return false;
+      return iterate.EXIT;
     }
   });
 
-  if (iterateResult === false) {
+  if (iterateResult === iterate.EXIT) {
     return true;
   }
   return false;

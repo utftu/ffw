@@ -4,11 +4,16 @@ import find from '../transform-structure/find.js';
 import transform from '../transform-structure/transform.js';
 import Field from '../field/field.js';
 
+transformFields.PASS = transform.PASS;
 function transformFields(fields, getProperty) {
   return transform(
     fields,
     (field) => {
-      return transformFields(getProperty(field), getProperty);
+      const newValue = getProperty(field);
+      if (newValue === transformFields.PASS) {
+        return transformFields.PASS;
+      }
+      return transformFields(newValue, getProperty);
     },
     (target) => target instanceof Field
   );
@@ -83,6 +88,7 @@ class Form {
     for (const fieldName in this.initValues) {
       const defaultValue = this.initValues[fieldName];
       const field = this._getFieldOrCreate(this.fields, fieldName);
+      field.initParams.value = defaultValue;
       field.data.value = defaultValue;
     }
 
@@ -96,13 +102,6 @@ class Form {
       [...this._flatFields].map((field) => field.validate())
     );
     return errors.every((error) => error === '');
-    // return Promise.all([...this._flatFields].map((field) => field.validate()))
-    //   .then(() => {
-    //     return true;
-    //   })
-    //   .catch(() => {
-    //     return false;
-    //   });
   }
 
   getValid() {
@@ -129,7 +128,7 @@ class Form {
     }
   }
 
-  getStructure() {
+  getData() {
     function rec(data) {
       return transformFields(data, (field) => {
         return {
@@ -144,7 +143,6 @@ class Form {
 
   getValues() {
     const values = transformFields(this.fields, (field) => field.value);
-    console.log('-----', 'values', values);
     return values;
   }
 
@@ -156,6 +154,7 @@ class Form {
         if (field.error !== '') {
           return field.error;
         }
+        return transformFields.PASS;
       }
     });
 
@@ -167,7 +166,10 @@ class Form {
       if (find(field.value, (data) => data instanceof Field)) {
         return field.value;
       } else {
-        return field.touched;
+        if (field.touched === true) {
+          return field.touched;
+        }
+        return transformFields.PASS;
       }
     });
   }

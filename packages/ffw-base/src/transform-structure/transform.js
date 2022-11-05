@@ -2,8 +2,6 @@ import creators from './creators.js';
 import getType from './get-type.js';
 import iterate from './iterate.js';
 
-export const NO_OP = {};
-
 transform.PASS = Symbol('pass');
 function transform(structure, cb, checkTarget) {
   const type = getType(structure);
@@ -18,11 +16,10 @@ function transform(structure, cb, checkTarget) {
 
   iterate(structure, type, (data, i) => {
     const transformResult = transform(data, cb, checkTarget);
-    if (transformResult === NO_OP) {
+    if (transformResult === transform.PASS) {
       return;
     }
     newData[i] = transformResult;
-    // newData[i] = transform(data, cb, checkTarget);
   });
 
   return newData;

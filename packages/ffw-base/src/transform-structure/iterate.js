@@ -8,20 +8,14 @@ function iterate(structure, type, cb) {
       if (cbResult === iterate.EXIT) {
         return iterate.EXIT;
       }
-      if (cbResult === false) {
-        return false;
-      }
     }
-    return;
-  }
-  if (type === 'object') {
+  } else if (type === 'object') {
     for (let key in structure) {
       const cbResult = cb(structure[key], key);
-      if (cbResult === false) {
-        return false;
+      if (cbResult === iterate.EXIT) {
+        return iterate.EXIT;
       }
     }
-    return;
   }
 }
 
