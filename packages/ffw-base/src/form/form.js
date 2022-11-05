@@ -1,8 +1,8 @@
 import ee from 'utftu/ee.js';
 import DelayedCalls from '../delayed-calls/delayed-calls.js';
+import Field from '../field/field.js';
 import find from '../transform-structure/find.js';
 import transform from '../transform-structure/transform.js';
-import Field from '../field/field.js';
 
 transformFields.PASS = transform.PASS;
 function transformFields(fields, getProperty) {
@@ -142,12 +142,11 @@ class Form {
   }
 
   getValues() {
-    const values = transformFields(this.fields, (field) => field.value);
-    return values;
+    return transformFields(this.fields, (field) => field.value);
   }
 
   getErrors() {
-    const errors = transformFields(this.fields, (field) => {
+    return transformFields(this.fields, (field) => {
       if (find(field.value, (data) => data instanceof Field)) {
         return field.value;
       } else {
@@ -157,8 +156,6 @@ class Form {
         return transformFields.PASS;
       }
     });
-
-    return errors;
   }
 
   getTouches() {

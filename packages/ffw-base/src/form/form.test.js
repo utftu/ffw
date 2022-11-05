@@ -87,7 +87,7 @@ describe('form', () => {
       });
     });
   });
-  describe('getErrors() || .errors', () => {
+  describe.only('getErrors() || .errors', () => {
     it('shallow', () => {
       const form = new Form({
         initValues: {
