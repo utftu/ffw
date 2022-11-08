@@ -44,7 +44,7 @@ export default App;
 ### Using
 
 ```tsx
-import {useFfw} from 'ffw';
+import {useFfw} from 'packages/ffw-react';
 
 function User() {
   const form = useFfw(
@@ -67,7 +67,7 @@ export default User;
 or
 
 ```tsx
-import {useFfwField} from 'ffw';
+import {useFfwField} from 'packages/ffw-react';
 
 function Age() {
   const ageField = useFfwField('age');

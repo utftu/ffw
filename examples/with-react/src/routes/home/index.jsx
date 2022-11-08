@@ -1,4 +1,4 @@
-import {useInitFfw, FfwProvider} from 'ffw';
+import {useInitFfw, FfwProvider} from 'packages/ffw-react';
 import AgeInput from './age-input';
 import AgeListener from './age-listener';
 import GlobalListener from './global-listener';

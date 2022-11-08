@@ -1,4 +1,4 @@
-import {useFfw} from 'ffw';
+import {useFfw} from 'packages/ffw-react';
 
 function NameInput() {
   const form = useFfw('name');

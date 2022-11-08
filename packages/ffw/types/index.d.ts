@@ -1,14 +1,5 @@
-import FieldReact from './field-react';
-import useInitForm from './use-init-form';
-import useForm from './use-form';
-import useField from './use-field';
+import type Field from './field';
+import type Form from './form';
 
-export {
-  FieldReact as FwField,
-  useForm as useFfw,
-  useField as useFfwField,
-  useInitForm as useInitFfw,
-  useForm,
-  useField,
-  useInitForm,
-};
+type createFormProxy<TField extends Field = Field> = () => Form<TField>;
+export {Field, Form, Field as FfwField, Form as FfwForm};

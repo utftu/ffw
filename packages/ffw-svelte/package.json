@@ -1,6 +1,6 @@
 {
-  "name": "ffw",
-  "version": "1.0.27",
+  "name": "ffw-svelte",
+  "version": "1.0.14",
   "description": "",
   "type": "module",
   "types": "./dist/types/index.d.ts",
@@ -24,16 +24,17 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build2": "rollup -c ./relax.config.mjs",
-    "build": "rollup -c rollup.config.js",
-    "test": "echo \"Error: no test specified\""
-  },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "utftu": "^1.0.12"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "strangelove": "^1.0.8"
-  }
+    "ffw": "workspace:*"
+  },
+  "peerDependencies": {
+    "svelte": ">=3.0.0"
+  },
+  "devDependencies": {
+    "svelte": ">=3.0.0"
+  },
+  "author": "",
+  "license": "ISC"
 }

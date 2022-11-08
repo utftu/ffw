@@ -1,9 +1,9 @@
 {
-  "name": "ffw",
-  "version": "1.0.27",
+  "name": "ffw-react",
+  "version": "1.0.30",
   "description": "",
   "type": "module",
-  "types": "./dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "main": "./dist/cjs/index.js",
   "exports": {
     ".": {
@@ -24,16 +24,19 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build2": "rollup -c ./relax.config.mjs",
     "build": "rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\""
   },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "utftu": "^1.0.12"
-  },
   "dependencies": {
-    "strangelove": "^1.0.8"
+    "ffw": "workspace:*",
+    "utftu": "^1.0.4"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

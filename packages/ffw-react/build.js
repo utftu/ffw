@@ -1,6 +1,7 @@
 import esbuild from 'esbuild';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+import textReplace from 'esbuild-plugin-text-replace';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -25,8 +26,15 @@ esbuild.build({
   format: 'esm',
   minify: true,
   platform: 'node',
+  external: ['react', 'react-dom'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/prod.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/esm/prod.js'"]],
+    }),
+  ],
 });
 
 esbuild.build({
@@ -35,8 +43,15 @@ esbuild.build({
   format: 'esm',
   minify: false,
   platform: 'node',
+  external: ['react', 'react-dom'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/dev.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/esm/dev.js'"]],
+    }),
+  ],
 });
 
 esbuild.build({
@@ -45,8 +60,15 @@ esbuild.build({
   format: 'cjs',
   minify: true,
   platform: 'node',
+  external: ['react', 'react-dom'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/prod.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/cjs/prod.js'"]],
+    }),
+  ],
 });
 
 esbuild.build({
@@ -55,6 +77,13 @@ esbuild.build({
   format: 'cjs',
   minify: false,
   platform: 'node',
+  external: ['react', 'react-dom'],
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/dev.js'),
+  plugins: [
+    textReplace({
+      include: /.*/,
+      pattern: [["from 'ffw-base'", "from 'ffw-base/dist/cjs/dev.js'"]],
+    }),
+  ],
 });
