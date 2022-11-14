@@ -183,6 +183,16 @@ class Form {
     return this.getTouches();
   }
 
+  on(name, cb) {
+    this.ee.on(name, cb);
+
+    return () => this.ee.off(name, cb);
+  }
+
+  off(name, cb) {
+    return () => this.ee.off(name, cb);
+  }
+
   _errors = 0;
   _flatFields = new Set();
   addField(field) {

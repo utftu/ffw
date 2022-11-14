@@ -3,9 +3,9 @@
 import {it} from '@jest/globals';
 import {renderHook} from '@testing-library/react';
 import {Form} from 'ffw';
-import FormReact from '../form-react/form-react.js';
+import {createElement} from 'react';
 import '@testing-library/jest-dom';
-import {FfwProvider} from '../old';
+import {FfwProvider} from '../context.js';
 import useForm from './use-form.js';
 
 describe('use-form', () => {
@@ -17,9 +17,8 @@ describe('use-form', () => {
   it('context', () => {
     const form = new Form();
     const {result} = renderHook(() => useForm(form), {
-      wrapper: ({children}) => (
-        <FfwProvider value={form}>{children}</FfwProvider>
-      ),
+      wrapper: ({children}) =>
+        createElement(FfwProvider, {value: form}, children),
     });
     expect(result.current).toBe(form);
   });
