@@ -78,6 +78,26 @@ class Field {
     this.form.calls.add(this, name, () => this.ee.emit(name, newData));
     this.form.calls.add(this.form, '*', () => this.form.ee.emit('global'));
 
+    if (name === 'error') {
+      const oldError = prevData;
+      const error = newData;
+      if (error !== '' && oldError === '') {
+        this.form._errors++;
+        if (this.form._errors === 1) {
+          this.form.calls.add(this.form, 'valid', () =>
+            this.form.ee.emit('valid', false)
+          );
+        }
+      } else if (error === '' && oldError !== '') {
+        this.form._errors--;
+        if (this.form._errors === 0) {
+          this.form.calls.add(this.form, 'valid', () =>
+            this.form.ee.emit('valid', true)
+          );
+        }
+      }
+    }
+
     if (name === 'error' || name === 'touched') {
       if (oldErrorTouched === this.errorTouched) {
         return;
@@ -120,25 +140,25 @@ class Field {
 
   async validate() {
     const error = await this.test(this.data.value);
-    const oldError = this.error;
+    // const oldError = this.error;
 
     this.setError(error);
 
-    if (error !== '' && oldError === '') {
-      this.form._errors++;
-      if (this.form._errors === 1) {
-        this.form.calls.add(this.form, 'valid', () =>
-          this.form.ee.emit('valid', false)
-        );
-      }
-    } else if (error === '' && oldError !== '') {
-      this.form._errors--;
-      if (this.form._errors === 0) {
-        this.form.calls.add(this.form, 'valid', () =>
-          this.form.ee.emit('valid', true)
-        );
-      }
-    }
+    // if (error !== '' && oldError === '') {
+    //   this.form._errors++;
+    //   if (this.form._errors === 1) {
+    //     this.form.calls.add(this.form, 'valid', () =>
+    //       this.form.ee.emit('valid', false)
+    //     );
+    //   }
+    // } else if (error === '' && oldError !== '') {
+    //   this.form._errors--;
+    //   if (this.form._errors === 0) {
+    //     this.form.calls.add(this.form, 'valid', () =>
+    //       this.form.ee.emit('valid', true)
+    //     );
+    //   }
+    // }
 
     return error;
   }

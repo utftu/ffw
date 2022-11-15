@@ -1,14 +1,14 @@
-import {useFfw} from 'packages/ffw-react';
+import {useFields} from 'ffw-react';
 
 function AgeInput() {
-  const form = useFfw('age');
+  const [age] = useFields(['age']);
   console.log('-----', 'AgeInput');
 
   return (
     <div>
       <span>
         AgeInput: age = {''}
-        <input {...form.fields.age.getInput()} />
+        <input {...age.getInput()} />
       </span>
     </div>
   );

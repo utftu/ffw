@@ -58,5 +58,7 @@ describe('use-fields', () => {
       await waitTime();
     });
     expect(updateCount).toBe(2);
+    expect(result.current[0]).toBe(form.fields.name);
+    expect(result.current[1]).toBe(form.fields.age);
   });
 });

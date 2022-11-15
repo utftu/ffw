@@ -39,23 +39,20 @@ class Form {
     cb();
   }
 
-  createField(form, props = {}) {
-    return new Field({
-      form,
-      ...props,
-    });
+  createField(props = {}) {
+    return new Field(props);
   }
 
   _getFlatField(name) {
     if (!(name in this.fields)) {
-      this.addField(name, this.createField(this));
+      this.addField(name, this.createField({form: this}));
     }
     return this.fields[name];
   }
 
   _getFlatFieldOrCreate(target, name) {
     if (!target[name]) {
-      target[name] = this.createField(this, {name: name});
+      target[name] = this.createField({name, form: this});
     }
     return target[name];
   }
@@ -69,9 +66,6 @@ class Form {
 
     if (props.batch) {
       this.batch = props.batch;
-    }
-    if (props.createField) {
-      this.createField = (config) => props.createField(this, config);
     }
 
     const validateObj =

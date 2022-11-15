@@ -3,6 +3,8 @@ import path from 'node:path';
 import fs from 'node:fs';
 import textReplace from 'esbuild-plugin-text-replace';
 
+const externals = ['react', 'react-dom', 'yup'];
+
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 fs.cpSync(path.join(__dirname, 'types'), path.join(__dirname, 'dist/types'), {
@@ -26,7 +28,7 @@ esbuild.build({
   format: 'esm',
   minify: true,
   platform: 'node',
-  external: ['react', 'react-dom'],
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/prod.js'),
   plugins: [
@@ -43,7 +45,7 @@ esbuild.build({
   format: 'esm',
   minify: false,
   platform: 'node',
-  external: ['react', 'react-dom'],
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/dev.js'),
   plugins: [
@@ -60,7 +62,7 @@ esbuild.build({
   format: 'cjs',
   minify: true,
   platform: 'node',
-  external: ['react', 'react-dom'],
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/prod.js'),
   plugins: [
@@ -77,7 +79,7 @@ esbuild.build({
   format: 'cjs',
   minify: false,
   platform: 'node',
-  external: ['react', 'react-dom'],
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/dev.js'),
   plugins: [

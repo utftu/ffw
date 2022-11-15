@@ -1,14 +1,14 @@
-import {useFfw} from 'packages/ffw-react';
+import {useFields} from 'ffw-react';
 
 function NameInput() {
-  const form = useFfw('name');
+  const [name] = useFields(['name']);
   console.log('-----', 'NameInput');
 
   return (
     <div>
       <span>
         NameInput: name = {''}
-        <input {...form.f.name.getInput()} />
+        <input {...name.getInput()} />
       </span>
     </div>
   );

@@ -1,7 +1,7 @@
-import {useFfw} from 'packages/ffw-react';
+import {useFields} from 'ffw-react';
 
 function GlobalListener() {
-  const form = useFfw();
+  const [form] = useFields((form) => [form]);
   console.log('-----', 'GlobalListener');
 
   return (

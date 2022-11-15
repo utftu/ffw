@@ -50,6 +50,6 @@
   },
   "dependencies": {
     "esbuild-ifdef": "^0.1.8",
-    "utftu": "^1.0.4"
+    "utftu": "^1.0.13"
   }
 }

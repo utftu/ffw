@@ -1,11 +1,11 @@
 /** @jest-environment jsdom */
 
-import {it} from '@jest/globals';
+import {it, describe} from '@jest/globals';
 import {renderHook} from '@testing-library/react';
 import {Form} from 'ffw';
 import {createElement} from 'react';
 import '@testing-library/jest-dom';
-import {FfwProvider} from '../context.js';
+import {FfwProvider} from '../context/context.js';
 import useForm from './use-form.js';
 
 describe('use-form', () => {

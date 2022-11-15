@@ -13,7 +13,7 @@ function prepareDeps(deps, form) {
   return deps;
 }
 
-function useFields(deps, customForm) {
+function useFields(deps = [], customForm) {
   const form = useForm(customForm);
   const fields = prepareDeps(deps, form);
 

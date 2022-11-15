@@ -1,12 +1,12 @@
-import {useFfw} from 'packages/ffw-react';
+import {useFields} from 'ffw-react';
 
 function AgeListener() {
-  const form = useFfw('age');
+  const [age] = useFields(['age']);
   console.log('-----', 'AgeListener');
 
   return (
     <div>
-      <span>AgeListener: age = {form.f.age.value}</span>
+      <span>AgeListener: age = {age.value}</span>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import {useFormContext} from '../context.js';
+import {useFormContext} from '../context/context.js';
 
 function useForm(customForm) {
   const formContext = useFormContext();

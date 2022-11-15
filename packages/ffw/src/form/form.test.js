@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import {jest} from '@jest/globals';
 import Field from '../field/field.js';
 import waitTime from 'utftu/wait-time.js';
-import {prepareYup} from '../validators/yup.js';
+import prepareYup from '../validators/yup.js';
 import Form from './form.js';
 
 describe('form', () => {

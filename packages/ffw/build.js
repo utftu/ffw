@@ -4,6 +4,8 @@ import fs from 'fs';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
+const externals = ['yup'];
+
 fs.cpSync(path.join(__dirname, 'types'), path.join(__dirname, 'dist/types'), {
   recursive: true,
 });
@@ -25,6 +27,7 @@ esbuild.build({
   format: 'esm',
   minify: true,
   platform: 'node',
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/prod.js'),
 });
@@ -35,6 +38,7 @@ esbuild.build({
   format: 'esm',
   minify: false,
   platform: 'node',
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/esm/dev.js'),
 });
@@ -45,6 +49,7 @@ esbuild.build({
   format: 'cjs',
   minify: true,
   platform: 'node',
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/prod.js'),
 });
@@ -55,6 +60,7 @@ esbuild.build({
   format: 'cjs',
   minify: false,
   platform: 'node',
+  external: externals,
   watch: !!process.env.WATCH,
   outfile: path.join(__dirname, './dist/cjs/dev.js'),
 });

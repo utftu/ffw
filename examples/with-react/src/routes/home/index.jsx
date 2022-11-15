@@ -1,31 +1,35 @@
-import {useInitFfw, FfwProvider} from 'packages/ffw-react';
+import {useInitForm, FfwProvider, prepareYup} from 'ffw-react';
 import AgeInput from './age-input';
 import AgeListener from './age-listener';
+import FormValid from './form-valid';
 import GlobalListener from './global-listener';
 import NameInput from './name-input';
+import * as yup from 'yup';
 
 function Home() {
-  const ffw = useInitFfw({
+  const form = useInitForm({
     initValues: {
       name: 'aleks',
       age: 42,
     },
-    options: {
-      checkPrevData: false,
-    },
+    validateSchema: prepareYup({
+      age: yup.number().required(),
+    }),
   });
-  globalThis.form = ffw;
+
+  globalThis.form = form;
   return (
-    <FfwProvider value={ffw}>
+    <FfwProvider value={form}>
       <div>
         <AgeInput />
         <AgeListener />
         <GlobalListener />
         <NameInput />
+        <FormValid />
         <div
           onClick={() => {
-            ffw.f.name.set('1');
-            ffw.f.age.set('2');
+            form.f.name.set('1');
+            form.f.age.set('2');
           }}
         >
           click

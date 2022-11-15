@@ -13,8 +13,8 @@ class FormSvelte extends Form {
           function handle() {
             cb(form.valid);
           }
-          form.emitter.on('ffw.valid', handle);
-          return () => form.emitter.off('ffw.valid', handle);
+          form.emitter.on('valid', handle);
+          return () => form.emitter.off('valid', handle);
         },
       },
     };

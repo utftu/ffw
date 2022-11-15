@@ -5,15 +5,18 @@ import useSubscribe from '../use-subscribe/use-subscribe.js';
 function useFormValid(customForm) {
   const form = useForm(customForm);
 
-  const subscribe = useCallback((listener) => {
-    return form.on('valid', listener);
-  }, form);
+  const subscribe = useCallback(
+    (listener) => {
+      return form.on('valid', listener);
+    },
+    [form]
+  );
 
   const get = useCallback(() => {
     return form.getValid();
-  }, []);
+  }, [form]);
 
-  const value = useSubscribe(subscribe, get);
+  const value = useSubscribe(get, subscribe);
 
   return value;
 }

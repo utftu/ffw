@@ -12,7 +12,7 @@ function yupToTest(yupSchema) {
   };
 }
 
-export const prepareYup = (structure) => {
+function prepareYup(structure) {
   return transform(
     structure,
     (yupSchema) => {
@@ -20,4 +20,6 @@ export const prepareYup = (structure) => {
     },
     (value) => value instanceof yup.BaseSchema
   );
-};
+}
+
+export default prepareYup;
