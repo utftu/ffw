@@ -1,20 +1,24 @@
 import {Form} from 'packages/ffw';
+import FieldSvelte from './field-svelte.js';
 
 class FormSvelte extends Form {
+  createField(props) {
+    new FieldSvelte(props);
+  }
   constructor(...args) {
     super(...args);
 
     const form = this;
 
     this.svelte = this.s = {
+      subscribe(cb) {
+        cb(form);
+        return form.on('*', () => cb(form));
+      },
       valid: {
         subscribe(cb) {
           cb(form.valid);
-          function handle() {
-            cb(form.valid);
-          }
-          form.emitter.on('valid', handle);
-          return () => form.emitter.off('valid', handle);
+          return form.on('valid', () => cb(form.valid));
         },
       },
     };

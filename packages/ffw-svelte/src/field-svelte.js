@@ -21,11 +21,11 @@ class FieldSvelte extends Field {
         },
       };
     }
-    this.s = this.svelte = {
-      makeStore,
+    this.makeStore = makeStore;
+    this.svelte = this.s = {
       subscribe(cb) {
         cb(field);
-        return field.subscribe('*', cb);
+        return field.on('*', cb);
       },
       touched: makeStore('touched'),
       error: makeStore('error'),
@@ -35,15 +35,13 @@ class FieldSvelte extends Field {
         },
         subscribe(cb) {
           cb(field.value);
-          return field.subscribe('value', () => {
-            cb(field.value);
-          });
+          return field.on('value', () => cb(field.value));
         },
       },
       errorTouched: {
         subscribe: (cb) => {
           cb(field.errorTouched);
-          return field.subscribe('errorTouched', (name) => {
+          return field.on('errorTouched', () => {
             cb(field.errorTouched);
           });
         },
