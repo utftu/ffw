@@ -1,4 +1,4 @@
-import {Form} from 'packages/ffw';
+import {Form} from 'ffw';
 import FieldSvelte from './field-svelte.js';
 
 class FormSvelte extends Form {

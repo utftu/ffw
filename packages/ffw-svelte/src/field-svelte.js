@@ -1,4 +1,4 @@
-import {Field} from 'packages/ffw';
+import {Field} from 'ffw';
 
 class FieldSvelte extends Field {
   svelte = null;
