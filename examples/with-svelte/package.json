@@ -24,7 +24,7 @@
     "vite": "^3.2.3"
   },
   "dependencies": {
-    "ffw-s": "file:../../packages/ffw-svelte",
+    "ffw-svelte": "file:../../packages/ffw-svelte",
     "yup": "^0.32.11"
   },
   "type": "module"

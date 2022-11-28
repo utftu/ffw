@@ -3,7 +3,7 @@ import FieldSvelte from './field-svelte.js';
 
 class FormSvelte extends Form {
   createField(props) {
-    new FieldSvelte(props);
+    return new FieldSvelte(props);
   }
   constructor(...args) {
     super(...args);

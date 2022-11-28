@@ -4,4 +4,4 @@
   const {value} = field.s;
 </script>
 
-<input on:blur={field.onBlur} bind:value={$value}/>
+<input on:blur={field.onBlur} bind:value={$value} />

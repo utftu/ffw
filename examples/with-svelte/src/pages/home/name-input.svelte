@@ -1,13 +1,13 @@
 <script>
-  import {getFfw} from 'ffw-s'
-  import FfwInput from 'src/components/ffw-input.svelte'
-  const ffw = getFfw()
+  import {getFfw} from 'ffw-svelte';
+  import FfwInput from 'src/components/ffw-input.svelte';
+  const ffw = getFfw();
 </script>
 
 <div>
   <span>
-    NameInput: name = {""}
+    NameInput: name = {''}
 
-    <FfwInput field={ffw.fields.name}/>
+    <FfwInput field={ffw.fields.name} />
   </span>
 </div>

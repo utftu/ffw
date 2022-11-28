@@ -1,12 +1,8 @@
 import initForm from './init-form';
 import useForm from './use-form';
 import {setContext, getContext} from 'svelte';
+import {prepareYup} from 'ffw';
 
-const preparedSetContext = (form) => setContext('ffw-s', form);
-const preparedGetContext = () => getContext('ffw-s');
-export {
-  initForm as initFFw,
-  useForm as getFfw,
-  preparedSetContext as setFfwContext,
-  preparedGetContext as getFfwContext,
-};
+export const setFfwContext = (form) => setContext('ffw-s', form);
+export const getFfwContext = () => getContext('ffw-s');
+export {prepareYup, initForm as initFFw, useForm as getFfw};

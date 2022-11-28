@@ -1,0 +1,7 @@
+module.exports = {
+  proseWrap: 'always',
+  singleQuote: true,
+  jsxSingleQuote: true,
+  bracketSpacing: false,
+  semi: true,
+};

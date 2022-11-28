@@ -1,8 +1,8 @@
 <script>
-  import {getFfw} from 'ffw-s'
-  const ffw = getFfw()
+  import {getFfw} from 'ffw-svelte';
+  const ffw = getFfw();
 
-  const {value} = ffw.f.age.s
+  const {value} = ffw.f.age.s;
 </script>
 
 <div>

@@ -11,7 +11,7 @@ function transformFields(fields, getProperty) {
     (field) => {
       const newValue = getProperty(field);
       if (newValue === transformFields.PASS) {
-        return transformFields.PASS;
+        return transform.PASS;
       }
       return transformFields(newValue, getProperty);
     },

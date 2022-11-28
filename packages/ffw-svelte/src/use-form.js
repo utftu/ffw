@@ -1,7 +1,7 @@
-import {getContext} from 'svelte';
+import {getFfwContext} from './context.js';
 
 function useForm() {
-  return getContext('ffw-s');
+  return getFfwContext();
 }
 
 export default useForm;
