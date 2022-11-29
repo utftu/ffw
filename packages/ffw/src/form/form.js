@@ -43,18 +43,11 @@ class Form {
     return new Field(props);
   }
 
-  _getFlatField(name) {
-    if (!(name in this.fields)) {
-      this.addField(name, this.createField({form: this}));
+  _getFlatFieldOrCreate(name, props) {
+    if (!this.fields[name]) {
+      this.fields[name] = this.createField({name, form: this, ...props});
     }
     return this.fields[name];
-  }
-
-  _getFlatFieldOrCreate(target, name) {
-    if (!target[name]) {
-      target[name] = this.createField({name, form: this});
-    }
-    return target[name];
   }
 
   constructor(props = {}) {
@@ -63,6 +56,13 @@ class Form {
     this.options = {...this.options, ...props.options};
     this.onSubmit = props.onSubmit ?? (() => {});
     this.initValues = props.initValues ?? {};
+
+    for (const fieldName in this.initValues) {
+      const defaultValue = this.initValues[fieldName];
+      this._getFlatFieldOrCreate(fieldName, {
+        value: defaultValue,
+      });
+    }
 
     if (props.batch) {
       this.batch = props.batch;
@@ -75,15 +75,8 @@ class Form {
 
     for (const fieldName in validateObj) {
       const test = validateObj[fieldName];
-      const field = this._getFlatFieldOrCreate(this.fields, fieldName);
+      const field = this._getFlatFieldOrCreate(fieldName);
       field.test = test;
-    }
-
-    for (const fieldName in this.initValues) {
-      const defaultValue = this.initValues[fieldName];
-      const field = this._getFlatFieldOrCreate(this.fields, fieldName);
-      field.initParams.value = defaultValue;
-      field.data.value = defaultValue;
     }
 
     if (this.options.validateOnMount) {

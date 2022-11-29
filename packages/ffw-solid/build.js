@@ -15,7 +15,7 @@ function copyFile(source, target) {
 copyFile('../../static/package-cjs.json', './dist/cjs/package.json');
 copyFile('../../static/path.cjs', './dist/cjs/index.js');
 
-const externals = ['svelte', 'yup'];
+const externals = ['solid-js', 'yup'];
 
 const baseConfig = {
   entryPoints: [new URL('./src/index.js', import.meta.url).pathname],

@@ -2,11 +2,11 @@ import {Form} from 'ffw';
 import FieldSvelte from './field-svelte.js';
 
 class FormSvelte extends Form {
-  createField(props) {
-    return new FieldSvelte(props);
+  createField(config) {
+    return new FieldSvelte(config);
   }
-  constructor(...args) {
-    super(...args);
+  constructor(config) {
+    super(config);
 
     const form = this;
 

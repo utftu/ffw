@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "node ./scripts/build.js",
-    "format": "prettier --write .",
+    "format": "prettier --plugin-search-dir=. --write .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "types": "node ./scripts/declare.js",
