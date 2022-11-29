@@ -4,7 +4,7 @@ class FieldReact extends Field {
   getInput = () => {
     return {
       value: this.value,
-      onInput: this.onChange,
+      onInput: this.onInput,
       onBlur: this.onBlur,
     };
   };
