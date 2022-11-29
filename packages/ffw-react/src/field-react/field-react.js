@@ -4,7 +4,7 @@ class FieldReact extends Field {
   getInput = () => {
     return {
       value: this.value,
-      onChange: this.onChange,
+      onInput: this.onChange,
       onBlur: this.onBlur,
     };
   };
@@ -12,12 +12,7 @@ class FieldReact extends Field {
   getSelect = () => {
     return {
       value: this.value,
-      onChange: (value) =>
-        this.onChange({
-          target: {
-            value,
-          },
-        }),
+      onChange: (value) => this.getSelect(value),
       onBlur: this.onBlur,
     };
   };

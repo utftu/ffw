@@ -166,7 +166,7 @@ describe('field', () => {
       });
     });
 
-    describe('onChange()', () => {
+    describe('onInput()', () => {
       it('set value', async () => {
         const form = new Form({
           initValues: {
@@ -177,7 +177,7 @@ describe('field', () => {
         const listener = jest.fn();
         form.fields.age.on('value', listener);
 
-        form.fields.age.onChange({
+        form.fields.age.onInput({
           target: {
             value: '43',
           },
@@ -199,7 +199,7 @@ describe('field', () => {
             age: yup.number().required(),
           }),
         });
-        form.fields.age.onChange({
+        form.fields.age.onInput({
           target: {
             value: 'invalid',
           },
@@ -219,7 +219,7 @@ describe('field', () => {
             age: yup.number().required(),
           }),
         });
-        form.fields.age.onChange({
+        form.fields.age.onInput({
           target: {
             value: 'invalid',
           },

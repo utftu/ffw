@@ -140,25 +140,8 @@ class Field {
 
   async validate() {
     const error = await this.test(this.data.value);
-    // const oldError = this.error;
 
     this.setError(error);
-
-    // if (error !== '' && oldError === '') {
-    //   this.form._errors++;
-    //   if (this.form._errors === 1) {
-    //     this.form.calls.add(this.form, 'valid', () =>
-    //       this.form.ee.emit('valid', false)
-    //     );
-    //   }
-    // } else if (error === '' && oldError !== '') {
-    //   this.form._errors--;
-    //   if (this.form._errors === 0) {
-    //     this.form.calls.add(this.form, 'valid', () =>
-    //       this.form.ee.emit('valid', true)
-    //     );
-    //   }
-    // }
 
     return error;
   }
@@ -173,7 +156,7 @@ class Field {
     return () => this.ee.off(name, cb);
   }
 
-  onChange = (event) => {
+  onInput = (event) => {
     this.set(event.target.value);
   };
 
