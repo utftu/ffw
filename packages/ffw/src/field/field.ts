@@ -6,7 +6,7 @@ const defaultTest = async () => '';
 type TestFunc = (value: any) => Promise<string>;
 type Listener = any;
 
-class Field<TValue, TForm extends Form<any>> {
+class Field<TValue = any, TForm extends Form<any> = any> {
   ee = ee();
   data: {
     value: TValue;

@@ -19,7 +19,7 @@ function transformFields(fields, getProperty) {
   );
 }
 
-class Form<TField> {
+class Form<TField extends Field<any, any> {
   options = {
     validateOnChange: true,
     validateOnBlur: true,
