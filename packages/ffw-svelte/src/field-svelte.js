@@ -7,7 +7,7 @@ function createStore(name, field) {
     },
     subscribe(cb) {
       cb(field.data[name]);
-      return field.subscribe(name, () => {
+      return field.on(name, () => {
         cb(field.data[name]);
       });
     },
@@ -29,13 +29,13 @@ class FieldSvelte extends Field {
       touched: createStore('touched', field),
       error: createStore('error', field),
       value: {
-        ...createStore('value'),
+        ...createStore('value', field),
         set(newValue) {
           field.set(newValue);
         },
       },
       errorTouched: {
-        subscribe: createStore('errorTouched').subscribe,
+        subscribe: createStore('errorTouched', field).subscribe,
       },
     };
   }

@@ -16,6 +16,7 @@
     }),
   });
   globalThis.form = ffw;
+  console.log('ffw', ffw);
 
   setFfwContext(ffw);
   const valid = ffw.s.valid;

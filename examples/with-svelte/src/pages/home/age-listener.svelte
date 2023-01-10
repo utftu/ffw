@@ -1,6 +1,6 @@
 <script>
-  import {getFfw} from 'ffw-svelte';
-  const ffw = getFfw();
+  import {getFfwContext} from 'ffw-svelte';
+  const ffw = getFfwContext();
 
   const {value} = ffw.f.age.s;
 </script>

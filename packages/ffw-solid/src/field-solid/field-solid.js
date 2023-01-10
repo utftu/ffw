@@ -28,21 +28,16 @@ class FieldSolid extends Field {
   }
   getInput = () => {
     return {
-      value: this.value,
-      onChange: this.onChange,
+      value: this.solid.value(),
+      onInput: this.onInput,
       onBlur: this.onBlur,
     };
   };
 
   getSelect = () => {
     return {
-      value: this.value,
-      onChange: (value) =>
-        this.onChange({
-          target: {
-            value,
-          },
-        }),
+      value: this.solid.value(),
+      onChange: (value) => this.set(value),
       onBlur: this.onBlur,
     };
   };
