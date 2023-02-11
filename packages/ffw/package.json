@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "utftu": "^1.0.12"
+    "utftu": "^1.0.15"
   },
   "dependencies": {
     "strangelove": "^1.0.8"

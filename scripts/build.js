@@ -6,9 +6,9 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const entries = [
   {name: 'ffw', external: ['yup']},
-  {name: 'ffw-react', external: ['react', 'react-dom', 'yup']},
-  {name: 'ffw-svelte', external: ['svelte', 'yup']},
-  {name: 'ffw-solid', external: ['solid-js', 'yup']},
+  // {name: 'ffw-react', external: ['react', 'react-dom', 'yup']},
+  // {name: 'ffw-svelte', external: ['svelte', 'yup']},
+  // {name: 'ffw-solid', external: ['solid-js', 'yup']},
 ];
 
 function formatPackageExpoerts(packageDir) {

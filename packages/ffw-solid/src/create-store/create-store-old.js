@@ -1,7 +1,7 @@
 import {createSignal, onCleanup} from 'solid-js';
 
 function createStore(get, subscribe) {
-  const [state, setState] = createSignal(get(), {equals: false});
+  const [state, setState] = createSignal(get());
 
   const unsubscribe = subscribe((value) => {
     setState(value);

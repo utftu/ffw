@@ -8,6 +8,7 @@ import Form from '../form/form.js';
 import * as yup from 'yup';
 import waitTime from 'utftu/wait-time.js';
 import prepareYup from '../validators/yup.js';
+import {describe} from '@jest/globals';
 
 const formMock = new Form({});
 
@@ -305,6 +306,30 @@ describe('field', () => {
       expect(errorListener.mock.calls.length).toBe(2);
       expect(touchedListener.mock.calls.length).toBe(1);
       expect(errorTouchedListener.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('setData()', () => {
+    it('checkPrevData: false(default)', () => {
+      const form = new Form({
+        initValues: {
+          name: 'Aleksey',
+        },
+      });
+      const wasSet = form.fields.name.setData('Aleksey');
+      expect(wasSet).toBe(true);
+    });
+    it('checkPrevData: true', () => {
+      const form = new Form({
+        initValues: {
+          name: 'Aleksey',
+        },
+        options: {
+          checkPrevData: true,
+        },
+      });
+      const wasSet = form.fields.name.setData('Aleksey');
+      expect(wasSet).toBe(false);
     });
   });
 });

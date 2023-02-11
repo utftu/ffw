@@ -1,3 +1,4 @@
+import {plugins} from '@swc/core';
 import ee from 'utftu/ee.js';
 import DelayedCalls from '../delayed-calls/delayed-calls.js';
 import Field from '../field/field.js';
@@ -23,17 +24,22 @@ class Form {
   options = {
     validateOnChange: true,
     validateOnBlur: true,
-    validateOnMount: false,
-    checkPrevData: true,
+    checkPrevData: false,
   };
   fields = {};
   f = null;
-  validateSchema = {};
   onSubmit = () => {};
-  initValues = {};
-
   calls = new DelayedCalls();
   ee = ee();
+
+  notify(name, value) {
+    this.calls.add(this, name, () => {
+      this.ee.emit(name, value);
+    });
+    if (name !== 'global') {
+      this.notify('global', [this, name, value]);
+    }
+  }
 
   batch(cb) {
     cb();
@@ -50,8 +56,15 @@ class Form {
     return this.fields[name];
   }
 
-  constructor(props = {}) {
+  constructor(
+    props = {
+      plugins: [],
+    }
+  ) {
+    const plugins = props.plugins || [];
     this.f = this.fields;
+
+    plugins.forEach((plugin) => plugin(this));
 
     this.options = {...this.options, ...props.options};
     this.onSubmit = props.onSubmit ?? (() => {});
@@ -79,9 +92,9 @@ class Form {
       field.test = test;
     }
 
-    if (this.options.validateOnMount) {
-      this.validate();
-    }
+    // if (this.options.validateOnMount) {
+    //   this.validate();
+    // }
   }
 
   async validate() {

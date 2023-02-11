@@ -6,6 +6,22 @@ class Field {
   form = null;
 
   ee = ee();
+  // eeSync = ee();
+
+  notify(name, value) {
+    // data
+    // this.eeSync.emit(name, value);
+    this.form.calls.add(this, name, () => {
+      this.ee.emit(name, value);
+    });
+    //global
+    // this.eeSync.emit('global', [this, name, value]);
+    this.form.calls.add(this, 'global', () => {
+      this.ee.emit('global', [this, name, value]);
+    });
+    this.form.notify('global', [this, name, value]);
+  }
+
   data = {
     value: '',
     error: '',
@@ -70,13 +86,15 @@ class Field {
 
   setData(name, newData) {
     const prevData = this.data[name];
-    if (prevData === newData) {
-      return;
+    if (this.form.options.checkPrevData && prevData === newData) {
+      return false;
     }
     const oldErrorTouched = this.errorTouched;
     this.data[name] = newData;
-    this.form.calls.add(this, name, () => this.ee.emit(name, newData));
-    this.form.calls.add(this.form, '*', () => this.form.ee.emit('global'));
+    // const
+    this.notify(name, newData);
+    // this.form.calls.add(this, name, () => this.ee.emit(name, newData));
+    // this.form.calls.add(this.form, '*', () => this.form.ee.emit('global'));
 
     if (name === 'error') {
       const oldError = prevData;
@@ -84,28 +102,32 @@ class Field {
       if (error !== '' && oldError === '') {
         this.form._errors++;
         if (this.form._errors === 1) {
-          this.form.calls.add(this.form, 'valid', () =>
-            this.form.ee.emit('valid', false)
-          );
+          this.form.notify('valid', false);
+          // this.form.calls.add(this.form, 'valid', () =>
+          //   this.form.ee.emit('valid', false)
+          // );
         }
       } else if (error === '' && oldError !== '') {
         this.form._errors--;
         if (this.form._errors === 0) {
-          this.form.calls.add(this.form, 'valid', () =>
-            this.form.ee.emit('valid', true)
-          );
+          this.form.notify('valid', true);
+          // this.form.calls.add(this.form, 'valid', () =>
+          //   this.form.ee.emit('valid', true)
+          // );
         }
       }
     }
 
     if (name === 'error' || name === 'touched') {
-      if (oldErrorTouched === this.errorTouched) {
-        return;
+      if (oldErrorTouched !== this.errorTouched) {
+        this.notify('errorTouched', this.errorTouched);
+        // this.form.calls.add(this, 'errorTouched', () =>
+        //   this.ee.emit('errorTouched', this.errorTouched)
+        // );
       }
-      this.form.calls.add(this, 'errorTouched', () =>
-        this.ee.emit('errorTouched', this.errorTouched)
-      );
     }
+
+    return true;
   }
 
   update() {
