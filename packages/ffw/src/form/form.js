@@ -1,4 +1,3 @@
-import {plugins} from '@swc/core';
 import ee from 'utftu/ee.js';
 import DelayedCalls from '../delayed-calls/delayed-calls.js';
 import Field from '../field/field.js';

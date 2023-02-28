@@ -13,10 +13,10 @@ function createStore(name, value, ee) {
 function transformForm(form) {
   form.solid = {};
   form.solid.makeStore = (name, value) => {
-    form.solid[name] = createStore(name, value, ee);
+    form.solid[name] = createStore(name, value, form.ee);
   };
-  form.svelte.makeStore('valid', form.valid);
-  form.svelte.makeStore('global', null);
+  form.solid.makeStore('valid', form.valid);
+  form.solid.makeStore('global', null);
 
   const oldCreateField = form.createField;
   form.createField = function (...args) {
@@ -26,20 +26,20 @@ function transformForm(form) {
 }
 
 function transformField(field) {
-  field.svelte = {};
-  field.svelte.makeWriteStore = (name, value) =>
-    makeReadStore(field.svelte, field.ee, name, value, () =>
-      field.setData(name, value)
-    );
+  field.solid = {};
+  field.solid.makeStore = (name, value) => {
+    form.solid[name] = createStore(name, value, field.ee);
+  };
 
   for (const name in data) {
-    field.nanostores.makeWriteStore(name, data[name]);
+    field.solid.makeStore(name, data[name]);
   }
-  field.svelte.errorTouched = makeWriteStore(
-    field.svelte,
-    field.ee,
-    'errorTouched',
-    field.errorTouched
-  );
-  field.svelte.global = makeWriteStore(field.svelte, field.ee, 'global', null);
+  field.solid.makeStore('errorTouched', field.errorTouched);
+  field.solid.makeStore('global', null);
 }
+
+function addSolid(form) {
+  transformForm(form);
+}
+
+export default addSolid;
