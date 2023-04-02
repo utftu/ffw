@@ -1,5 +1,12 @@
-import {useEffect} from 'react';
-import useForceUpdate from 'utftu/use-force-update.js';
+import {useCallback, useEffect, useState} from 'react';
+
+function useForceUpdate() {
+  const [, forceUpdate] = useState({})
+
+  return useCallback(() => {
+    forceUpdate({})
+  }, [])
+}
 
 function useSubscribeClient(get, subscribe) {
   const forceUpdate = useForceUpdate();

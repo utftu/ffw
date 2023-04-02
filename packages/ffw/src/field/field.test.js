@@ -1,14 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
 import Field from './field.js';
-import {jest, expect} from '@jest/globals';
+import {vi, expect, it, describe} from 'vitest'
 import Form from '../form/form.js';
 import * as yup from 'yup';
 import {waitTime} from 'utftu/wait-time';
 import {prepareYup} from '../validators/yup.js';
-import {describe} from '@jest/globals';
 
 const formMock = new Form({});
 
@@ -21,6 +16,7 @@ const ageFieldParams = {
 describe('field', () => {
   describe('init', () => {
     it('default params', () => {
+      debugger
       const field = new Field({
         form: formMock,
       });
@@ -44,7 +40,7 @@ describe('field', () => {
   });
   it('set()', async () => {
     const field = new Field(ageFieldParams);
-    const listener = jest.fn();
+    const listener = vi.fn();
     field.on('value', listener);
     field.set(43);
 
@@ -56,7 +52,7 @@ describe('field', () => {
 
   it('setError()', async () => {
     const field = new Field(ageFieldParams);
-    const listener = jest.fn();
+    const listener = vi.fn();
     field.on('error', listener);
     field.setError('Wrong value');
 
@@ -68,7 +64,7 @@ describe('field', () => {
 
   it('setTouched()', async () => {
     const field = new Field(ageFieldParams);
-    const listener = jest.fn();
+    const listener = vi.fn();
     field.on('touched', listener);
     field.setTouched(true);
 
@@ -128,7 +124,7 @@ describe('field', () => {
           },
           validateSchema: prepareYup({}),
         });
-        const listener = jest.fn();
+        const listener = vi.fn();
         form.fields.age.on('touched', listener);
 
         form.fields.age.onBlur();
@@ -175,7 +171,7 @@ describe('field', () => {
           },
           validateSchema: prepareYup({}),
         });
-        const listener = jest.fn();
+        const listener = vi.fn();
         form.fields.age.on('value', listener);
 
         form.fields.age.onInput({
@@ -239,7 +235,7 @@ describe('field', () => {
         }),
       });
       const field = form.fields.age;
-      const listener = jest.fn();
+      const listener = vi.fn();
       field.on('errorTouched', listener);
 
       expect(field.errorTouched).toBe('');
@@ -275,10 +271,10 @@ describe('field', () => {
         }),
       });
       const field = form.f.age;
-      const valueListener = jest.fn();
-      const errorListener = jest.fn();
-      const touchedListener = jest.fn();
-      const errorTouchedListener = jest.fn();
+      const valueListener = vi.fn();
+      const errorListener = vi.fn();
+      const touchedListener = vi.fn();
+      const errorTouchedListener = vi.fn();
 
       field.on('value', valueListener);
       field.on('error', errorListener);

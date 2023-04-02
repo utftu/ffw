@@ -1,9 +1,8 @@
 import * as yup from 'yup';
-import {jest} from '@jest/globals';
 import Field from '../field/field.js';
-import {waitTime} from 'utftu/wait-time';
 import {prepareYup} from '../validators/yup.js';
 import Form from './form.js';
+import {vi, expect, it, describe} from 'vitest'
 
 describe('form', () => {
   it('initValues', () => {
@@ -64,7 +63,7 @@ describe('form', () => {
     });
   });
   it('onSubmit()', async () => {
-    const submitListener = jest.fn();
+    const submitListener = vi.fn();
     const form = new Form({
       initValues: {
         age: 42,

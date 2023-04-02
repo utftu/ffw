@@ -55,7 +55,7 @@ function transformForm(form) {
   };
 }
 
-function addSvelte(form) {
+export function addSvelte(form) {
   transformForm(form);
 }
 

@@ -35,6 +35,6 @@ function transformForm(form) {
   };
 }
 
-function addNanostores() {
+export function addNanostores(form) {
   transformForm(form);
 }

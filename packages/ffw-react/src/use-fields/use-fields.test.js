@@ -5,7 +5,7 @@ import {it, describe, jest} from '@jest/globals';
 import '@testing-library/jest-dom';
 import {Form} from 'ffw';
 import waitTime from 'utftu/wait-time';
-import useFields from './use-fields.js';
+import {useFields} from './use-fields.js';
 
 describe('use-fields', () => {
   it('init func', () => {

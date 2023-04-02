@@ -1,6 +1,6 @@
 import createStore from './create-store/create-store.js';
 
-function createStore(name, value, ee) {
+function createConnectedStore(name, value, ee) {
   return createStore(
     () => value,
     (cb) => {
@@ -13,7 +13,7 @@ function createStore(name, value, ee) {
 function transformForm(form) {
   form.solid = {};
   form.solid.makeStore = (name, value) => {
-    form.solid[name] = createStore(name, value, form.ee);
+    form.solid[name] = createConnectedStore(name, value, form.ee);
   };
   form.solid.makeStore('valid', form.valid);
   form.solid.makeStore('global', null);
@@ -28,7 +28,7 @@ function transformForm(form) {
 function transformField(field) {
   field.solid = {};
   field.solid.makeStore = (name, value) => {
-    form.solid[name] = createStore(name, value, field.ee);
+    form.solid[name] = createConnectedStore(name, value, field.ee);
   };
 
   for (const name in data) {
@@ -38,8 +38,6 @@ function transformField(field) {
   field.solid.makeStore('global', null);
 }
 
-function addSolid(form) {
+export function addSolid(form) {
   transformForm(form);
 }
-
-export default addSolid;

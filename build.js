@@ -22,19 +22,30 @@ class PackageConfig {
 const packages = [
   new PackageConfig({
     name: 'ffw',
-    external: ['yup'],
+    external: [],
   }),
-  // {
-  //   name: 'ffw',
-  //   entry: './packages/ffw/src/index.js',
-  // },
+  new PackageConfig({
+    name: 'ffw-nanostores',
+    external: ['ffw', 'nanostores'],
+  }),
+  new PackageConfig({
+    name: 'ffw-solid',
+    external: ['ffw', 'solid-js'],
+  }),
+  new PackageConfig({
+    name: 'ffw-svelte',
+    external: ['ffw', 'svelte'],
+  }),
+  new PackageConfig({
+    name: 'ffw-react',
+    external: ['ffw', 'react'],
+  }),
 ];
 
 for (const {name, entry, dir, external} of packages) {
   await build({
     ...defineConfig({
       build: {
-        target: 'esnext',
         outDir: `${dir}/dist`,
         name,
         lib: {

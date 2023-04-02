@@ -79,7 +79,7 @@ class Form {
     const errors = await Promise.all(
       [...this._flatFields].map((field) => field.validate())
     );
-    console.log('-----', 'errors123', errors);
+
     return errors.every((error) => error === '');
   }
 

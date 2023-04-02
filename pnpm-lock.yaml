@@ -8,6 +8,7 @@ importers:
       '@swc/core': ^1.3.25
       '@swc/helpers': ^0.4.14
       '@testing-library/react': ^13.3.0
+      '@vitest/coverage-istanbul': ^0.29.8
       esbuild: ^0.14.48
       esbuild-plugin-text-replace: ^1.2.0
       formik: ^2.2.9
@@ -36,6 +37,7 @@ importers:
       '@swc/core': 1.3.35
       '@swc/helpers': 0.4.14
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
+      '@vitest/coverage-istanbul': 0.29.8_vitest@0.29.8
       esbuild: 0.14.54
       esbuild-plugin-text-replace: 1.2.0
       formik: 2.2.9_react@18.2.0
@@ -1828,6 +1830,22 @@ packages:
     resolution: {integrity: sha512-pet5WJ9U8yPVRhkwuEIp5ktAeAqRZOq4UdAyWLWzxbtpyXnzbtLdKiXAjJzi/KLmPGS9wk86lUFWZFN6sISo4g==}
     dependencies:
       '@types/yargs-parser': 21.0.0
+    dev: true
+
+  /@vitest/coverage-istanbul/0.29.8_vitest@0.29.8:
+    resolution: {integrity: sha512-ZCBDQFM8Quu5yQN2BNhTRL2XHxzghE1aH2pUctwrCDcafabpLE2CV8KaYHg1bBVNIKGtyLqQagv4E455uAn6dw==}
+    peerDependencies:
+      vitest: '>=0.28.0 <1'
+    dependencies:
+      istanbul-lib-coverage: 3.2.0
+      istanbul-lib-instrument: 5.2.1
+      istanbul-lib-report: 3.0.0
+      istanbul-lib-source-maps: 4.0.1
+      istanbul-reports: 3.1.5
+      test-exclude: 6.0.0
+      vitest: 0.29.8_jsdom@19.0.0+terser@5.16.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@vitest/expect/0.29.8:

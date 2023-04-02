@@ -6,7 +6,7 @@ import {Form} from 'ffw';
 import {createElement} from 'react';
 import '@testing-library/jest-dom';
 import {FfwProvider} from '../context/context.js';
-import useForm from './use-form.js';
+import {useForm} from './use-form.js';
 
 describe('use-form', () => {
   it('custom', () => {

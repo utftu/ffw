@@ -6,16 +6,13 @@ class Field {
   form = null;
 
   ee = createEventEmitter();
-  // eeSync = ee();
 
   notify(name, value) {
-    // data
-    // this.eeSync.emit(name, value);
+
     this.form.calls.add(this, name, () => {
       this.ee.emit(name, value);
     });
-    //global
-    // this.eeSync.emit('global', [this, name, value]);
+
     this.form.calls.add(this, 'global', () => {
       this.ee.emit('global', [this, name, value]);
     });
@@ -91,10 +88,8 @@ class Field {
     }
     const oldErrorTouched = this.errorTouched;
     this.data[name] = newData;
-    // const
+
     this.notify(name, newData);
-    // this.form.calls.add(this, name, () => this.ee.emit(name, newData));
-    // this.form.calls.add(this.form, '*', () => this.form.ee.emit('global'));
 
     if (name === 'error') {
       const oldError = prevData;
@@ -103,17 +98,11 @@ class Field {
         this.form._errors++;
         if (this.form._errors === 1) {
           this.form.notify('valid', false);
-          // this.form.calls.add(this.form, 'valid', () =>
-          //   this.form.ee.emit('valid', false)
-          // );
         }
       } else if (error === '' && oldError !== '') {
         this.form._errors--;
         if (this.form._errors === 0) {
           this.form.notify('valid', true);
-          // this.form.calls.add(this.form, 'valid', () =>
-          //   this.form.ee.emit('valid', true)
-          // );
         }
       }
     }
@@ -121,9 +110,6 @@ class Field {
     if (name === 'error' || name === 'touched') {
       if (oldErrorTouched !== this.errorTouched) {
         this.notify('errorTouched', this.errorTouched);
-        // this.form.calls.add(this, 'errorTouched', () =>
-        //   this.ee.emit('errorTouched', this.errorTouched)
-        // );
       }
     }
 
@@ -143,7 +129,7 @@ class Field {
     this.setData('touched', touched);
   }
 
-  set(value, validate) {
+  set = (value, validate) => {
     this.setData('value', value);
 
     if (validate === true) {
@@ -178,7 +164,7 @@ class Field {
     return () => this.ee.off(name, cb);
   }
 
-  onInput = (event) => {
+  onNativeInput = (event) => {
     this.set(event.target.value);
   };
 
