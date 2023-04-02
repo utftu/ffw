@@ -1,5 +1,5 @@
 import Field from './field.js';
-import {vi, expect, it, describe} from 'vitest'
+import {vi, expect, it, describe} from 'vitest';
 import Form from '../form/form.js';
 import * as yup from 'yup';
 import {waitTime} from 'utftu/wait-time';
@@ -16,7 +16,7 @@ const ageFieldParams = {
 describe('field', () => {
   describe('init', () => {
     it('default params', () => {
-      debugger
+      debugger;
       const field = new Field({
         form: formMock,
       });
@@ -163,7 +163,7 @@ describe('field', () => {
       });
     });
 
-    describe('onInput()', () => {
+    describe('onNativeInput()', () => {
       it('set value', async () => {
         const form = new Form({
           initValues: {
@@ -174,7 +174,7 @@ describe('field', () => {
         const listener = vi.fn();
         form.fields.age.on('value', listener);
 
-        form.fields.age.onInput({
+        form.fields.age.onNativeInput({
           target: {
             value: '43',
           },
@@ -196,7 +196,7 @@ describe('field', () => {
             age: yup.number().required(),
           }),
         });
-        form.fields.age.onInput({
+        form.fields.age.onNativeInput({
           target: {
             value: 'invalid',
           },
@@ -216,7 +216,7 @@ describe('field', () => {
             age: yup.number().required(),
           }),
         });
-        form.fields.age.onInput({
+        form.fields.age.onNativeInput({
           target: {
             value: 'invalid',
           },

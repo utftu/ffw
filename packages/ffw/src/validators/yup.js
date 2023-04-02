@@ -10,9 +10,9 @@ export function convertYupToTest(yupSchema) {
 }
 
 export function prepareYup(obj) {
-  const newObj = {}
+  const newObj = {};
   for (const key in obj) {
-    newObj[key] = convertYupToTest(obj[key])
+    newObj[key] = convertYupToTest(obj[key]);
   }
-  return newObj
+  return newObj;
 }

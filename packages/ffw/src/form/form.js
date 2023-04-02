@@ -108,35 +108,35 @@ class Form {
   }
 
   _prepareFieldData(func) {
-    const data = {}
+    const data = {};
     for (const key in this.fields) {
-      const funcResult = func(this.fields[key])
+      const funcResult = func(this.fields[key]);
       if (funcResult === undefined) {
-        continue
+        continue;
       }
-      data[key] = func(this.fields[key])
+      data[key] = func(this.fields[key]);
     }
-    return data
+    return data;
   }
 
   get values() {
-    return this._prepareFieldData((field) => field.value)
+    return this._prepareFieldData((field) => field.value);
   }
 
   get errors() {
-    return this._prepareFieldData((field) => field.error || undefined)
+    return this._prepareFieldData((field) => field.error || undefined);
   }
 
   get touches() {
-    return this._prepareFieldData((field) => field.touched || undefined)
+    return this._prepareFieldData((field) => field.touched || undefined);
   }
 
   get data() {
     return this._prepareFieldData((field) => ({
       value: field.value,
       error: field.error,
-      touched: field.touched
-    }))
+      touched: field.touched,
+    }));
   }
 
   on(name, cb) {

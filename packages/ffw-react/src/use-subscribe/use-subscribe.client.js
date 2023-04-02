@@ -1,11 +1,11 @@
 import {useCallback, useEffect, useState} from 'react';
 
 function useForceUpdate() {
-  const [, forceUpdate] = useState({})
+  const [, forceUpdate] = useState({});
 
   return useCallback(() => {
-    forceUpdate({})
-  }, [])
+    forceUpdate({});
+  }, []);
 }
 
 function useSubscribeClient(get, subscribe) {

@@ -39,7 +39,7 @@ function transformField(field) {
   field.svelte.global = createReadStore('global', null, field.ee);
 }
 
-function transformForm(form) {
+export function addSveltePlugin(form) {
   form.svelte = {};
   form.svelte.makeReadStore = (name, value) => {
     form.svelte[name] = createReadStore(name, value, form.ee);
@@ -54,9 +54,3 @@ function transformForm(form) {
     return field;
   };
 }
-
-export function addSvelte(form) {
-  transformForm(form);
-}
-
-export default addSvelte;

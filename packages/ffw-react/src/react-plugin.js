@@ -1,7 +1,5 @@
-
-
 function transformField(field) {
-  field.react = {}
+  field.react = {};
 
   field.react.getFieldHelpers = () => {
     return {
@@ -13,10 +11,10 @@ function transformField(field) {
 }
 
 export function addReactPlugin(form) {
-  const oldCreateField = form.createField
-  form.createField = function(...args) {
-    const field = oldCreateField.apply(form, args)
-    transformField(field)
-    return field
-  }
+  const oldCreateField = form.createField;
+  form.createField = function (...args) {
+    const field = oldCreateField.apply(form, args);
+    transformField(field);
+    return field;
+  };
 }

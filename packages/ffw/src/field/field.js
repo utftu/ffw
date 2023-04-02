@@ -8,7 +8,6 @@ class Field {
   ee = createEventEmitter();
 
   notify(name, value) {
-
     this.form.calls.add(this, name, () => {
       this.ee.emit(name, value);
     });
@@ -144,7 +143,7 @@ class Field {
     if (validate === undefined && this.form.options.validateOnChange) {
       this.validate();
     }
-  }
+  };
 
   async validate() {
     const error = await this.test(this.data.value);

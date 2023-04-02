@@ -6,8 +6,8 @@
     "build": "node ./build.js",
     "format": "prettier --plugin-search-dir=. --write .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "vitest": "vitest",
+    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "vitest",
     "coverage": "vitest run --coverage",
     "pub": "npm run format && npm run build && npm run test && node ./scripts/publish.js"
   },
@@ -46,6 +46,6 @@
   "dependencies": {
     "react-dom": "^18.2.0",
     "source-map": "^0.7.4",
-    "utftu": "^1.0.17"
+    "utftu": "^1.0.19"
   }
 }

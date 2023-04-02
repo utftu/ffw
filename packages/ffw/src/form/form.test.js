@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import Field from '../field/field.js';
 import {prepareYup} from '../validators/yup.js';
 import Form from './form.js';
-import {vi, expect, it, describe} from 'vitest'
+import {vi, expect, it, describe} from 'vitest';
 
 describe('form', () => {
   it('initValues', () => {
@@ -153,7 +153,7 @@ describe('form', () => {
           age: 'hello',
         },
         validateSchema: {
-          age: (value) => typeof value === 'number' ? "" : "error message",
+          age: (value) => (typeof value === 'number' ? '' : 'error message'),
         },
       });
       const valid = await form.validate();

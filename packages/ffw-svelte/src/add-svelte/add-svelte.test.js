@@ -1,16 +1,16 @@
-import addSvelte from './add-svelte.js';
+import {addSveltePlugin} from './add-svelte.js';
 import {Form} from 'ffw';
-import {jest} from '@jest/globals';
-import waitTime from 'utftu/wait-time';
+import {describe, it, vi, expect} from 'vitest';
+import {waitTime} from 'utftu/wait-time';
 
 describe('add-svelte', () => {
   it('readable', async () => {
-    const subscribe = jest.fn();
+    const subscribe = vi.fn();
     const form = new Form({
       initValues: {
         name: 'Aleksey',
       },
-      plugins: [addSvelte],
+      plugins: [addSveltePlugin],
     });
     const name = form.fields.name;
 
@@ -24,12 +24,12 @@ describe('add-svelte', () => {
   });
 
   it('writable', async () => {
-    const subscribe = jest.fn();
+    const subscribe = vi.fn();
     const form = new Form({
       initValues: {
         name: 'Aleksey',
       },
-      plugins: [addSvelte],
+      plugins: [addSveltePlugin],
     });
     const name = form.fields.name;
 
