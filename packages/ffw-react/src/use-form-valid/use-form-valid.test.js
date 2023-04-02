@@ -1,9 +1,6 @@
-/** @jest-environment jsdom */
-
 import {renderHook, act} from '@testing-library/react';
-import {it, describe} from '@jest/globals';
-import '@testing-library/jest-dom';
-import {Form} from 'ffw';
+import {it, describe, expect} from 'vitest';
+import {Form, prepareYup} from 'ffw';
 import {waitTime} from 'utftu/wait-time';
 import {useFormValid} from './use-form-valid.js';
 import * as yup from 'yup';

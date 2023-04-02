@@ -1,10 +1,7 @@
-/** @jest-environment jsdom */
-
-import {it, describe} from '@jest/globals';
+import {it, describe, expect} from 'vitest';
 import {renderHook} from '@testing-library/react';
 import {Form} from 'ffw';
 import {createElement} from 'react';
-import '@testing-library/jest-dom';
 import {FfwProvider} from '../context/context.js';
 import {useForm} from './use-form.js';
 

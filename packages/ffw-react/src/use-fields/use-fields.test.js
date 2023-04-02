@@ -1,15 +1,12 @@
-/** @jest-environment jsdom */
-
 import {renderHook, act} from '@testing-library/react';
-import {it, describe, jest} from '@jest/globals';
-import '@testing-library/jest-dom';
+import {it, expect, describe, vi} from 'vitest';
 import {Form} from 'ffw';
-import waitTime from 'utftu/wait-time';
+import {waitTime} from 'utftu/wait-time';
 import {useFields} from './use-fields.js';
 
 describe('use-fields', () => {
   it('init func', () => {
-    const mock = jest.fn((form) => {
+    const mock = vi.fn((form) => {
       return [form.fields.name, 'age'];
     });
     const form = new Form({
