@@ -1,23 +1,6 @@
-import ee from 'utftu/ee.js';
+import {createEventEmitter} from 'utftu/ee';
 import DelayedCalls from '../delayed-calls/delayed-calls.js';
 import Field from '../field/field.js';
-import find from '../transform-structure/find.js';
-import transform from '../transform-structure/transform.js';
-
-transformFields.PASS = transform.PASS;
-function transformFields(fields, getProperty) {
-  return transform(
-    fields,
-    (field) => {
-      const newValue = getProperty(field);
-      if (newValue === transformFields.PASS) {
-        return transform.PASS;
-      }
-      return transformFields(newValue, getProperty);
-    },
-    (target) => target instanceof Field
-  );
-}
 
 class Form {
   options = {
@@ -29,7 +12,7 @@ class Form {
   f = null;
   onSubmit = () => {};
   calls = new DelayedCalls();
-  ee = ee();
+  ee = createEventEmitter();
 
   notify(name, value) {
     this.calls.add(this, name, () => {
@@ -90,16 +73,13 @@ class Form {
       const field = this._getFlatFieldOrCreate(fieldName);
       field.test = test;
     }
-
-    // if (this.options.validateOnMount) {
-    //   this.validate();
-    // }
   }
 
   async validate() {
     const errors = await Promise.all(
       [...this._flatFields].map((field) => field.validate())
     );
+    console.log('-----', 'errors123', errors);
     return errors.every((error) => error === '');
   }
 
@@ -127,59 +107,36 @@ class Form {
     }
   }
 
-  getData() {
-    function rec(data) {
-      return transformFields(data, (field) => {
-        return {
-          error: field.error,
-          touched: field.touched,
-          value: rec(field.value),
-        };
-      });
+  _prepareFieldData(func) {
+    const data = {}
+    for (const key in this.fields) {
+      const funcResult = func(this.fields[key])
+      if (funcResult === undefined) {
+        continue
+      }
+      data[key] = func(this.fields[key])
     }
-    return rec(this.fields);
-  }
-
-  getValues() {
-    return transformFields(this.fields, (field) => field.value);
-  }
-
-  getErrors() {
-    return transformFields(this.fields, (field) => {
-      if (find(field.value, (data) => data instanceof Field)) {
-        return field.value;
-      } else {
-        if (field.error !== '') {
-          return field.error;
-        }
-        return transformFields.PASS;
-      }
-    });
-  }
-
-  getTouches() {
-    return transformFields(this.fields, (field) => {
-      if (find(field.value, (data) => data instanceof Field)) {
-        return field.value;
-      } else {
-        if (field.touched === true) {
-          return field.touched;
-        }
-        return transformFields.PASS;
-      }
-    });
+    return data
   }
 
   get values() {
-    return this.getValues();
+    return this._prepareFieldData((field) => field.value)
   }
 
   get errors() {
-    return this.getErrors();
+    return this._prepareFieldData((field) => field.error || undefined)
   }
 
   get touches() {
-    return this.getTouches();
+    return this._prepareFieldData((field) => field.touched || undefined)
+  }
+
+  get data() {
+    return this._prepareFieldData((field) => ({
+      value: field.value,
+      error: field.error,
+      touched: field.touched
+    }))
   }
 
   on(name, cb) {

@@ -1,7 +1,7 @@
 import addSvelte from './add-svelte.js';
 import {Form} from 'ffw';
 import {jest} from '@jest/globals';
-import waitTime from 'utftu/wait-time.js';
+import waitTime from 'utftu/wait-time';
 
 describe('add-svelte', () => {
   it('readable', async () => {

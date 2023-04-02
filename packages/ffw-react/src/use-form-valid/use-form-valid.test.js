@@ -5,7 +5,7 @@ import {it, describe} from '@jest/globals';
 import '@testing-library/jest-dom';
 import {Form} from 'ffw';
 import {prepareYup} from 'ffw/src/index.js';
-import waitTime from 'utftu/wait-time.js';
+import waitTime from 'utftu/wait-time';
 import useFormValid from './use-form-valid.js';
 import * as yup from 'yup';
 

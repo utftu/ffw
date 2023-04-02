@@ -6,8 +6,8 @@ import Field from './field.js';
 import {jest, expect} from '@jest/globals';
 import Form from '../form/form.js';
 import * as yup from 'yup';
-import waitTime from 'utftu/wait-time.js';
-import prepareYup from '../validators/yup.js';
+import {waitTime} from 'utftu/wait-time';
+import {prepareYup} from '../validators/yup.js';
 import {describe} from '@jest/globals';
 
 const formMock = new Form({});

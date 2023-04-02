@@ -1,11 +1,11 @@
-import ee from 'utftu/ee.js';
+import {createEventEmitter} from 'utftu/ee';
 
 const defaultTest = () => '';
 
 class Field {
   form = null;
 
-  ee = ee();
+  ee = createEventEmitter();
   // eeSync = ee();
 
   notify(name, value) {

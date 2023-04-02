@@ -1,7 +1,4 @@
-import transform from '../transform-structure/transform.js';
-import * as yup from 'yup';
-
-function yupToTest(yupSchema) {
+export function convertYupToTest(yupSchema) {
   return async (value) => {
     try {
       await yupSchema.validate(value);
@@ -12,14 +9,10 @@ function yupToTest(yupSchema) {
   };
 }
 
-function prepareYup(structure) {
-  return transform(
-    structure,
-    (yupSchema) => {
-      return yupToTest(yupSchema);
-    },
-    (value) => value instanceof yup.BaseSchema
-  );
+export function prepareYup(obj) {
+  const newObj = {}
+  for (const key in obj) {
+    newObj[key] = convertYupToTest(obj[key])
+  }
+  return newObj
 }
-
-export default prepareYup;

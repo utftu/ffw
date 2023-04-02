@@ -1,4 +1,4 @@
-import createControlledPromise from 'utftu/create-controlled-promise.js';
+import {createControlledPromise} from 'utftu/controlled-promise';
 
 class DelayedCalls {
   _calls = new Map();
