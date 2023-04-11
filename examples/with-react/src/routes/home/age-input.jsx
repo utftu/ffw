@@ -8,7 +8,7 @@ function AgeInput() {
     <div>
       <span>
         AgeInput: age = {''}
-        <input {...age.getInput()} />
+        <input {...age.react.getFieldHelpers()} onChange={age.onNativeInput} />
       </span>
     </div>
   );

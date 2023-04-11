@@ -2,7 +2,7 @@ import {createEventEmitter} from 'utftu/ee';
 
 const defaultTest = () => '';
 
-class Field {
+export class Field {
   form = null;
 
   ee = createEventEmitter();
@@ -181,5 +181,3 @@ class Field {
     this.setData('error', this.initParams.error);
   }
 }
-
-export default Field;

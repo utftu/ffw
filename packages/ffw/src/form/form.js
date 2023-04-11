@@ -1,8 +1,8 @@
 import {createEventEmitter} from 'utftu/ee';
-import DelayedCalls from '../delayed-calls/delayed-calls.js';
-import Field from '../field/field.js';
+import {DelayedCalls} from '../delayed-calls/delayed-calls.js';
+import {Field} from '../field/field.js';
 
-class Form {
+export class Form {
   options = {
     validateOnChange: true,
     validateOnBlur: true,
@@ -164,5 +164,3 @@ class Form {
     this._flatFields.delete(field);
   }
 }
-
-export default Form;

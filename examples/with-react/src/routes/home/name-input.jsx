@@ -8,7 +8,10 @@ function NameInput() {
     <div>
       <span>
         NameInput: name = {''}
-        <input {...name.getInput()} />
+        <input
+          {...name.react.getFieldHelpers()}
+          onChange={name.onNativeInput}
+        />
       </span>
     </div>
   );

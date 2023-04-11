@@ -3,21 +3,9 @@
   "version": "1.1.1",
   "description": "",
   "type": "module",
-  "main": "./dist/cjs/index.js",
   "exports": {
-    ".": {
-      "development": {
-        "import": "./dist/esm/dev.js",
-        "require": "./dist/cjs/dev.js"
-      },
-      "production": {
-        "import": "./dist/esm/prod.js",
-        "require": "./dist/cjs/prod.js"
-      },
-      "import": "./dist/esm/prod.js",
-      "require": "./dist/cjs/prod.js"
-    },
-    "./*": "./*"
+    "import": "./dist/ffw-react.js",
+    "require": "./dist/ffw-react.cjs"
   },
   "files": [
     "dist/**/*"

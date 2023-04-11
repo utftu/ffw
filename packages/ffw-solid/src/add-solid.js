@@ -38,6 +38,10 @@ function transformField(field) {
   field.solid.makeStore('global', null);
 }
 
+export const addSolidPlugin = () => (form) => {
+  transformForm(form);
+};
+
 export function addSolid(form) {
   transformForm(form);
 }

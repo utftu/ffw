@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import Field from '../field/field.js';
+import {Field} from '../field/field.js';
 import {prepareYup} from '../validators/yup.js';
-import Form from './form.js';
+import {Form} from './form.js';
 import {vi, expect, it, describe} from 'vitest';
 
 describe('form', () => {

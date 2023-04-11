@@ -1,6 +1,6 @@
 import {createControlledPromise} from 'utftu/controlled-promise';
 
-class DelayedCalls {
+export class DelayedCalls {
   _calls = new Map();
 
   constructor(batch) {
