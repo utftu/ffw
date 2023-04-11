@@ -1,7 +1,6 @@
 {
   "name": "ffw",
   "version": "1.1.1",
-  "description": "",
   "type": "module",
   "exports": {
     "import": "./dist/ffw.js",
@@ -10,17 +9,6 @@
   "files": [
     "dist/**/*"
   ],
-  "scripts": {
-    "build2": "rollup -c ./relax.config.mjs",
-    "build": "rollup -c rollup.config.js",
-    "test": "echo \"Error: no test specified\""
-  },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "utftu": "^1.0.19"
-  },
-  "dependencies": {
-    "strangelove": "^1.0.8"
-  }
+  "author": "utftu",
+  "license": "MIT"
 }
