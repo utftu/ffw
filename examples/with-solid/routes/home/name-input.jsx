@@ -1,13 +1,14 @@
 import {getFfwContext} from 'ffw-solid';
 
-function NameInput() {
+export function NameInput() {
   const ffw = getFfwContext();
-
+  const nameField = ffw.fields.name;
   return (
     <div>
-      <input {...ffw.fields.name.getInput()} />
+      <input
+        value={nameField.solid.value()}
+        onInput={nameField.onNativeInput}
+      />
     </div>
   );
 }
-
-export default NameInput;

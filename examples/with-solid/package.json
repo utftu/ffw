@@ -11,10 +11,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/solid-js": "^1.2.3",
-    "astro": "^1.9.2",
-    "ffw-solid": "workspace:*",
+    "@astrojs/solid-js": "^2.1.0",
+    "astro": "^2.2.2",
     "ffw": "workspace:*",
+    "ffw-solid": "workspace:*",
     "solid-js": "^1.7.3"
   }
 }

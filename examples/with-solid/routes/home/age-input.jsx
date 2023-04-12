@@ -1,14 +1,12 @@
 import {getFfwContext} from 'ffw-solid';
 
-function AgeInput() {
+export function AgeInput() {
   const ffw = getFfwContext();
   const ageFfw = ffw.fields.age;
 
   return (
     <div>
-      <input value={ageFfw.solid.value()} onInput={ffw.onNativeInput} />
+      <input value={ageFfw.solid.value()} onInput={ageFfw.onNativeInput} />
     </div>
   );
 }
-
-export default AgeInput;
