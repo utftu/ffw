@@ -24,8 +24,8 @@
     "vite": "^4.2.1"
   },
   "dependencies": {
-    "ffw-svelte": "file:../../packages/ffw-svelte",
-    "ffw": "file:../../packages/ffw",
+    "ffw-svelte": "workspace:*",
+    "ffw": "workspace:*",
     "yup": "^0.32.11"
   },
   "type": "module"

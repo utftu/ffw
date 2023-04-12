@@ -12,9 +12,11 @@ export class Form {
   f = null;
   onSubmit = () => {};
   calls = new DelayedCalls();
+  eeSync = createEventEmitter();
   ee = createEventEmitter();
 
   notify(name, value) {
+    this.eeSync.emit(name, value);
     this.calls.add(this, name, () => {
       this.ee.emit(name, value);
     });

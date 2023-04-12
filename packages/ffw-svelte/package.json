@@ -1,9 +1,7 @@
 {
   "name": "ffw-svelte",
   "version": "1.1.1",
-  "description": "",
   "type": "module",
-  "main": "./dist/cjs/index.js",
   "exports": {
     "import": "./dist/ffw-svelte.js",
     "require": "./dist/ffw-svelte.cjs"
@@ -11,9 +9,6 @@
   "files": [
     "dist/**/*"
   ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "peerDependencies": {
     "svelte": ">=3.0.0",
     "ffw": "workspace:*"
@@ -22,6 +17,6 @@
     "svelte": ">=3.0.0",
     "ffw": "workspace:*"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "utftu",
+  "license": "MIT"
 }

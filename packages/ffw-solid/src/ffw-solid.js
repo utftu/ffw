@@ -1,4 +1,4 @@
 import {getFfwContext, FfwContextProvider} from './context/context.js';
-import {addSolid} from './add-solid.js';
+import {addSolidPlugin} from './plugin/plugin.js';
 
-export {getFfwContext, FfwContextProvider, addSolid};
+export {getFfwContext, FfwContextProvider, addSolidPlugin};

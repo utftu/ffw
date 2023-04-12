@@ -5,9 +5,11 @@ const defaultTest = () => '';
 export class Field {
   form = null;
 
+  eeSync = createEventEmitter();
   ee = createEventEmitter();
 
   notify(name, value) {
+    this.eeSync.emit(name, value);
     this.form.calls.add(this, name, () => {
       this.ee.emit(name, value);
     });
@@ -32,7 +34,7 @@ export class Field {
     form = null,
   } = {}) {
     this.form = form;
-    this.test = defaultTest;
+    this.test = test;
 
     this.initParams = {
       value,
@@ -40,7 +42,6 @@ export class Field {
       error,
       test,
     };
-    this.test = test;
 
     this.data.value = value;
     this.data.error = error;
@@ -79,6 +80,8 @@ export class Field {
     }
     return this.data.error;
   }
+
+  setDataPure(name, value) {}
 
   setData(name, newData) {
     const prevData = this.data[name];

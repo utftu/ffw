@@ -1,4 +1,4 @@
-import {addSveltePlugin} from './add-svelte.js';
+import {addSveltePlugin} from './plugin.js';
 import {Form} from 'ffw';
 import {describe, it, vi, expect} from 'vitest';
 import {waitTime} from 'utftu/wait-time';

@@ -22,9 +22,14 @@ function createWriteStore(name, value, ee, set) {
 function transformField(field) {
   field.svelte = {};
   field.svelte.makeWriteStore = (name, value) => {
-    field.svelte[name] = createWriteStore(name, value, field.ee, (value) => {
-      field.setData(name, value);
-    });
+    field.svelte[name] = createWriteStore(
+      name,
+      value,
+      field.eeSync,
+      (value) => {
+        field.setData(name, value);
+      }
+    );
   };
 
   for (const name in field.data) {
@@ -34,15 +39,15 @@ function transformField(field) {
   field.svelte.errorTouched = createReadStore(
     'errorTouched',
     field.errorTouched,
-    field.ee
+    field.eeSync
   );
-  field.svelte.global = createReadStore('global', null, field.ee);
+  field.svelte.global = createReadStore('global', null, field.eeSync);
 }
 
-export function addSveltePlugin(form) {
+function transformForm(form) {
   form.svelte = {};
   form.svelte.makeReadStore = (name, value) => {
-    form.svelte[name] = createReadStore(name, value, form.ee);
+    form.svelte[name] = createReadStore(name, value, form.eeSync);
   };
   form.svelte.makeReadStore('valid', form.valid);
   form.svelte.makeReadStore('global', null);
@@ -54,3 +59,7 @@ export function addSveltePlugin(form) {
     return field;
   };
 }
+
+export const addSveltePlugin = () => (form) => {
+  transformForm(form);
+};
