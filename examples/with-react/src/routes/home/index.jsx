@@ -11,7 +11,7 @@ import {useMemo} from 'react';
 function Home() {
   const form = useMemo(() => {
     return new Form({
-      plugins: [addReactPlugin],
+      plugins: [addReactPlugin()],
       initValues: {
         name: 'aleks',
         age: 42,
@@ -21,15 +21,6 @@ function Home() {
       }),
     });
   }, []);
-  // const form = useInitForm({
-  //   initValues: {
-  //     name: 'aleks',
-  //     age: 42,
-  //   },
-  //   validateSchema: prepareYup({
-  //     age: yup.number().required(),
-  //   }),
-  // });
 
   globalThis.form = form;
   return (

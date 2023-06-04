@@ -3,6 +3,10 @@ import {DelayedCalls} from '../delayed-calls/delayed-calls.js';
 import {Field} from '../field/field.js';
 
 export class Form {
+  static new(...args) {
+    return new Form(...args);
+  }
+
   options = {
     validateOnChange: true,
     validateOnBlur: true,

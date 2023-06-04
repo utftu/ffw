@@ -3,6 +3,10 @@ import {createEventEmitter} from 'utftu/ee';
 const defaultTest = () => '';
 
 export class Field {
+  static new(...args) {
+    return new Field(...args);
+  }
+
   form = null;
 
   eeSync = createEventEmitter();
