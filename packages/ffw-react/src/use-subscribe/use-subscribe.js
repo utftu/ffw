@@ -1,8 +1,28 @@
-import useSubscribeClient from './use-subscribe.client.js';
-import useSubscribeServer from './use-subscribe.server.js';
+import {useCallback, useMemo, useSyncExternalStore} from 'react';
 
 export function useSubscribe(get, subscribe) {
-  return typeof window === 'undefined'
-    ? useSubscribeServer(get)
-    : useSubscribeClient(get, subscribe);
+  const store = useMemo(
+    () => ({
+      immutable: {
+        value: get(),
+      },
+    }),
+    []
+  );
+  const savedSubscribe = useCallback((cb) => {
+    const unsubscribe = subscribe((value) => {
+      store.immutable = {...store.immutable};
+      store.immutable.value = value;
+      cb();
+    });
+
+    return unsubscribe;
+  }, []);
+  const immutable = useSyncExternalStore(
+    savedSubscribe,
+    () => store.immutable,
+    () => store.immutable
+  );
+
+  return immutable.value;
 }

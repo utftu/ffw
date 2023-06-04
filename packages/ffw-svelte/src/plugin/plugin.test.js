@@ -10,7 +10,7 @@ describe('add-svelte', () => {
       initValues: {
         name: 'Aleksey',
       },
-      plugins: [addSveltePlugin],
+      plugins: [addSveltePlugin()],
     });
     const name = form.fields.name;
 
@@ -29,7 +29,7 @@ describe('add-svelte', () => {
       initValues: {
         name: 'Aleksey',
       },
-      plugins: [addSveltePlugin],
+      plugins: [addSveltePlugin()],
     });
     const name = form.fields.name;
 

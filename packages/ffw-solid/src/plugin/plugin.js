@@ -1,22 +1,12 @@
 import createStore from '../create-store/create-store.js';
 
-function createConnectedStore(name, value, ee) {
-  return createStore(
-    () => value,
-    (cb) => {
-      ee.on(name, cb);
-      return () => ee.off(name, cb);
-    }
-  );
-}
-
 function transformForm(form) {
   form.solid = {};
-  form.solid.makeStore = (name, value) => {
-    form.solid[name] = createConnectedStore(name, value, form.eeSync);
-  };
-  form.solid.makeStore('valid', form.valid);
-  form.solid.makeStore('global', null);
+  form.solid.createStore = createStore;
+  form.solid.valid = createStore(
+    () => form.valid,
+    (cb) => form.eeSync.on('valid', cb)
+  );
 
   const oldCreateField = form.createField;
   form.createField = function (...args) {
@@ -28,15 +18,18 @@ function transformForm(form) {
 
 function transformField(field) {
   field.solid = {};
-  field.solid.makeStore = (name, value) => {
-    field.solid[name] = createConnectedStore(name, value, field.eeSync);
-  };
 
   for (const name in field.data) {
-    field.solid.makeStore(name, field.data[name]);
+    field.solid[name] = createStore(
+      () => field.data[name],
+      (cb) => field.eeSync.on(name, cb)
+    );
   }
-  field.solid.makeStore('errorTouched', field.errorTouched);
-  field.solid.makeStore('global', null);
+
+  field.solid.errorTouched = createStore(
+    () => field.errorTouched,
+    (cb) => field.eeSync.on('errorTouched', cb)
+  );
 }
 
 export const addSolidPlugin = () => (form) => {

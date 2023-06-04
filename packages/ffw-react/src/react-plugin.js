@@ -10,11 +10,11 @@ function transformField(field) {
   };
 }
 
-export function addReactPlugin(form) {
+export const addReactPlugin = () => (form) => {
   const oldCreateField = form.createField;
   form.createField = function (...args) {
     const field = oldCreateField.apply(form, args);
     transformField(field);
     return field;
   };
-}
+};

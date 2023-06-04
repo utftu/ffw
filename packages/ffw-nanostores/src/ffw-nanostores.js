@@ -1,32 +1,35 @@
 import {atom} from 'nanostores';
 
-function createStore(name, value, ee) {
-  const atomInstanse = atom(value);
-  ee.on(name, (newValue) => atom.set(newValue));
-
+function createStore(get, subscribe) {
+  const atomInstanse = atom(get());
+  subscribe((value) => {
+    atomInstanse.set(value);
+  });
   return atomInstanse;
 }
 
 function transformField(field) {
   field.nanostores = {};
-  field.nanostores.makeStore = (name, value) => {
-    field.nanostores[name] = createStore(name, value, field.ee);
-  };
 
   for (const name in field.data) {
-    field.nanostores.makeStore(name, data[name]);
+    field.nanostores[name] = createStore(
+      () => field.data[name],
+      (cb) => field.eeSync.on(name, cb)
+    );
   }
-  field.nanostores.makeStore('errorTouched', field.errorTouched);
-  field.nanostores.makeStore('global', null);
+  field.nanostores.errorTouched = createStore(
+    () => field.errorTouched,
+    (cb) => field.eeSync.on('errorTouched', cb)
+  );
 }
 
 function transformForm(form) {
   form.nanostores = {};
-  form.nanostores.makeStore = (name, value) => {
-    form.nanostores[name] = createStore(name, value, form.ee);
-  };
-  form.nanostores.makeStore('valid', form.valid);
-  form.nanostores.makeStore('global', null);
+  form.nanostores.createStore = createStore;
+  form.nanostores.valid = createStore(
+    () => form.valid,
+    (cb) => form.eeSync.on('valid', cb)
+  );
 
   const oldCreateField = form.createField;
   form.createField = function (...args) {
@@ -35,6 +38,6 @@ function transformForm(form) {
   };
 }
 
-export function addNanostores(form) {
+export const addNanostores = () => (form) => {
   transformForm(form);
-}
+};

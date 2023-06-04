@@ -3,6 +3,9 @@
   "version": "1.1.1",
   "description": "",
   "type": "module",
+  "scripts": {
+    "build": "node ./build.js"
+  },
   "exports": {
     "import": "./dist/ffw-react.js",
     "require": "./dist/ffw-react.cjs"
@@ -10,20 +13,10 @@
   "files": [
     "dist/**/*"
   ],
-  "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "test": "echo \"Error: no test specified\""
-  },
-  "dependencies": {
+  "peerDependencies": {
     "ffw": "workspace:*",
-    "utftu": "^1.0.4"
+    "react": "*"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  }
+  "license": "ISC"
 }

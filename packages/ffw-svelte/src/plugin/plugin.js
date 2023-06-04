@@ -1,56 +1,53 @@
-function createReadStore(name, value, ee) {
+function createReadStore(get, subscribe) {
   return {
     subscribe(cb) {
-      cb(value);
+      cb(get());
 
-      const listener = (value) => cb(value);
-      ee.on(name, listener);
-
-      return () => {
-        ee.off(name, listener);
-      };
+      return subscribe(cb);
     },
   };
 }
 
-function createWriteStore(name, value, ee, set) {
-  const store = createReadStore(name, value, ee);
+function createWriteStore(get, subscribe, set) {
+  const store = createReadStore(get, subscribe);
   store.set = set;
   return store;
 }
 
 function transformField(field) {
   field.svelte = {};
-  field.svelte.makeWriteStore = (name, value) => {
-    field.svelte[name] = createWriteStore(
-      name,
-      value,
-      field.eeSync,
-      (value) => {
-        field.setData(name, value);
-      }
-    );
-  };
 
   for (const name in field.data) {
-    field.svelte.makeWriteStore(name, field.data[name]);
+    field.svelte[name] = createWriteStore(
+      () => field.data[name],
+      (cb) => field.eeSync.on(name, cb),
+      (data) => {
+        field.setData(name, data);
+      }
+    );
   }
+  field.svelte.value = createWriteStore(
+    () => field.data.value,
+    (cb) => field.eeSync.on('value', cb),
+    (data) => {
+      field.set(data);
+    }
+  );
 
   field.svelte.errorTouched = createReadStore(
-    'errorTouched',
-    field.errorTouched,
-    field.eeSync
+    () => field.errorTouched,
+    (cb) => field.eeSync.on('errorTouched', cb)
   );
-  field.svelte.global = createReadStore('global', null, field.eeSync);
 }
 
 function transformForm(form) {
   form.svelte = {};
-  form.svelte.makeReadStore = (name, value) => {
-    form.svelte[name] = createReadStore(name, value, form.eeSync);
-  };
-  form.svelte.makeReadStore('valid', form.valid);
-  form.svelte.makeReadStore('global', null);
+  form.svelte.createReadStore = createReadStore;
+  form.svelte.createWriteStore = createWriteStore;
+  form.svelte.valid = createReadStore(
+    () => form.valid,
+    (cb) => form.eeSync.on('valid', cb)
+  );
 
   const oldCreateField = form.createField;
   form.createField = function (...args) {

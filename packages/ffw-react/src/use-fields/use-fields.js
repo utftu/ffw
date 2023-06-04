@@ -22,7 +22,11 @@ export function useFields(deps = [], customForm) {
   }, fields);
 
   const subscribe = useCallback((listener) => {
-    fields.forEach((field) => field.on('*', listener));
+    fields.forEach((field) =>
+      field.on('*', () => {
+        listener(fields);
+      })
+    );
     return () => {
       fields.forEach((field) => field.off('*', listener));
     };

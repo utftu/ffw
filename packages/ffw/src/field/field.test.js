@@ -1,6 +1,6 @@
-import Field from './field.js';
+import {Field} from './field.js';
 import {vi, expect, it, describe} from 'vitest';
-import Form from '../form/form.js';
+import {Form} from '../form/form.js';
 import * as yup from 'yup';
 import {waitTime} from 'utftu/wait-time';
 import {prepareYup} from '../validators/yup.js';

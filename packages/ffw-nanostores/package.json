@@ -1,10 +1,15 @@
 {
   "name": "ffw-nanostores",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node ./build.js"
+  },
+  "exports": {
+    "import": "./dist/ffw-nanostores.js",
+    "require": "./dist/ffw-nanostores.cjs"
   },
   "keywords": [],
   "author": "",
