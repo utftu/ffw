@@ -20,41 +20,33 @@ for (const packageDir of packageDirectories) {
   const packageName = packageJson.name;
   console.log(`Checking for changes in ${packageName}...`);
 
-  // Run the git status command to check for changes in the package directory
-  try {
-    const gitStatus = execSync(`git -C ${packageDir} status --porcelain`, {
-      encoding: 'utf-8',
-    });
+  const gitStatus = execSync(`git -C ${packageDir} status --porcelain`, {
+    encoding: 'utf-8',
+  });
 
-    // If there are changes, update the package version
-    if (gitStatus.length > 0) {
-      const currentVersion = packageJson.version;
-      const newVersion = incrementVersion(currentVersion);
-      packageJson.version = newVersion;
-
-      // Save the updated package.json file
-      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-      console.log(`${packageName} version updated to ${newVersion}.`);
-    } else {
-      console.log(`${packageName} has no changes.`);
-    }
-
-    // Run the publish command using either Yarn or npm
-    console.log(`Publishing ${packageName}...`);
-    try {
-      execSync(`cd ${packageDir} && pnpm publish --no-git-checks`, {
-        stdio: 'inherit',
-      });
-    } catch (error) {
-      console.error(`Failed to publish ${packageName}:`, error);
-    }
-    console.log(`${packageName} published successfully.`);
-  } catch (error) {
-    console.error(`Failed to check changes for ${packageName}:`, error);
+  if (gitStatus.length === 0) {
+    console.log(`${packageName} has no changes.`);
+    continue;
   }
+
+  const currentVersion = packageJson.version;
+  const newVersion = incrementVersion(currentVersion);
+  packageJson.version = newVersion;
+
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  console.log(`${packageName} version updated to ${newVersion}.`);
+
+  console.log(`Publishing ${packageName}...`);
+  try {
+    execSync(`cd ${packageDir} && pnpm publish --no-git-checks`, {
+      stdio: 'inherit',
+    });
+  } catch (error) {
+    console.error(`Failed to publish ${packageName}:`, error);
+  }
+  console.log(`${packageName} published successfully.`);
 }
 
-// Function to increment the package version
 function incrementVersion(version) {
   const versionParts = version.split('.');
   const lastPart = versionParts.pop();
