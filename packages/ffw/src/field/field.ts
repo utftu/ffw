@@ -1,44 +1,64 @@
-import {createEventEmitter} from 'utftu/ee';
+import {createEventEmitter} from 'utftu';
+import {Form} from '../form/form.ts';
 
 const defaultTest = () => '';
 
-export class Field {
-  static new(...args) {
-    return new Field(...args);
+export type Cb<TValue = any> = (value: TValue) => void;
+export type UnsubscribeCb = () => void;
+
+type Data<TValue> = {
+  value: TValue;
+  touched: boolean;
+  error: string;
+  [key: string]: any;
+};
+
+export type Test<TValue = any> = (value: TValue) => string;
+
+export type PropsField<TValue = any> = {
+  value?: TValue;
+  test?: Test<TValue>;
+  touched?: boolean;
+  error?: string;
+  form: Form;
+  name?: string;
+};
+
+type InitParams<TValue> = Data<TValue> & {
+  test: Test<TValue>;
+};
+
+export class Field<TValue = any> {
+  static new<TValue = string>(props: PropsField<TValue>) {
+    return new Field(props);
   }
 
-  form = null;
+  form: Form;
+  name: string;
 
-  eeSync = createEventEmitter();
   ee = createEventEmitter();
+  // ee = createEventEmitter();
 
-  notify(name, value) {
-    this.eeSync.emit(name, value);
-    this.form.calls.add(this, name, () => {
-      this.ee.emit(name, value);
-    });
-
-    this.form.calls.add(this, 'global', () => {
-      this.ee.emit('global', [this, name, value]);
-    });
-    this.form.notify('global', [this, name, value]);
+  notify(name: string, value: any) {
+    this.ee.emit(name, value);
+    this.form.notify('global', {field: this, name, value});
   }
 
-  data = {
-    value: '',
-    error: '',
-    touched: false,
-  };
+  data: Data<TValue>;
+  initParams: InitParams<TValue>;
+  test: Test<TValue>;
 
   constructor({
-    value = '',
+    value = '' as TValue,
     touched = false,
     error = '',
     test = defaultTest,
-    form = null,
-  } = {}) {
+    name = '',
+    form,
+  }: PropsField<TValue>) {
     this.form = form;
     this.test = test;
+    this.name = name;
 
     this.initParams = {
       value,
@@ -47,9 +67,11 @@ export class Field {
       test,
     };
 
-    this.data.value = value;
-    this.data.error = error;
-    this.data.touched = touched;
+    this.data = {
+      value,
+      error,
+      touched,
+    };
 
     form.addField(this);
   }
@@ -85,9 +107,7 @@ export class Field {
     return this.data.error;
   }
 
-  setDataPure(name, value) {}
-
-  setData(name, newData) {
+  setData(name: string, newData: any) {
     const prevData = this.data[name];
     if (this.form.options.checkPrevData && prevData === newData) {
       return false;
@@ -123,19 +143,18 @@ export class Field {
   }
 
   update() {
-    this.form.calls.add(this, '*', () => this.ee.emit('*'));
-    this.form.calls.add(this.form, '*', () => this.form.ee.emit('*'));
+    this.notify('*', undefined);
   }
 
-  setError(error) {
+  setError(error: string) {
     this.setData('error', error);
   }
 
-  setTouched(touched) {
+  setTouched(touched: boolean) {
     this.setData('touched', touched);
   }
 
-  set = (value, validate) => {
+  set = (value: TValue, validate?: boolean) => {
     this.setData('value', value);
 
     if (validate === true) {
@@ -152,25 +171,25 @@ export class Field {
     }
   };
 
-  async validate() {
-    const error = await this.test(this.data.value);
+  validate() {
+    const error = this.test(this.data.value);
 
     this.setError(error);
 
     return error;
   }
 
-  on(name, cb) {
+  on(name: string, cb: Cb<TValue>) {
     this.ee.on(name, cb);
 
     return () => this.ee.off(name, cb);
   }
 
-  off(name, cb) {
+  off(name: string, cb: UnsubscribeCb) {
     return () => this.ee.off(name, cb);
   }
 
-  onNativeInput = (event) => {
+  onNativeInput = (event: {target: {value: TValue}}) => {
     this.set(event.target.value);
   };
 

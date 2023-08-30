@@ -1,7 +1,7 @@
 import {addSveltePlugin} from './plugin.js';
 import {Form} from 'ffw';
 import {describe, it, vi, expect} from 'vitest';
-import {waitTime} from 'utftu/wait-time';
+import {waitTime} from 'utftu';
 
 describe('add-svelte', () => {
   it('readable', async () => {

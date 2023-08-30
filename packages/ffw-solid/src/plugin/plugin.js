@@ -5,7 +5,7 @@ function transformForm(form) {
   form.solid.createStore = createStore;
   form.solid.valid = createStore(
     () => form.valid,
-    (cb) => form.eeSync.on('valid', cb)
+    (cb) => form.eeSync.on('valid', cb),
   );
 
   const oldCreateField = form.createField;
@@ -22,13 +22,13 @@ function transformField(field) {
   for (const name in field.data) {
     field.solid[name] = createStore(
       () => field.data[name],
-      (cb) => field.eeSync.on(name, cb)
+      (cb) => field.eeSync.on(name, cb),
     );
   }
 
   field.solid.errorTouched = createStore(
     () => field.errorTouched,
-    (cb) => field.eeSync.on('errorTouched', cb)
+    (cb) => field.eeSync.on('errorTouched', cb),
   );
 }
 

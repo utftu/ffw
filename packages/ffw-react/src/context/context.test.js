@@ -19,7 +19,7 @@ describe('context', () => {
       return createElement(
         FfwProvider,
         {value: useInitFormResult},
-        createElement(Child)
+        createElement(Child),
       );
     }
     render(createElement(Parent));

@@ -1,11 +1,13 @@
-import {Field} from './field.js';
+import {Field} from './field.ts';
 import {vi, expect, it, describe} from 'vitest';
-import {Form} from '../form/form.js';
+import {Form} from '../form/form.ts';
 import * as yup from 'yup';
-import {waitTime} from 'utftu/wait-time';
-import {prepareYup} from '../validators/yup.js';
+import {waitTime} from 'utftu';
+// import {prepareYup} from '../validators/yup.js';
+import {prepareDesy} from '../validators/desy.ts';
+import {d} from 'desy';
 
-const formMock = new Form({});
+const formMock = new Form();
 
 const ageFieldParams = {
   value: 42,
@@ -80,8 +82,8 @@ describe('field', () => {
         initValues: {
           age: 'wrong',
         },
-        validateSchema: prepareYup({
-          age: yup.number().required(),
+        validateSchema: prepareDesy({
+          age: d.number(),
         }),
       });
       const validateResult = await form.fields.age.validate();
@@ -93,8 +95,8 @@ describe('field', () => {
         initValues: {
           age: 42,
         },
-        validateSchema: prepareYup({
-          age: yup.number().required(),
+        validateSchema: prepareDesy({
+          age: d.number(),
         }),
       });
       const validateResult = await form.fields.age.validate();
@@ -106,8 +108,8 @@ describe('field', () => {
         initValues: {
           age: 'wrong',
         },
-        validateSchema: prepareYup({
-          age: yup.number().required(),
+        validateSchema: prepareDesy({
+          age: d.number(),
         }),
       });
       await form.fields.age.validate();
@@ -122,7 +124,7 @@ describe('field', () => {
           initValues: {
             age: 42,
           },
-          validateSchema: prepareYup({}),
+          validateSchema: prepareDesy({}),
         });
         const listener = vi.fn();
         form.fields.age.on('touched', listener);
@@ -137,8 +139,8 @@ describe('field', () => {
           initValues: {
             age: 'invalid',
           },
-          validateSchema: prepareYup({
-            age: yup.number().required(),
+          validateSchema: prepareDesy({
+            age: d.number(),
           }),
         });
         form.fields.age.onBlur();
@@ -150,8 +152,8 @@ describe('field', () => {
           initValues: {
             age: 'invalid',
           },
-          validateSchema: prepareYup({
-            age: yup.number().required(),
+          validateSchema: prepareDesy({
+            age: d.number(),
           }),
           options: {
             validateOnBlur: false,
@@ -169,7 +171,7 @@ describe('field', () => {
           initValues: {
             age: '42',
           },
-          validateSchema: prepareYup({}),
+          validateSchema: prepareDesy({}),
         });
         const listener = vi.fn();
         form.fields.age.on('value', listener);
@@ -192,8 +194,8 @@ describe('field', () => {
           initValues: {
             age: 42,
           },
-          validateSchema: prepareYup({
-            age: yup.number().required(),
+          validateSchema: prepareDesy({
+            age: d.number(),
           }),
         });
         form.fields.age.onNativeInput({
@@ -212,8 +214,8 @@ describe('field', () => {
           initValues: {
             age: 42,
           },
-          validateSchema: prepareYup({
-            age: yup.number().required(),
+          validateSchema: prepareDesy({
+            age: d.number(),
           }),
         });
         form.fields.age.onNativeInput({
@@ -230,8 +232,8 @@ describe('field', () => {
         initValues: {
           age: '42',
         },
-        validateSchema: prepareYup({
-          age: yup.number().required(),
+        validateSchema: prepareDesy({
+          age: d.number(),
         }),
       });
       const field = form.fields.age;
@@ -266,8 +268,8 @@ describe('field', () => {
         initValues: {
           age: '42',
         },
-        validateSchema: prepareYup({
-          age: yup.number().required(),
+        validateSchema: prepareDesy({
+          age: d.number(),
         }),
       });
       const field = form.f.age;
@@ -312,7 +314,7 @@ describe('field', () => {
           name: 'Aleksey',
         },
       });
-      const wasSet = form.fields.name.setData('Aleksey');
+      const wasSet = form.fields.name.setData('value', 'Aleksey');
       expect(wasSet).toBe(true);
     });
     it('checkPrevData: true', () => {
@@ -324,7 +326,7 @@ describe('field', () => {
           checkPrevData: true,
         },
       });
-      const wasSet = form.fields.name.setData('Aleksey');
+      const wasSet = form.fields.name.setData('value', 'Aleksey');
       expect(wasSet).toBe(false);
     });
   });

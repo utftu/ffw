@@ -7,7 +7,7 @@ export function useSubscribe(get, subscribe) {
         value: get(),
       },
     }),
-    []
+    [],
   );
   const savedSubscribe = useCallback((cb) => {
     const unsubscribe = subscribe((value) => {
@@ -21,7 +21,7 @@ export function useSubscribe(get, subscribe) {
   const immutable = useSyncExternalStore(
     savedSubscribe,
     () => store.immutable,
-    () => store.immutable
+    () => store.immutable,
   );
 
   return immutable.value;

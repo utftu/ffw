@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 import {Field} from '../field/field.js';
-import {prepareYup} from '../validators/yup.js';
+// import {prepareYup} from '../validators/yup.js';
+import {d} from 'desy';
+import {prepareDesy} from '../validators/desy.ts';
 import {Form} from './form.js';
 import {vi, expect, it, describe} from 'vitest';
 
@@ -70,9 +72,9 @@ describe('form', () => {
         name: 'robbin',
       },
       onSubmit: submitListener,
-      validateSchema: prepareYup({
-        age: yup.number().required(),
-        name: yup.string().required(),
+      validateSchema: prepareDesy({
+        age: d.number(),
+        name: d.string(),
       }),
     });
     form.f.age.set('wrong');

@@ -25,7 +25,7 @@ export function useFields(deps = [], customForm) {
     fields.forEach((field) =>
       field.on('*', () => {
         listener(fields);
-      })
+      }),
     );
     return () => {
       fields.forEach((field) => field.off('*', listener));

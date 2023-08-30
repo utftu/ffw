@@ -1,7 +1,7 @@
 import {renderHook, act} from '@testing-library/react';
 import {it, describe, expect} from 'vitest';
 import {Form, prepareYup} from 'ffw';
-import {waitTime} from 'utftu/wait-time';
+import {waitTime} from 'utftu';
 import {useFormValid} from './use-form-valid.js';
 import * as yup from 'yup';
 

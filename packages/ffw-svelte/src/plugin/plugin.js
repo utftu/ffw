@@ -23,7 +23,7 @@ function transformField(field) {
       (cb) => field.eeSync.on(name, cb),
       (data) => {
         field.setData(name, data);
-      }
+      },
     );
   }
   field.svelte.value = createWriteStore(
@@ -31,12 +31,12 @@ function transformField(field) {
     (cb) => field.eeSync.on('value', cb),
     (data) => {
       field.set(data);
-    }
+    },
   );
 
   field.svelte.errorTouched = createReadStore(
     () => field.errorTouched,
-    (cb) => field.eeSync.on('errorTouched', cb)
+    (cb) => field.eeSync.on('errorTouched', cb),
   );
 }
 
@@ -46,7 +46,7 @@ function transformForm(form) {
   form.svelte.createWriteStore = createWriteStore;
   form.svelte.valid = createReadStore(
     () => form.valid,
-    (cb) => form.eeSync.on('valid', cb)
+    (cb) => form.eeSync.on('valid', cb),
   );
 
   const oldCreateField = form.createField;

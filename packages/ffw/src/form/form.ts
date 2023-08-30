@@ -1,61 +1,76 @@
-import {createEventEmitter} from 'utftu/ee';
-import {DelayedCalls} from '../delayed-calls/delayed-calls.js';
-import {Field} from '../field/field.js';
+import {createEventEmitter} from 'utftu';
+import {Cb, Field, PropsField, Test} from '../field/field.js';
+
+type Options = {
+  validateOnChange: boolean;
+  validateOnBlur: boolean;
+  checkPrevData: boolean;
+};
+
+type OnSubmit = (form: Form) => void;
+
+type FormProps = {
+  plugins?: ((form: Form) => void)[];
+  initValues?: Record<string, any>;
+  options?: Partial<Options>;
+  onSubmit?: OnSubmit;
+  validateSchema?:
+    | Record<string, Test>
+    | ((form: Form) => Record<string, Test>);
+};
+
+const optionsDefault = {
+  validateOnChange: true,
+  validateOnBlur: true,
+  checkPrevData: false,
+};
 
 export class Form {
-  static new(...args) {
-    return new Form(...args);
+  static new(props: FormProps) {
+    return new Form(props);
   }
 
-  options = {
-    validateOnChange: true,
-    validateOnBlur: true,
-    checkPrevData: false,
+  options: {
+    validateOnChange: boolean;
+    validateOnBlur: boolean;
+    checkPrevData: boolean;
   };
-  fields = {};
-  f = null;
-  onSubmit = () => {};
-  calls = new DelayedCalls();
+  initValues: Record<string, any>;
+  fields: Record<string, Field<any>> = {};
+  f: Record<string, Field<any>>;
+  onSubmit: OnSubmit;
   eeSync = createEventEmitter();
   ee = createEventEmitter();
 
-  notify(name, value) {
-    this.eeSync.emit(name, value);
-    this.calls.add(this, name, () => {
-      this.ee.emit(name, value);
-    });
+  notify(name: string, value: any) {
+    this.ee.emit(name, value);
     if (name !== 'global') {
-      this.notify('global', [this, name, value]);
+      this.notify('global', {form: this, name, value});
     }
   }
 
-  batch(cb) {
-    cb();
-  }
-
-  createField(props = {}) {
+  createField(props: PropsField) {
     return new Field(props);
   }
 
-  _getFlatFieldOrCreate(name, props) {
+  _getFlatFieldOrCreate(
+    name: string,
+    props: Omit<PropsField, 'name' | 'form'>,
+  ) {
     if (!this.fields[name]) {
       this.fields[name] = this.createField({name, form: this, ...props});
     }
     return this.fields[name];
   }
 
-  constructor(
-    props = {
-      plugins: [],
-    }
-  ) {
+  constructor(props: FormProps = {}) {
     const plugins = props.plugins || [];
     this.f = this.fields;
 
     plugins.forEach((plugin) => plugin(this));
 
-    this.options = {...this.options, ...props.options};
-    this.onSubmit = props.onSubmit ?? (() => {});
+    this.options = {...optionsDefault, ...props.options};
+    this.onSubmit = props.onSubmit ?? ((_form) => {});
     this.initValues = props.initValues ?? {};
 
     for (const fieldName in this.initValues) {
@@ -65,10 +80,6 @@ export class Form {
       });
     }
 
-    if (props.batch) {
-      this.batch = props.batch;
-    }
-
     const validateObj =
       typeof props.validateSchema === 'function'
         ? props.validateSchema(this)
@@ -76,14 +87,14 @@ export class Form {
 
     for (const fieldName in validateObj) {
       const test = validateObj[fieldName];
-      const field = this._getFlatFieldOrCreate(fieldName);
+      const field = this._getFlatFieldOrCreate(fieldName, {value: undefined});
       field.test = test;
     }
   }
 
   async validate() {
     const errors = await Promise.all(
-      [...this._flatFields].map((field) => field.validate())
+      [...this._flatFields].map((field) => field.validate()),
     );
 
     return errors.every((error) => error === '');
@@ -113,8 +124,8 @@ export class Form {
     }
   }
 
-  _prepareFieldData(func) {
-    const data = {};
+  _prepareFieldData<TValue>(func: (field: Field) => TValue) {
+    const data: Record<keyof typeof this.fields, any> = {};
     for (const key in this.fields) {
       const funcResult = func(this.fields[key]);
       if (funcResult === undefined) {
@@ -145,25 +156,25 @@ export class Form {
     }));
   }
 
-  on(name, cb) {
+  on(name: string, cb: Cb) {
     this.ee.on(name, cb);
 
     return () => this.ee.off(name, cb);
   }
 
-  off(name, cb) {
+  off(name: string, cb: Cb) {
     return () => this.ee.off(name, cb);
   }
 
   _errors = 0;
-  _flatFields = new Set();
-  addField(field) {
+  _flatFields = new Set<Field>();
+  addField(field: Field) {
     if (field.error !== '') {
       this._errors++;
     }
     this._flatFields.add(field);
   }
-  removeField(field) {
+  removeField(field: Field) {
     if (field.error !== '') {
       this._errors--;
     }

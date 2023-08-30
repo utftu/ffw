@@ -50,7 +50,7 @@ function User() {
   const form = useFfw(
     // list fields to subscribe
     'name',
-    'age'
+    'age',
   );
 
   return (

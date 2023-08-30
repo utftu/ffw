@@ -14,12 +14,12 @@ function transformField(field) {
   for (const name in field.data) {
     field.nanostores[name] = createStore(
       () => field.data[name],
-      (cb) => field.eeSync.on(name, cb)
+      (cb) => field.eeSync.on(name, cb),
     );
   }
   field.nanostores.errorTouched = createStore(
     () => field.errorTouched,
-    (cb) => field.eeSync.on('errorTouched', cb)
+    (cb) => field.eeSync.on('errorTouched', cb),
   );
 }
 
@@ -28,7 +28,7 @@ function transformForm(form) {
   form.nanostores.createStore = createStore;
   form.nanostores.valid = createStore(
     () => form.valid,
-    (cb) => form.eeSync.on('valid', cb)
+    (cb) => form.eeSync.on('valid', cb),
   );
 
   const oldCreateField = form.createField;

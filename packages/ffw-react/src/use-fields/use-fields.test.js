@@ -1,7 +1,7 @@
 import {renderHook, act} from '@testing-library/react';
 import {it, expect, describe, vi} from 'vitest';
 import {Form} from 'ffw';
-import {waitTime} from 'utftu/wait-time';
+import {waitTime} from 'utftu';
 import {useFields} from './use-fields.js';
 
 describe('use-fields', () => {
@@ -29,7 +29,7 @@ describe('use-fields', () => {
       },
     });
     const {result} = renderHook(() =>
-      useFields([form.fields.name, 'age'], form)
+      useFields([form.fields.name, 'age'], form),
     );
     expect(result.current[0]).toBe(form.fields.name);
     expect(result.current[1]).toBe(form.fields.age);

@@ -9,7 +9,7 @@ export function useFormValid(customForm) {
     (listener) => {
       return form.on('valid', listener);
     },
-    [form]
+    [form],
   );
 
   const get = useCallback(() => {
