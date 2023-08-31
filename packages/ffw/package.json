@@ -5,10 +5,8 @@
   "scripts": {
     "build": "node ./build.js"
   },
-  "exports": {
-    "import": "./dist/ffw.js",
-    "require": "./dist/ffw.cjs"
-  },
+  "main": "./dist/ffw.js",
+  "types": "./dist/types/ffw.d.ts",
   "files": [
     "dist/**/*"
   ],

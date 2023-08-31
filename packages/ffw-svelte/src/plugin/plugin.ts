@@ -1,0 +1,90 @@
+import {Field, Form} from 'ffw';
+
+type Get<TValue = any> = () => TValue;
+type Set<TValue = any> = (value: TValue) => void;
+type Cb<TValue = any> = (value: TValue) => void;
+type Subscribe<TValue = any> = (cb: Cb<TValue>) => void;
+
+type ReadStore<TValue = any> = {
+  subscribe: Subscribe<TValue>;
+};
+
+type WriteStore<TValue = any> = ReadStore<TValue> & {
+  set: Set<TValue>;
+};
+
+export type FieldSvelte = Field & {
+  svelte: any;
+};
+
+export type FormSvelte = Form<FieldSvelte> & {
+  svelte: any;
+};
+
+function createReadStore<TValue = any>(
+  get: Get,
+  subscribe: Subscribe,
+): ReadStore<TValue> {
+  return {
+    subscribe(cb: Cb) {
+      cb(get());
+
+      return subscribe(cb);
+    },
+  };
+}
+
+function createWriteStore(get: Get, subscribe: Subscribe, set: Set) {
+  const store: WriteStore = createReadStore(get, subscribe) as WriteStore;
+  store.set = set;
+  return store;
+}
+
+function transformField(field: Field) {
+  const fieldSvelte = field as FieldSvelte;
+  fieldSvelte.svelte = {};
+
+  for (const name in field.data) {
+    fieldSvelte.svelte[name] = createWriteStore(
+      () => field.data[name],
+      (cb) => field.ee.on(name, cb),
+      (data) => {
+        field.setData(name, data);
+      },
+    );
+  }
+  fieldSvelte.svelte.value = createWriteStore(
+    () => field.data.value,
+    (cb) => field.ee.on('value', cb),
+    (data) => {
+      field.set(data);
+    },
+  );
+
+  fieldSvelte.svelte.errorTouched = createReadStore(
+    () => field.errorTouched,
+    (cb) => field.ee.on('errorTouched', cb),
+  );
+}
+
+function transformForm(form: Form) {
+  const formSvelte = form as FormSvelte;
+  formSvelte.svelte = {};
+  formSvelte.svelte.createReadStore = createReadStore;
+  formSvelte.svelte.createWriteStore = createWriteStore;
+  formSvelte.svelte.valid = createReadStore(
+    () => form.valid,
+    (cb) => form.ee.on('valid', cb),
+  );
+
+  const oldCreateField = form.createField;
+  form.createField = function (...args) {
+    const field = oldCreateField.call(form, ...args);
+    transformField(field);
+    return field;
+  };
+}
+
+export const addSveltePlugin = () => (form: Form) => {
+  transformForm(form);
+};

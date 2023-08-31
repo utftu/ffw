@@ -1,6 +1,11 @@
 import {useCallback, useMemo, useSyncExternalStore} from 'react';
 
-export function useSubscribe(get, subscribe) {
+type Get<TValue = any> = () => TValue;
+type Cb<TValue = any> = (value: TValue) => void;
+type Unsubscribe = () => void;
+type Subscribe<TValue = any> = (cb: Cb<TValue>) => Unsubscribe;
+
+export function useSubscribe(get: Get, subscribe: Subscribe) {
   const store = useMemo(
     () => ({
       immutable: {
@@ -9,11 +14,11 @@ export function useSubscribe(get, subscribe) {
     }),
     [],
   );
-  const savedSubscribe = useCallback((cb) => {
+  const savedSubscribe = useCallback((cb: Cb) => {
     const unsubscribe = subscribe((value) => {
       store.immutable = {...store.immutable};
       store.immutable.value = value;
-      cb();
+      cb(value);
     });
 
     return unsubscribe;

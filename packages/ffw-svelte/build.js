@@ -1,4 +1,5 @@
 import {build, defineConfig} from 'vite';
+import dts from 'vite-plugin-dts';
 
 await build({
   ...defineConfig({
@@ -13,4 +14,5 @@ await build({
       },
     },
   }),
+  plugins: [dts()],
 });

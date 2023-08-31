@@ -3,6 +3,8 @@ import {Form} from './form/form.ts';
 import {prepareYup, convertYupToTest} from './validators/yup.ts';
 import {prepareDesy} from './validators/desy.ts';
 
+export {Form as FfwForm} from './form/form.ts';
+
 export const FfwField = Field;
-export const FfwForm = Form;
+// export const FfwForm = Form;
 export {Form, Field, prepareYup, prepareDesy};

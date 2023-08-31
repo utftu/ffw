@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {useForm} from '../use-form/use-form.js';
-import {useSubscribe} from '../use-subscribe/use-subscribe.js';
+import {useSubscribe} from '../use-subscribe/use-subscribe.ts';
 
 export function useFormValid(customForm) {
   const form = useForm(customForm);

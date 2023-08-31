@@ -25,7 +25,7 @@ const optionsDefault = {
   checkPrevData: false,
 };
 
-export class Form {
+export class Form<TField extends Field = Field> {
   static new(props: FormProps) {
     return new Form(props);
   }
@@ -36,10 +36,9 @@ export class Form {
     checkPrevData: boolean;
   };
   initValues: Record<string, any>;
-  fields: Record<string, Field<any>> = {};
-  f: Record<string, Field<any>>;
+  fields: Record<string, TField> = {};
+  f: Record<string, TField>;
   onSubmit: OnSubmit;
-  eeSync = createEventEmitter();
   ee = createEventEmitter();
 
   notify(name: string, value: any) {
@@ -49,8 +48,8 @@ export class Form {
     }
   }
 
-  createField(props: PropsField) {
-    return new Field(props);
+  createField(props: PropsField): TField {
+    return new Field(props) as TField;
   }
 
   _getFlatFieldOrCreate(

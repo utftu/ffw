@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {createElement} from 'react';
 import {useForm} from '../use-form/use-form.js';
-import {FfwProvider} from './context.js';
+import {FfwProvider} from './context.ts';
 import {expect, describe, it} from 'vitest';
 import {Form} from 'ffw';
 
