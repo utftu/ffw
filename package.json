@@ -42,6 +42,7 @@
     "yup": "^1.2.0"
   },
   "dependencies": {
-    "utftu": "^1.0.26"
+    "utftu": "^1.0.26",
+    "vite-node": "^0.34.3"
   }
 }

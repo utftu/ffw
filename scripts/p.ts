@@ -8,10 +8,14 @@ if (!target) {
   throw new Error('no target');
 }
 
-execSync(`cd ${target}`);
-execSync('git add .');
-execSync('git commit -m "fast publish"');
-execSync('git push');
-execSync('pnpm run test');
+console.log(execSync(`cd ${target}`).toString());
+console.log(execSync('git add .').toString());
+console.log(execSync('git commit -m "fast publish"').toString());
+
+// execSync(`cd ${target}`);
+// execSync('git add .');
+// execSync('git commit -m "fast publish"');
+// execSync('git push');
+// execSync('pnpm run test');
 
 // execSync('cd -');
