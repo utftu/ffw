@@ -18,7 +18,7 @@ myExecSync(`cd ${target}`);
 myExecSync(`git add .`);
 myExecSync('git commit -m "fast publish"');
 myExecSync('git push');
-myExecSync('pnpm test');
+myExecSync(`pnpm test .`);
 myExecSync('npm version patch');
 
 // console.log(execSync(`cd ${target}`).toString());
