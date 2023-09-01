@@ -14,11 +14,12 @@ function myExecSync(command: string) {
   });
 }
 
-myExecSync('ls');
 myExecSync(`cd ${target}`);
 myExecSync(`git add .`);
 myExecSync('git commit -m "fast publish"');
 myExecSync('git push');
+myExecSync('pnpm test');
+myExecSync('npm version patch');
 
 // console.log(execSync(`cd ${target}`).toString());
 // console.log(execSync('git add .').toString());
