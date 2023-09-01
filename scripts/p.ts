@@ -11,6 +11,7 @@ if (!target) {
 execSync(`cd ${target}`);
 execSync('git add .');
 execSync('git commit -m "fast publish"');
-execSync('git apush');
+execSync('git push');
+execSync('pnpm run test');
 
-execSync('cd -');
+// execSync('cd -');
