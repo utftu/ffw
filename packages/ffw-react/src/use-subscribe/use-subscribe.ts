@@ -1,9 +1,9 @@
 import {useCallback, useMemo, useSyncExternalStore} from 'react';
 
 type Get<TValue = any> = () => TValue;
-type Cb<TValue = any> = (value: TValue) => void;
+export type Cb<TValue = any> = (value: TValue) => void;
 type Unsubscribe = () => void;
-type Subscribe<TValue = any> = (cb: Cb<TValue>) => Unsubscribe;
+export type Subscribe<TValue = any> = (cb: Cb<TValue>) => Unsubscribe;
 
 export function useSubscribe(get: Get, subscribe: Subscribe) {
   const store = useMemo(

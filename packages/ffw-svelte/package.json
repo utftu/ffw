@@ -5,10 +5,7 @@
   "scripts": {
     "build": "node ./build.js"
   },
-  "exports": {
-    "import": "./dist/ffw-svelte.js",
-    "require": "./dist/ffw-svelte.cjs"
-  },
+  "main": "./dist/ffw-svelte.js",
   "files": [
     "dist/**/*"
   ],

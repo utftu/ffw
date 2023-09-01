@@ -1,10 +1,9 @@
 import {Field} from './field/field.ts';
 import {Form} from './form/form.ts';
-import {prepareYup, convertYupToTest} from './validators/yup.ts';
+import {prepareYup} from './validators/yup.ts';
 import {prepareDesy} from './validators/desy.ts';
 
-export {Form as FfwForm} from './form/form.ts';
+export {Form as FormFfw} from './form/form.ts';
+export {Field as FieldFfw} from './field/field.ts';
 
-export const FfwField = Field;
-// export const FfwForm = Form;
 export {Form, Field, prepareYup, prepareDesy};

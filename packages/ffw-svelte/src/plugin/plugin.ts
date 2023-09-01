@@ -13,12 +13,21 @@ type WriteStore<TValue = any> = ReadStore<TValue> & {
   set: Set<TValue>;
 };
 
-export type FieldSvelte = Field & {
-  svelte: any;
+export type FieldSvelte<TValue = any> = Field<TValue> & {
+  svelte: {
+    value: WriteStore<TValue>;
+    error: WriteStore<string>;
+    touched: WriteStore<boolean>;
+    errorTouched: ReadStore<boolean>;
+  } & {[key: string]: WriteStore<any>};
 };
 
 export type FormSvelte = Form<FieldSvelte> & {
-  svelte: any;
+  svelte: {
+    valid: ReadStore<boolean>;
+    createReadStore: typeof createReadStore;
+    createWriteStore: typeof createWriteStore;
+  } & {[key: string]: WriteStore<any>};
 };
 
 function createReadStore<TValue = any>(
@@ -42,7 +51,7 @@ function createWriteStore(get: Get, subscribe: Subscribe, set: Set) {
 
 function transformField(field: Field) {
   const fieldSvelte = field as FieldSvelte;
-  fieldSvelte.svelte = {};
+  fieldSvelte.svelte = {} as any;
 
   for (const name in field.data) {
     fieldSvelte.svelte[name] = createWriteStore(
@@ -69,7 +78,7 @@ function transformField(field: Field) {
 
 function transformForm(form: Form) {
   const formSvelte = form as FormSvelte;
-  formSvelte.svelte = {};
+  formSvelte.svelte = {} as any;
   formSvelte.svelte.createReadStore = createReadStore;
   formSvelte.svelte.createWriteStore = createWriteStore;
   formSvelte.svelte.valid = createReadStore(

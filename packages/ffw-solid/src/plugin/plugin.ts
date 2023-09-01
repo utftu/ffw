@@ -16,9 +16,7 @@ export type FormSolid = Form<FieldSolid> & {
   solid: {
     createStore: typeof createStore;
     valid: Accessor<boolean>;
-    [key: string]: Accessor<any> | any;
-    // [key: string]: Accessor<any>;
-  };
+  } & {[key: string]: Accessor<any>};
 };
 
 function transformField(field: Field) {

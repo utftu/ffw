@@ -1,19 +1,23 @@
 import {useCallback} from 'react';
-import {useForm} from '../use-form/use-form.js';
-import {useSubscribe} from '../use-subscribe/use-subscribe.js';
+import {useForm} from '../use-form/use-form.ts';
+import {useSubscribe} from '../use-subscribe/use-subscribe.ts';
+import {FieldReact, FormReact} from '../plugin/plugin.ts';
 
-function prepareDeps(deps, form) {
+type DepsArr = (string | FieldReact)[];
+type Deps = DepsArr | ((form: FormReact) => DepsArr);
+
+function prepareDeps(deps: Deps, form: FormReact): FieldReact[] {
   deps = typeof deps === 'function' ? deps(form) : deps;
-  deps = deps.map((dep) => {
+  const fields = deps.map((dep) => {
     if (typeof dep === 'string') {
       return form.fields[dep];
     }
     return dep;
   });
-  return deps;
+  return fields;
 }
 
-export function useFields(deps = [], customForm) {
+export function useFields(deps: Deps = [], customForm?: FormReact) {
   const form = useForm(customForm);
   const fields = prepareDeps(deps, form);
 
@@ -21,7 +25,7 @@ export function useFields(deps = [], customForm) {
     return fields;
   }, fields);
 
-  const subscribe = useCallback((listener) => {
+  const subscribe = useCallback((listener: (fields: FieldReact[]) => void) => {
     fields.forEach((field) =>
       field.on('*', () => {
         listener(fields);

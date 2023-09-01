@@ -1,6 +1,4 @@
-import * as yup from 'yup';
 import {Field} from '../field/field.js';
-// import {prepareYup} from '../validators/yup.js';
 import {d} from 'desy';
 import {prepareDesy} from '../validators/desy.ts';
 import {Form} from './form.js';

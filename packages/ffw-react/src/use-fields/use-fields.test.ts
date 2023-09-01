@@ -2,7 +2,8 @@ import {renderHook, act} from '@testing-library/react';
 import {it, expect, describe, vi} from 'vitest';
 import {Form} from 'ffw';
 import {waitTime} from 'utftu';
-import {useFields} from './use-fields.js';
+import {useFields} from './use-fields.ts';
+import {FormReact} from '../plugin/plugin.ts';
 
 describe('use-fields', () => {
   it('init func', () => {
@@ -14,7 +15,7 @@ describe('use-fields', () => {
         name: 'Ivan',
         age: 25,
       },
-    });
+    }) as FormReact;
     const {result} = renderHook(() => useFields(mock, form));
     expect(mock.mock.calls.length).toBe(1);
     expect(mock.mock.calls[0][0]).toBe(form);
@@ -27,7 +28,7 @@ describe('use-fields', () => {
         name: 'Ivan',
         age: 25,
       },
-    });
+    }) as FormReact;
     const {result} = renderHook(() =>
       useFields([form.fields.name, 'age'], form),
     );
@@ -40,7 +41,7 @@ describe('use-fields', () => {
         name: 'Ivan',
         age: 25,
       },
-    });
+    }) as FormReact;
     let updateCount = 0;
     const {result} = renderHook(() => {
       updateCount++;

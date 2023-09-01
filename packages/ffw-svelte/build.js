@@ -6,13 +6,18 @@ await build({
     build: {
       outDir: './dist',
       lib: {
-        entry: ['./src/ffw-svelte.js'],
-        formats: ['es', 'cjs'],
+        entry: ['./src/ffw-svelte.ts'],
+        formats: ['es'],
       },
       rollupOptions: {
         external: ['ffw', 'svelte'],
       },
     },
   }),
-  plugins: [dts()],
+  plugins: [
+    dts({
+      outDir: './dist/types',
+      tsconfigPath: './tsconfig.types.json',
+    }),
+  ],
 });

@@ -185,7 +185,7 @@ export class Field<TValue = any> {
     return () => this.ee.off(name, cb);
   }
 
-  off(name: string, cb: UnsubscribeCb) {
+  off(name: string, cb: Cb<TValue>) {
     return () => this.ee.off(name, cb);
   }
 

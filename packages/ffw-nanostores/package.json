@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nanostores": "^0.7.3"
+    "nanostores": "^0.7.3",
+    "ffw": "workspace:*"
   }
 }

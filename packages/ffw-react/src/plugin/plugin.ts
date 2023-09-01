@@ -1,6 +1,6 @@
 import {Field, Form} from 'ffw';
 
-export type FieldReact = Field & {
+export type FieldReact<TValue = any> = Field<TValue> & {
   react: any;
 };
 

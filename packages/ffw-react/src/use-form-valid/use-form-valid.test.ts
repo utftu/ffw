@@ -1,9 +1,11 @@
 import {renderHook, act} from '@testing-library/react';
 import {it, describe, expect} from 'vitest';
-import {Form, prepareYup} from 'ffw';
+import {Form, prepareDesy} from 'ffw';
+import {d} from 'desy';
 import {waitTime} from 'utftu';
-import {useFormValid} from './use-form-valid.js';
+import {useFormValid} from './use-form-valid.ts';
 import * as yup from 'yup';
+import {FormReact} from '../plugin/plugin.ts';
 
 describe('use-form-valid', () => {
   it('base', async () => {
@@ -11,10 +13,10 @@ describe('use-form-valid', () => {
       initValues: {
         age: 25,
       },
-      validateSchema: prepareYup({
-        age: yup.number().required(),
+      validateSchema: prepareDesy({
+        age: d.number(),
       }),
-    });
+    }) as FormReact;
     const {result} = renderHook(() => useFormValid(form));
     expect(result.current).toBe(true);
     await act(async () => {

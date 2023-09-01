@@ -1,9 +1,7 @@
 import {Field} from './field.ts';
 import {vi, expect, it, describe} from 'vitest';
 import {Form} from '../form/form.ts';
-import * as yup from 'yup';
 import {waitTime} from 'utftu';
-// import {prepareYup} from '../validators/yup.js';
 import {prepareDesy} from '../validators/desy.ts';
 import {d} from 'desy';
 
