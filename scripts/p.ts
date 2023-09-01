@@ -8,9 +8,21 @@ if (!target) {
   throw new Error('no target');
 }
 
-console.log(execSync(`cd ${target}`).toString());
-console.log(execSync('git add .').toString());
-console.log(execSync('git commit -m "fast publish"').toString());
+function myExecSync(command: string) {
+  return execSync(command, {
+    stdio: 'inherit',
+  });
+}
+
+myExecSync('ls');
+myExecSync(`cd ${target}`);
+myExecSync(`git add .`);
+myExecSync('git commit -m "fast publish"');
+
+// console.log(execSync(`cd ${target}`).toString());
+// console.log(execSync('git add .').toString());
+// console.log(execSync('git commit -m "fast publish"').toString());
+// console.log('');
 
 // execSync(`cd ${target}`);
 // execSync('git add .');
