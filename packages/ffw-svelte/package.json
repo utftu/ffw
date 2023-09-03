@@ -5,6 +5,7 @@
   "scripts": {
     "build": "node ./build.js"
   },
+  "types": "./dist/types/ffw-svelte.d.ts",
   "main": "./dist/ffw-svelte.js",
   "files": [
     "dist/**/*"
