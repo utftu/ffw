@@ -23,6 +23,7 @@
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.21",
+    "@types/yargs": "^17.0.24",
     "@vitest/coverage-istanbul": "^0.34.3",
     "desy": "^0.0.3",
     "esbuild": "^0.19.2",
@@ -43,6 +44,7 @@
   },
   "dependencies": {
     "utftu": "^1.0.26",
-    "vite-node": "^0.34.3"
+    "vite-node": "^0.34.3",
+    "yargs": "^17.7.2"
   }
 }
