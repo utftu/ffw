@@ -1,7 +1,7 @@
 import {
   addSveltePlugin,
-  FieldFfwSvelte,
-  FormFfwSvelte,
+  type FieldFfwSvelte,
+  type FormFfwSvelte,
 } from './plugin/plugin.ts';
 import {getFfwContext, setFfwContext} from './context/context.ts';
 
