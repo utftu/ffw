@@ -1,4 +1,4 @@
-import {FormSvelte, addSveltePlugin} from './plugin.ts';
+import {FormFfwSvelte, addSveltePlugin} from './plugin.ts';
 import {Form} from 'ffw';
 import {describe, it, vi, expect} from 'vitest';
 import {waitTime} from 'utftu';
@@ -11,7 +11,7 @@ describe('add-svelte', () => {
         name: 'Aleksey',
       },
       plugins: [addSveltePlugin()],
-    }) as FormSvelte;
+    }) as FormFfwSvelte;
     const name = form.fields.name;
 
     name.svelte.value.subscribe(subscribe);
@@ -30,7 +30,7 @@ describe('add-svelte', () => {
         name: 'Aleksey',
       },
       plugins: [addSveltePlugin()],
-    }) as FormSvelte;
+    }) as FormFfwSvelte;
     const name = form.fields.name;
 
     name.svelte.value.subscribe(subscribe);

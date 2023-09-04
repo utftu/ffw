@@ -91,12 +91,14 @@ export class Form<TField extends Field = Field> {
     }
   }
 
-  async validate() {
-    const errors = await Promise.all(
-      [...this._flatFields].map((field) => field.validate()),
-    );
-
-    return errors.every((error) => error === '');
+  validate() {
+    for (const field of this._flatFields) {
+      const error = field.validate();
+      if (error !== '') {
+        return false;
+      }
+    }
+    return true;
   }
 
   getValid() {
