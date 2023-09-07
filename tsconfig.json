@@ -4,6 +4,7 @@
     "module": "esnext",
     "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": true,
-    "strict": true
+    "strict": true,
+    "jsx": "react"
   }
 }

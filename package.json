@@ -24,6 +24,7 @@
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.21",
     "@types/yargs": "^17.0.24",
+    "@vitejs/plugin-react": "^4.0.4",
     "@vitest/coverage-istanbul": "^0.34.3",
     "desy": "^0.0.3",
     "esbuild": "^0.19.2",

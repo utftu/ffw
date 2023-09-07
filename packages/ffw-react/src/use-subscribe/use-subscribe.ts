@@ -12,17 +12,20 @@ export function useSubscribe(get: Get, subscribe: Subscribe) {
         value: get(),
       },
     }),
-    [],
+    [get, subscribe],
   );
-  const savedSubscribe = useCallback((cb: Cb) => {
-    const unsubscribe = subscribe((value) => {
-      store.immutable = {...store.immutable};
-      store.immutable.value = value;
-      cb(value);
-    });
+  const savedSubscribe = useCallback(
+    (cb: Cb) => {
+      const unsubscribe = subscribe((value) => {
+        store.immutable = {...store.immutable};
+        store.immutable.value = value;
+        cb(value);
+      });
 
-    return unsubscribe;
-  }, []);
+      return unsubscribe;
+    },
+    [get, subscribe],
+  );
   const immutable = useSyncExternalStore(
     savedSubscribe,
     () => store.immutable,
