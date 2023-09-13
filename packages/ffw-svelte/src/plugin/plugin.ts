@@ -13,13 +13,16 @@ type WriteStore<TValue = any> = ReadStore<TValue> & {
   set: Set<TValue>;
 };
 
+type AnyStore = ReadStore<any> | WriteStore<any>;
+
 export type FieldFfwSvelte<TValue = any> = Field<TValue> & {
   svelte: {
     value: WriteStore<TValue>;
-    error: WriteStore<string>;
     touched: WriteStore<boolean>;
-    errorTouched: ReadStore<boolean>;
-  } & {[key: string]: WriteStore<any>};
+    error: ReadStore<string>;
+    errorTouched: ReadStore<string>;
+    custom: Record<string, AnyStore>;
+  };
 };
 
 export type FormFfwSvelte = Form<FieldFfwSvelte> & {
@@ -27,7 +30,8 @@ export type FormFfwSvelte = Form<FieldFfwSvelte> & {
     valid: ReadStore<boolean>;
     createReadStore: typeof createReadStore;
     createWriteStore: typeof createWriteStore;
-  } & {[key: string]: WriteStore<any>};
+    custom: Record<string, AnyStore>;
+  };
 };
 
 function createReadStore<TValue = any>(
@@ -51,9 +55,9 @@ function createWriteStore(get: Get, subscribe: Subscribe, set: Set) {
 
 function transformField(field: Field) {
   const fieldSvelte = field as FieldFfwSvelte;
-  fieldSvelte.svelte = {} as any;
+  fieldSvelte.svelte = {} as typeof fieldSvelte.svelte;
 
-  for (const name in field.data) {
+  for (const name of ['value', 'touched'] as const) {
     fieldSvelte.svelte[name] = createWriteStore(
       () => field.data[name],
       (cb) => field.ee.on(name, cb),
@@ -62,29 +66,25 @@ function transformField(field: Field) {
       },
     );
   }
-  fieldSvelte.svelte.value = createWriteStore(
-    () => field.data.value,
-    (cb) => field.ee.on('value', cb),
-    (data) => {
-      field.set(data);
-    },
-  );
 
-  fieldSvelte.svelte.errorTouched = createReadStore(
-    () => field.errorTouched,
-    (cb) => field.ee.on('errorTouched', cb),
-  );
+  for (const name of ['error', 'errorTouched'] as const) {
+    fieldSvelte.svelte[name] = createReadStore(
+      () => field[name],
+      (cb) => field.ee.on(name, cb),
+    );
+  }
 }
 
 function transformForm(form: Form) {
   const formSvelte = form as FormFfwSvelte;
-  formSvelte.svelte = {} as any;
-  formSvelte.svelte.createReadStore = createReadStore;
-  formSvelte.svelte.createWriteStore = createWriteStore;
-  formSvelte.svelte.valid = createReadStore(
-    () => form.valid,
-    (cb) => form.ee.on('valid', cb),
-  );
+  formSvelte.svelte = {
+    createReadStore,
+    createWriteStore,
+    valid: createReadStore(
+      () => form.valid,
+      (cb) => form.ee.on('valid', cb),
+    ),
+  } as typeof formSvelte.svelte;
 
   const oldCreateField = form.createField;
   form.createField = function (...args) {
@@ -92,8 +92,15 @@ function transformForm(form: Form) {
     transformField(field);
     return field;
   };
+
+  for (const key in form.fields) {
+    const field = form.fields[key];
+    transformField(field);
+  }
+
+  return formSvelte;
 }
 
 export const addSveltePlugin = () => (form: Form) => {
-  transformForm(form);
+  return transformForm(form);
 };

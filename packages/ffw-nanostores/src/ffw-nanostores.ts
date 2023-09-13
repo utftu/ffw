@@ -52,6 +52,14 @@ function transformForm(form: Form) {
     transformField(field);
     return field;
   };
+
+  for (const key in form.fields) {
+    const field = form.fields[key];
+
+    transformField(field);
+  }
+
+  return form as any as FormNanostores;
 }
 
 export const addNanostores = () => (form: Form) => {

@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": true,
     "strict": true,
-    "jsx": "preserve"
-  }
+    "jsx": "preserve",
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "**/dist/*"]
 }
