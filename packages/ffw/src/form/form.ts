@@ -1,5 +1,6 @@
 import {createEventEmitter} from 'utftu';
 import {Cb, Field, PropsField, Test} from '../field/field.js';
+import {UnionToIntersection} from '../types.ts';
 
 type Options = {
   validateOnChange: boolean;
@@ -9,8 +10,10 @@ type Options = {
 
 type OnSubmit = (form: Form) => void;
 
+type FormPlugin<TForm extends Form = any> = (form: TForm) => any;
+
 type FormProps = {
-  plugins?: ((form: Form) => void)[];
+  plugins?: FormPlugin[];
   initValues?: Record<string, any>;
   options?: Partial<Options>;
   onSubmit?: OnSubmit;
@@ -26,7 +29,7 @@ const optionsDefault = {
 };
 
 export class Form<TField extends Field = Field> {
-  static new(props: FormProps) {
+  static new<TFormProps extends FormProps = any>(props?: TFormProps) {
     return new Form(props);
   }
 
@@ -60,6 +63,13 @@ export class Form<TField extends Field = Field> {
       this.fields[name] = this.createField({name, form: this, ...props});
     }
     return this.fields[name];
+  }
+
+  addPlugin<TPlugin extends FormPlugin<typeof this>>(
+    plugin: TPlugin,
+  ): ReturnType<TPlugin> {
+    const pluginResult = plugin(this);
+    return pluginResult;
   }
 
   constructor(props: FormProps = {}) {

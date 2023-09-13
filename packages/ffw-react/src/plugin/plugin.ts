@@ -26,11 +26,18 @@ function transformField(field: Field) {
   };
 }
 
-export const addReactPlugin = () => (form: Form) => {
-  const oldCreateField = form.createField;
-  form.createField = function (...args) {
-    const field = oldCreateField.apply(form, args);
-    transformField(field);
-    return field;
+export const addReactPlugin =
+  () =>
+  <TForm extends Form>(form: TForm) => {
+    const oldCreateField = form.createField;
+    form.createField = function (...args) {
+      const field = oldCreateField.apply(form, args);
+      transformField(field);
+      return field;
+    };
+    for (const key in form.fields) {
+      const field = form.fields[key];
+      transformField(field);
+    }
+    return form as any as FormReact;
   };
-};
