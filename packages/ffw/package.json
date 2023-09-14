@@ -1,6 +1,6 @@
 {
   "name": "ffw",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "type": "module",
   "scripts": {
     "build": "node ./build.js",
