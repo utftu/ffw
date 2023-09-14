@@ -34,6 +34,8 @@ function transformField(field: Field) {
       (cb) => field.ee.on(name, cb),
     );
   }
+
+  return fieldSolid;
 }
 
 function transformForm(form: Form) {
@@ -50,8 +52,7 @@ function transformForm(form: Form) {
   const oldCreateField = form.createField;
   form.createField = function (...args) {
     const field = oldCreateField.call(form, ...args);
-    transformField(field);
-    return field;
+    return transformField(field);
   };
 
   for (const key in form.fields) {
@@ -59,7 +60,7 @@ function transformForm(form: Form) {
     transformField(field);
   }
 
-  return form as FormSolid;
+  return formSolid;
 }
 
 export const addSolidPlugin = () => (form: Form) => {

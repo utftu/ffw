@@ -73,6 +73,8 @@ function transformField(field: Field) {
       (cb) => field.ee.on(name, cb),
     );
   }
+
+  return fieldSvelte;
 }
 
 function transformForm(form: Form) {
@@ -89,8 +91,7 @@ function transformForm(form: Form) {
   const oldCreateField = form.createField;
   form.createField = function (...args) {
     const field = oldCreateField.call(form, ...args);
-    transformField(field);
-    return field;
+    return transformField(field);
   };
 
   for (const key in form.fields) {

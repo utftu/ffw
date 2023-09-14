@@ -1,12 +1,24 @@
-import {atom} from 'nanostores';
+import {atom, type ReadableAtom} from 'nanostores';
 import {Field, Form} from 'ffw';
 
+type CustomStore = Record<string, ReadableAtom<any>>;
+
 type FieldNanostores<TValue = any> = Field<TValue> & {
-  nanostores: any;
+  nanostores: {
+    value: ReadableAtom<TValue>;
+    error: ReadableAtom<string>;
+    errorTouched: ReadableAtom<string>;
+    touched: ReadableAtom<boolean>;
+    custom: Record<string, ReadableAtom<any>>;
+  };
 };
 
 type FormNanostores = Form<FieldNanostores> & {
-  nanostores: any;
+  nanostores: {
+    createStore: typeof createStore;
+    valid: ReadableAtom<boolean>;
+    custom: CustomStore;
+  };
 };
 
 type Get<TValue = any> = () => TValue;
@@ -18,39 +30,38 @@ function createStore(get: Get, subscribe: Subscribe) {
   subscribe((value) => {
     atomInstanse.set(value);
   });
-  return atomInstanse;
+  return atomInstanse as ReadableAtom;
 }
 
-function transformField(field: Field) {
-  const fieldNanostores = field as FieldNanostores;
-  fieldNanostores.nanostores = {};
+function transformField<TValue = any>(field: Field<TValue>) {
+  const fieldNanostores = field as FieldNanostores<TValue>;
+  fieldNanostores.nanostores = {} as typeof fieldNanostores.nanostores;
 
-  for (const name in field.data) {
+  for (const name of ['value', 'error', 'errorTouched', 'touched'] as const) {
     fieldNanostores.nanostores[name] = createStore(
-      () => field.data[name],
+      () => field[name],
       (cb) => field.ee.on(name, cb),
     );
   }
-  fieldNanostores.nanostores.errorTouched = createStore(
-    () => field.errorTouched,
-    (cb) => field.ee.on('errorTouched', cb),
-  );
+
+  return fieldNanostores;
 }
 
 function transformForm(form: Form) {
   const formNanostores = form as FormNanostores;
-  formNanostores.nanostores = {} as any;
-  formNanostores.nanostores.createStore = createStore;
-  formNanostores.nanostores.valid = createStore(
-    () => form.valid,
-    (cb) => form.ee.on('valid', cb),
-  );
+  formNanostores.nanostores = {
+    createStore,
+    valid: createStore(
+      () => form.valid,
+      (cb) => form.ee.on('valid', cb),
+    ),
+    custom: {},
+  } as typeof formNanostores.nanostores;
 
   const oldCreateField = form.createField;
   form.createField = function (...args) {
     const field = oldCreateField.call(form, ...args);
-    transformField(field);
-    return field;
+    return transformField(field);
   };
 
   for (const key in form.fields) {
@@ -59,9 +70,9 @@ function transformForm(form: Form) {
     transformField(field);
   }
 
-  return form as any as FormNanostores;
+  return formNanostores;
 }
 
 export const addNanostores = () => (form: Form) => {
-  transformForm(form);
+  return transformForm(form);
 };
