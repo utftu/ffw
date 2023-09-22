@@ -12,7 +12,7 @@ export function useFormGloabal(customForm?: FormReact) {
 
   const subscribe = useCallback(
     (listener: (fields: FormReact) => void) => {
-      return form.ee.on('*', () => listener(form));
+      return form.ee.on('global', () => listener(form));
     },
     [form],
   );
