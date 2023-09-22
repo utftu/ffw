@@ -40,3 +40,39 @@ export function useFields(deps: Deps = [], customForm?: FormReact) {
 
   return value;
 }
+
+export function useFormProp(name: string, customForm: FormReact) {
+  const form = useForm(customForm);
+
+  const get = useCallback(() => {
+    return form[name as keyof FormReact];
+  }, [form]);
+
+  const subscribe = useCallback(
+    (listener: (fields: FormReact) => void) => {
+      return form.ee.on(name, (value) => listener(value));
+    },
+    [form],
+  );
+
+  const value = useSubscribe(get, subscribe);
+
+  return value;
+}
+
+export function useFieldProp(name: string, field: FieldReact) {
+  const get = useCallback(() => {
+    return field[name as keyof FieldReact];
+  }, [field]);
+
+  const subscribe = useCallback(
+    (listener: (value: FieldReact) => void) => {
+      return field.ee.on(name, (value) => listener(value));
+    },
+    [field],
+  );
+
+  const value = useSubscribe(get, subscribe);
+
+  return value;
+}

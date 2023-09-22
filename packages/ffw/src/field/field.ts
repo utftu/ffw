@@ -29,6 +29,8 @@ type InitParams<TValue> = Data<TValue> & {
 };
 
 export class Field<TValue = any> {
+  valueType!: TValue;
+
   static new<TValue = string>(props: PropsField<TValue>) {
     return new Field(props);
   }

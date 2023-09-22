@@ -1,6 +1,6 @@
 import {createEventEmitter} from 'utftu';
 import {Cb, Field, PropsField, Test} from '../field/field.js';
-import {UnionToIntersection} from '../types.ts';
+import {SubscribableProperty} from '../a.ts';
 
 type Options = {
   validateOnChange: boolean;
@@ -28,7 +28,9 @@ const optionsDefault = {
   checkPrevData: false,
 };
 
-export class Form<TField extends Field = Field> {
+export class Form<TField extends Field = Field>
+  implements SubscribableProperty
+{
   static new<TFormProps extends FormProps = any>(props?: TFormProps) {
     return new Form(props);
   }
@@ -122,10 +124,19 @@ export class Form<TField extends Field = Field> {
     return this.getValid();
   }
 
+  submitting = false;
+
   submit = async () => {
-    const formValid = await this.validate();
+    const formValid = this.validate();
     if (formValid) {
-      return this.onSubmit(this);
+      this.submitting = true;
+      this.notify('submitting', true);
+      try {
+        this.onSubmit(this);
+      } finally {
+        this.submitting = false;
+        this.notify('submitting', false);
+      }
     }
   };
 
