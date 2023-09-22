@@ -43,6 +43,9 @@ export class Field<TValue = any> {
 
   notify(name: string, value: any) {
     this.ee.emit(name, value);
+    if (name !== 'global') {
+      this.notify('global', {name, value});
+    }
     this.form.notify('global', {field: this, name, value});
   }
 
