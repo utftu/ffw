@@ -1,6 +1,5 @@
 import {createEventEmitter} from 'utftu';
 import {Cb, Field, PropsField, Test} from '../field/field.js';
-import {SubscribableProperty} from '../a.ts';
 
 type Options = {
   validateOnChange: boolean;
@@ -10,10 +9,10 @@ type Options = {
 
 type OnSubmit = (form: Form) => void;
 
-type FormPlugin<TForm extends Form = any> = (form: TForm) => any;
+type FormPluginOld<TForm extends Form = any> = (form: TForm) => any;
 
 type FormProps = {
-  plugins?: FormPlugin[];
+  plugins?: FormPluginOld[];
   initValues?: Record<string, any>;
   options?: Partial<Options>;
   onSubmit?: OnSubmit;
@@ -28,22 +27,28 @@ const optionsDefault = {
   checkPrevData: false,
 };
 
-export class Form<TField extends Field = Field>
-  implements SubscribableProperty
-{
+type formPlugin = {
+  onCreateField: (field: Field) => void;
+  onPluginConnected: (field: Form) => void;
+};
+
+export class Form<TField extends Field = Field> {
   static new<TFormProps extends FormProps = any>(props?: TFormProps) {
     return new Form(props);
   }
+
+  plugins: formPlugin[] = [];
 
   options: {
     validateOnChange: boolean;
     validateOnBlur: boolean;
     checkPrevData: boolean;
   };
-  initValues: Record<string, any>;
+
+  private initValues: Record<string, any>;
   fields: Record<string, TField> = {};
   f: Record<string, TField>;
-  onSubmit: OnSubmit;
+  private onSubmit: OnSubmit;
   ee = createEventEmitter();
 
   notify(name: string, value: any) {
@@ -54,10 +59,14 @@ export class Form<TField extends Field = Field>
   }
 
   createField(props: PropsField): TField {
-    return new Field(props) as TField;
+    // return new Field(props) as TField;
+
+    const field = new Field(props) as TField;
+    this.plugins.forEach(({onCreateField: createField}) => createField(field));
+    return field;
   }
 
-  _getFlatFieldOrCreate(
+  private getFlatFieldOrCreate(
     name: string,
     props: Omit<PropsField, 'name' | 'form'>,
   ) {
@@ -67,7 +76,7 @@ export class Form<TField extends Field = Field>
     return this.fields[name];
   }
 
-  addPlugin<TPlugin extends FormPlugin<typeof this>>(
+  addPlugin<TPlugin extends FormPluginOld<typeof this>>(
     plugin: TPlugin,
   ): ReturnType<TPlugin> {
     const pluginResult = plugin(this);
@@ -86,7 +95,7 @@ export class Form<TField extends Field = Field>
 
     for (const fieldName in this.initValues) {
       const defaultValue = this.initValues[fieldName];
-      this._getFlatFieldOrCreate(fieldName, {
+      this.getFlatFieldOrCreate(fieldName, {
         value: defaultValue,
       });
     }
@@ -98,7 +107,7 @@ export class Form<TField extends Field = Field>
 
     for (const fieldName in validateObj) {
       const test = validateObj[fieldName];
-      const field = this._getFlatFieldOrCreate(fieldName, {value: undefined});
+      const field = this.getFlatFieldOrCreate(fieldName, {value: undefined});
       field.test = test;
     }
   }
@@ -146,7 +155,7 @@ export class Form<TField extends Field = Field>
     }
   }
 
-  _prepareFieldData<TValue>(func: (field: Field) => TValue) {
+  private prepareFieldData<TValue>(func: (field: Field) => TValue) {
     const data: Record<keyof typeof this.fields, any> = {};
     for (const key in this.fields) {
       const funcResult = func(this.fields[key]);
@@ -159,19 +168,19 @@ export class Form<TField extends Field = Field>
   }
 
   get values() {
-    return this._prepareFieldData((field) => field.value);
+    return this.prepareFieldData((field) => field.value);
   }
 
   get errors() {
-    return this._prepareFieldData((field) => field.error || undefined);
+    return this.prepareFieldData((field) => field.error || undefined);
   }
 
   get touches() {
-    return this._prepareFieldData((field) => field.touched || undefined);
+    return this.prepareFieldData((field) => field.touched || undefined);
   }
 
   get data() {
-    return this._prepareFieldData((field) => ({
+    return this.prepareFieldData((field) => ({
       value: field.value,
       error: field.error,
       touched: field.touched,
