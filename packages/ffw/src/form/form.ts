@@ -12,7 +12,8 @@ type OnSubmit = (form: Form) => void;
 type FormPluginOld<TForm extends Form = any> = (form: TForm) => any;
 
 type FormProps = {
-  plugins?: FormPluginOld[];
+  pluginsOld?: FormPluginOld[];
+  plugins?: FormPlugin[];
   initValues?: Record<string, any>;
   options?: Partial<Options>;
   onSubmit?: OnSubmit;
@@ -27,7 +28,7 @@ const optionsDefault = {
   checkPrevData: false,
 };
 
-type formPlugin = {
+type FormPlugin = {
   onCreateField: (field: Field) => void;
   onPluginConnected: (field: Form) => void;
 };
@@ -37,7 +38,7 @@ export class Form<TField extends Field = Field> {
     return new Form(props);
   }
 
-  plugins: formPlugin[] = [];
+  plugins: FormPlugin[] = [];
 
   options: {
     validateOnChange: boolean;
@@ -59,8 +60,6 @@ export class Form<TField extends Field = Field> {
   }
 
   createField(props: PropsField): TField {
-    // return new Field(props) as TField;
-
     const field = new Field(props) as TField;
     this.plugins.forEach(({onCreateField: createField}) => createField(field));
     return field;
@@ -83,11 +82,16 @@ export class Form<TField extends Field = Field> {
     return pluginResult;
   }
 
-  constructor(props: FormProps = {}) {
-    const plugins = props.plugins || [];
+  constructor({plugins = [], ...props}: FormProps = {}) {
+    const pluginsOld = props.pluginsOld || [];
+
+    plugins.forEach(({onPluginConnected}) => {
+      onPluginConnected(this);
+    });
+    this.plugins = plugins;
     this.f = this.fields;
 
-    plugins.forEach((plugin) => plugin(this));
+    pluginsOld.forEach((pluginOld) => pluginOld(this));
 
     this.options = {...optionsDefault, ...props.options};
     this.onSubmit = props.onSubmit ?? ((_form) => {});

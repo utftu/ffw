@@ -39,7 +39,6 @@ export class Field<TValue = any> {
   name: string;
 
   ee = createEventEmitter();
-  // ee = createEventEmitter();
 
   notify(name: string, value: any) {
     this.ee.emit(name, value);
@@ -50,7 +49,7 @@ export class Field<TValue = any> {
   }
 
   data: Data<TValue>;
-  initParams: InitParams<TValue>;
+  private initParams: InitParams<TValue>;
   test: Test<TValue>;
 
   constructor({
